@@ -20,5 +20,5 @@ export function initializeFooter() {
                 }
             });
         });
-    });
+    }).catch(error => console.error('#footer failed to load :(', error));
 }
