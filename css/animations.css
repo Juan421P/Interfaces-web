@@ -1,0 +1,25 @@
+@keyframes left-spin-pulse {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(50%) scale(1) rotate(0deg);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(50%) scale(1.15) rotate(180deg);
+    }
+
+}
+
+@keyframes right-spin-pulse {
+
+    0%,
+    100% {
+        transform: translateX(50%) translateY(-50%) scale(1) rotate(0deg);
+    }
+
+    50% {
+        transform: translateX(50%) translateY(-50%) scale(1.15) rotate(180deg);
+    }
+
+}

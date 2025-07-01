@@ -1,0 +1,16 @@
+@layer base {
+
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear {
+        display: none;
+    }
+
+    input[type="password"]::password-toggle {
+        display: none;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+}

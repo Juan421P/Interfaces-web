@@ -1,0 +1,51 @@
+@layer utilities {
+
+    .animate-left-spin-pulse {
+        animation: left-spin-pulse 10s ease-in-out infinite;
+    }
+
+    .animate-right-spin-pulse {
+        animation: right-spin-pulse 10s ease-in-out infinite;
+    }
+
+    /*
+        texto y fondo 2b y d4
+    */
+    .text-2b {
+        color: #2B2B2B;
+    }
+
+    .text-d4 {
+        color: #D4D4D4;
+    }
+
+    .bg-2b {
+        background-color: #2B2B2B;
+    }
+
+    .bg-d4 {
+        background-color: #D4D4D4;
+    }
+
+    /*
+        text-shadow; xs, sm, md, lg...
+    */
+    .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    /*
+        svg-shadow
+    */
+    .drop-shadow {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+    }
+
+    /*
+        bg-size; xs, sm, md, lg...
+    */
+    .bg-size-sm {
+        background-size: 300px;
+    }
+
+}
