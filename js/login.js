@@ -1,4 +1,17 @@
-document.addEventListener('DOMContentLoaded', () => {
+import { ROUTES } from './helpers/routes.js';
+import { Footer } from ROUTES.components.footer.js;
+import { Toast } from ROUTES.components.toast.js;
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    const footer = new Footer();
+    footer.load();
+
+    const toast = new Toast();
+    await toast.init();
+
+    toast.show('Holiwis', 4000);
+
     const form = document.querySelector('#login-form');
     const emailInput = document.querySelector('#email');
     const passwordInput = document.querySelector('#password');
@@ -110,12 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
             valid = false;
         } else {
             clearPasswordError();
+            window.location.href(ROUTES.interfaces.app);
         }
         if (!valid) e.preventDefault();
         console.log(valid);
     });
 
     createToolTips();
+
     window.addEventListener('resize', () => {
         createToolTips();
     })
