@@ -16,7 +16,7 @@ export class Body {
 
     async load() {
         try {
-            const res = await fetch(this.url);
+            const res = await fetch(this.url + '?raw');
             if (!res.ok) throw new Error(`Cannot fetch ${this.url} :(`);
 
             document.body.outerHTML = await res.text();
@@ -29,8 +29,8 @@ export class Body {
             if (typeof this.afterLoad === 'function') {
                 this.afterLoad();
             }
-        } catch (err) {
-            console.error('Body component failed :(', err);
+        } catch (error) {
+            console.error('Body component failed :(', error);
         }
     }
     

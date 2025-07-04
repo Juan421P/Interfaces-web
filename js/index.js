@@ -34,6 +34,14 @@ async function render(hash = window.location.hash || '#main') {
     const html = await (await fetch(view.file)).text();
     document.querySelector('#main-view').innerHTML = html;
     document.title = view.title;
+
+    try {
+        const jsPath = view.file.replace(/\.html$/, '.js');
+        const mod = await import(new URL(jsPath, import.meta.url).href);
+        if (mod.init) await mod.init();
+    } catch (error) {
+        console.warn('No logic found for', hash, error);
+    }
 }
 
 window.addEventListener('hashchange', () => render());

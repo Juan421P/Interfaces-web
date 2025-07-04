@@ -1,10 +1,12 @@
+import { UsersService } from "../../js/services/users";
+
 export class Navbar {
     constructor(opts = {}) {
         this.url = opts.url || './components/navbar/navbar.html';
     }
 
     async load() {
-        const res = await fetch(this.url);
+        const res = await fetch(this.url + '?raw');
         const htmlText = await res.text();
 
         const tpl = document.createElement('template');
@@ -16,9 +18,51 @@ export class Navbar {
         host.innerHTML = '';
         host.append(tpl.content.cloneNode(true));
 
+        await this.injectProfilePicture();
+
         this.attachCollapses();
         this.highlightActive();
         window.addEventListener('hashchange', () => this.highlightActive());
+    }
+
+    async injectProfilePicture() {
+        try {
+            const user = await UsersService.me();
+            console.log('[Navbar] user payload →', user);
+
+            const { firstName, lastName, image: photo } = user;
+            const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase();
+
+            const avatarHost = document.querySelector('#profile-avatar');
+            if (!avatarHost) return;
+
+            avatarHost.innerHTML = '';
+
+            if (photo) {
+                const img = document.createElement('img');
+                img.src = photo;
+                img.className = 'h-14 w-14 rounded-full object-cover drop-shadow';
+                img.onerror = () => {
+                    avatarHost.innerHTML = '';
+                    avatarHost.appendChild(this.buildInitials(initials || '?'));
+                };
+                avatarHost.appendChild(img);
+            } else {
+                avatarHost.appendChild(this.buildInitials(initials || '?'));
+            }
+
+        } catch (err) {
+            console.error('[Navbar] user fetch failed:', err);
+        }
+    }
+
+
+
+    buildInitials(text) {
+        const element = document.createElement('div');
+        element.className = 'h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-100 to-blue-100 flex items-center justify-center drop-shadow text-xs font-bold text-indigo-400 select-none';
+        element.textContent = text;
+        return element;
     }
 
     highlightActive() {

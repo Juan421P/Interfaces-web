@@ -1,5 +1,5 @@
 <button id="burger-btn" class="fixed top-4 left-4 z-50 p-2 rounded-lg md:hidden
-               bg-white backdrop-blur shadow-md text-indigo-500 hover:text-indigo-700">
+               bg-white backdrop-blur shadow-md text-indigo-500 hover:text-indigo-700 drop-shadow">
 
     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         stroke-linejoin="round">
@@ -18,33 +18,52 @@
 
         <header class="flex items-center justify-between px-2">
 
-            <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400
-                 bg-clip-text text-transparent select-none">
+            <div class="flex flex-1 items-center justify-between gap-2">
 
-                Holiwis
+                <svg width="64" height="80" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    class="hidden md:block text-d4 drop-shadow transition-all duration-200">
 
-            </h1>
+                    <defs>
 
-            <button id="bell-btn" class="relative p-2 rounded-full cursor-pointer group">
+                        <linearGradient id="header-gradient" x1="0" y1="0" x2="1" y2="1">
 
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-6 h-6 text-indigo-300 transition-colors duration-300 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400">
+                            <stop offset="0%" stop-color="#818cf8" />
 
-                    <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <stop offset="100%" stop-color="#60a5fa" />
 
-                    <path d="M13.73 21a2 2 0 01-3.46 0" />
+                        </linearGradient>
+
+                    </defs>
+
+                    <path
+                        d="M47.58,40.67a.83.83,0,0,0-.58,0H45.7l1-1a.89.89,0,0,0,0-1.2.8.8,0,0,0-1.1,0l-1,1a22,22,0,0,0-3.5-5.8l-.6-6.1a2.2,2.2,0,0,0-2.36-2,1,1,0,0,0-.24,0l-6.1,1a16.56,16.56,0,0,0-4.13-1.25A12.79,12.79,0,0,0,32,21.8c.4,1.6,1.6,5.3,3.9,3.5,0,0,2.39-1.49-1-3.69.4.18,6.49,2.9,6.68-2.61a.8.8,0,0,0-.82-.78.83.83,0,0,0-.48.18,5.37,5.37,0,0,1-2.2.4s6.3-3.6,2.2-6.4a1.21,1.21,0,0,0-1.65.4,1.49,1.49,0,0,0-.15.4s-1.3,3.6-4.6,4.4a9.15,9.15,0,0,0,.1-3.3,10.11,10.11,0,0,0-4.1-6.5C20.6-4.7,4.7,1.6,4.7,1.6L12,10.9A9.51,9.51,0,0,0,10.3,18a10.34,10.34,0,0,0,7.29,8.11A20.55,20.55,0,0,0,13.7,28L7.6,27A2.21,2.21,0,0,0,5,28.76L5,29l-.9,9.2a16,16,0,0,0-1.8,6.7c0,.5.1,1,.1,1.4H.8a.9.9,0,0,0-.8.9.89.89,0,0,0,.8.8H2.6l-1.5.7a.7.7,0,0,0-.45.88.61.61,0,0,0,0,.12.8.8,0,0,0,1,.5l1.2-.6-.6,1.3A.89.89,0,0,0,2.7,52a.81.81,0,0,0,1.08-.35s0,0,0,0l.3-.7C7.5,56.3,15.1,60,24,60c12,0,21.7-6.8,21.7-15.1v-.6l.8.3a.7.7,0,0,0,.94-.32.55.55,0,0,0,.06-.18.71.71,0,0,0-.28-1l-.12,0-1.7-.6h1.7v-.1a.9.9,0,1,0,.48-1.73ZM21,4.5c.4,0,.7.7.7,1.5s-.3,1.4-.7,1.4-.7-.6-.7-1.4S20.6,4.5,21,4.5Zm-2.6,7.3c.2-.1.3.1.3.2s.5,7.4,8,7.4h.1c.2,0,4.1,0,5.6-3.2L25.7,9.5a.2.2,0,0,1,0-.28l0,0h.4L32.9,16v.2c-1.6,3.8-6.1,3.7-6.1,3.7h-.1c-8,0-8.5-7.8-8.5-7.9Zm10,32.3h-.6a2.68,2.68,0,0,1-1.4-.4,1.84,1.84,0,0,1-.5-.7l-.4.6a2.58,2.58,0,0,1-2.1.8.29.29,0,0,1-.3-.3c0-.1.1-.2.3-.2a1.79,1.79,0,0,0,1.7-.7,1.4,1.4,0,0,0,.4-1V42L25,42c-1.37,0-2.43-.39-2.52-1s1.2-1.2,2.8-1.4,2.8.3,2.9,1S27.3,41.8,26,42v.3a3,3,0,0,0,.7,1.1,2.53,2.53,0,0,0,1.6.2l.3.2C28.6,43.9,28.6,44.1,28.4,44.1Z"
+                        transform="translate(0 -0.01)" fill="url(#header-gradient)" />
 
                 </svg>
 
-                <span id="bell-dot"
-                    class="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-ping opacity-75">
-                </span>
+                <a href="#notifications" id="bell-btn"
+                    class="ml-auto md:ml-0 relative p-2 rounded-full cursor-pointer group">
 
-                <span id="bell-dot-static" class="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-red-500">
-                </span>
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        class="w-6 h-6 text-indigo-300 transition-colors duration-300 group-hover:text-indigo-400">
 
-            </button>
+                        <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+
+                        <path d="M13.73 21a2 2 0 01-3.46 0" />
+
+                    </svg>
+
+                    <span id="bell-dot"
+                        class="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-ping opacity-75">
+                    </span>
+
+                    <span id="bell-dot-static" class="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-red-500">
+                    </span>
+
+                </a>
+
+            </div>
 
         </header>
 
@@ -54,22 +73,21 @@
                 <!-- PÁGINA PRINCIPAL -->
                 <li>
                     <a href="#main"
-                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn" data-hash="#main">
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn"
+                        data-hash="#main">
 
                         <div class="inner flex items-center gap-5 px-5 py-4 rounded-lg
                         group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400
                         transition-colors duration-300">
 
-                            <!-- icon -->
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+                                class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
                                 <path d="M3 9.5l9-7 9 7V19a2 2 0 0 1-2 2h-5v-5H10v5H5a2 2 0 0 1-2-2Z" />
                             </svg>
 
-                            <!-- text -->
                             <span
-                                class="flex-1 font-medium text-indigo-400 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white group-hover:font-semibold transition-all duration-300">
+                                class="flex-1 font-medium text-indigo-400 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white group-hover:font-semibold transition-all duration-300 drop-shadow select-none">
 
                                 Página Principal
 
@@ -81,7 +99,7 @@
 
                 </li>
 
-                <!-- MÓDULO DE SISTEMA / PLANIFICACIÓN -->
+                <!-- MÓDULO DE SISTEMA -->
                 <li>
 
                     <div
@@ -94,13 +112,14 @@
 
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
-                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
 
                                     <path d="M3 3h18v18H3V3Z" />
 
                                 </svg>
 
-                                <span class="font-medium group-hover:text-white transition-all duration-300">
+                                <span
+                                    class="font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none">
 
                                     Sistema
 
@@ -110,7 +129,7 @@
 
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300 drop-shadow">
 
                                 <path d="M6 9l6 6 6-6" />
 
@@ -124,7 +143,7 @@
                             <li>
 
                                 <a href="#sys-users"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Usuarios
 
@@ -135,7 +154,7 @@
                             <li>
 
                                 <a href="#sys-roles"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Roles
 
@@ -146,9 +165,93 @@
                             <li>
 
                                 <a href="#sys-settings"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Configuración
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </li>
+
+                <!-- MÓDULO DE PLANIFICACIÓN -->
+                <li>
+
+                    <div
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn">
+
+                        <button type="button" data-toggle="collapse" data-target="#mod-plan"
+                            class="flex justify-between items-center w-full px-5 py-4 rounded-lg text-indigo-400 group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400 transition-colors duration-300">
+
+                            <div class="flex items-center gap-5">
+
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
+
+                                    <path d="M2 3h20" />
+
+                                    <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" />
+
+                                    <path d="m7 21 5-5 5 5" />
+
+                                </svg>
+
+                                <span
+                                    class="font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none">
+
+                                    Planificación
+
+                                </span>
+
+                            </div>
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300 drop-shadow">
+
+                                <path d="M6 9l6 6 6-6" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <ul id="mod-plan" class="pl-9 py-2 space-y-1 hidden">
+
+                            <li>
+
+                                <a href="#plan-university"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
+
+                                    Universidad
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#plan-faculties"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
+
+                                    Facultades
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#plan-somethingelselol"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
+
+                                    Algo más xd no sé qué sería
 
                                 </a>
 
@@ -173,7 +276,7 @@
 
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
-                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
 
                                     <path d="M16 2v2" />
 
@@ -187,7 +290,8 @@
 
                                 </svg>
 
-                                <span class="font-medium group-hover:text-white transition-all duration-300">
+                                <span
+                                    class="font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none">
 
                                     Recursos Humanos
 
@@ -197,7 +301,7 @@
 
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300 drop-shadow">
 
                                 <path d="M6 9l6 6 6-6" />
 
@@ -211,7 +315,7 @@
                             <li>
 
                                 <a href="#hr-employees"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Gestión de Empleados
 
@@ -238,14 +342,15 @@
 
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
-                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
 
                                     <path
                                         d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
 
                                 </svg>
 
-                                <span class="font-medium group-hover:text-white transition-all duration-300">
+                                <span
+                                    class="font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none">
 
                                     Registro Académico
 
@@ -255,7 +360,7 @@
 
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300 drop-shadow">
 
                                 <path d="M6 9l6 6 6-6" />
 
@@ -269,7 +374,7 @@
                             <li>
 
                                 <a href="#ar-users"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Uno
 
@@ -280,7 +385,7 @@
                             <li>
 
                                 <a href="#ar-roles"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Dos
 
@@ -291,7 +396,7 @@
                             <li>
 
                                 <a href="#ar-settings"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Tres
 
@@ -318,14 +423,15 @@
 
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
-                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
 
                                     <path
                                         d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
 
                                 </svg>
 
-                                <span class="font-medium group-hover:text-white transition-all duration-300">
+                                <span
+                                    class="font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none">
 
                                     Portal de Docente
 
@@ -335,7 +441,7 @@
 
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300 drop-shadow">
 
                                 <path d="M6 9l6 6 6-6" />
 
@@ -349,7 +455,7 @@
                             <li>
 
                                 <a href="#tp-users"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Uno
 
@@ -360,7 +466,7 @@
                             <li>
 
                                 <a href="#tp-roles"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Dos
 
@@ -371,7 +477,7 @@
                             <li>
 
                                 <a href="#tp-settings"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Tres
 
@@ -398,7 +504,7 @@
 
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
-                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
 
                                     <path
                                         d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
@@ -409,7 +515,8 @@
 
                                 </svg>
 
-                                <span class="font-medium group-hover:text-white transition-all duration-300">
+                                <span
+                                    class="font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none">
 
                                     Portal de Estudiante
 
@@ -419,7 +526,7 @@
 
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
-                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300 drop-shadow">
 
                                 <path d="M6 9l6 6 6-6" />
 
@@ -432,7 +539,7 @@
                             <li>
 
                                 <a href="#sp-a-enrollments"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Inscripción de Materias
 
@@ -443,7 +550,7 @@
                             <li>
 
                                 <a href="#sp-record"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Expediente
 
@@ -454,7 +561,7 @@
                             <li>
 
                                 <a href="#sp-schedules"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Horario
 
@@ -465,7 +572,7 @@
                             <li>
 
                                 <a href="#sp-pensum"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Pensum
 
@@ -476,7 +583,7 @@
                             <li>
 
                                 <a href="#sp-p-grades"
-                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors drop-shadow select-none">
 
                                     Notas Parciales
 
@@ -487,6 +594,67 @@
                         </ul>
 
                     </div>
+
+                </li>
+
+                <!-- PERFIL -->
+                <li>
+                    <a href="#main"
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn"
+                        data-hash="#profile">
+
+                        <div class="inner flex items-center gap-5 px-5 py-4 rounded-lg
+                        group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400
+                        transition-colors duration-300" id="nav-profile">
+
+
+                            <div class="h-14 w-14 flex items-center justify-center profile-avatar" id="profile-avatar">
+                            </div>
+
+                            <span
+                                class="flex-1 font-medium text-indigo-400 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white group-hover:font-semibold transition-all duration-300 drop-shadow select-none">
+
+                                Mi Perfil
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </li>
+
+                <!-- CERRAR SESIÓN -->
+                <li>
+                    <a href="/interfaces/login/login.html"
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn">
+
+                        <div class="inner flex items-center gap-5 px-5 py-4 rounded-lg
+                        group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400
+                        transition-colors duration-300">
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300 drop-shadow">
+
+                                <path d="m16 17 5-5-5-5" />
+
+                                <path d="M21 12H9" />
+
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+
+                            </svg>
+
+                            <span
+                                class="flex-1 font-medium text-indigo-400 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white group-hover:font-semibold transition-all duration-300 drop-shadow select-none">
+
+                                Cerrar Sesión
+
+                            </span>
+
+                        </div>
+
+                    </a>
 
                 </li>
 

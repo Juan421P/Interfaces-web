@@ -9,7 +9,7 @@ export class Footer {
 
     async load() {
         try {
-            const res = await fetch(this.url);
+            const res = await fetch(this.url + '?raw');
             const html = await res.text();
             const oldFooter = document.querySelector(this.selector);
             if (!oldFooter) throw new Error(`Element ${this.selector} not found`);
@@ -33,8 +33,9 @@ export class Footer {
         const scrollY = window.scrollY;
         const visibleHeight = window.innerHeight;
         const pageHeight = document.documentElement.scrollHeight;
+        const atBottom = pageHeight - (scrollY + visibleHeight) <= 1;
 
-        if (scrollY + visibleHeight >= pageHeight - 1) {
+        if (atBottom) {
             this.footerElement.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
             this.footerElement.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
         } else {

@@ -1,4 +1,4 @@
-const API_BASE = '';
+const API_BASE = 'https://retoolapi.dev';
 
 export async function fetchJSON(path, options = {}) {
     const res = await fetch(`${API_BASE}${path}`, options);
