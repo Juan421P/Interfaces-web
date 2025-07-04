@@ -1,3 +1,5 @@
+import { ROUTES } from "../../js/helpers/routes.js";
+
 export class Body {
 
     /**
@@ -7,7 +9,7 @@ export class Body {
     *   @param {Function} [opts.afterLoad]
     */
     constructor(opts = {}) {
-        this.url = opts.url || '../components/body/body.html';
+        this.url = opts.url || ROUTES.components.body.html;
         this.content = opts.content || '';
         this.afterLoad = opts.afterLoad || null;
     }

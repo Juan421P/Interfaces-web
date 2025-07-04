@@ -1,0 +1,499 @@
+<button id="burger-btn" class="fixed top-4 left-4 z-50 p-2 rounded-lg md:hidden
+               bg-white backdrop-blur shadow-md text-indigo-500 hover:text-indigo-700">
+
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+
+        <path d="M4 6h16M4 12h16M4 18h16" />
+
+    </svg>
+
+</button>
+
+<div id="sidebar-wrapper"
+    class="fixed inset-y-0 left-0 z-40 w-80 transform -translate-x-full transition-transform duration-300 md:translate-x-0 scrollbar-width-none">
+
+    <aside id="sidebar"
+        class="h-full w-full overflow-y-auto bg-white/70 backdrop-blur md:bg-transparent md:backdrop-blur-0 py-6 px-4 flex flex-col gap-6 scrollbar-width-none">
+
+        <header class="flex items-center justify-between px-2">
+
+            <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400
+                 bg-clip-text text-transparent select-none">
+
+                Holiwis
+
+            </h1>
+
+            <button id="bell-btn" class="relative p-2 rounded-full cursor-pointer group">
+
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-6 h-6 text-indigo-300 transition-colors duration-300 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400">
+
+                    <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+
+                    <path d="M13.73 21a2 2 0 01-3.46 0" />
+
+                </svg>
+
+                <span id="bell-dot"
+                    class="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-ping opacity-75">
+                </span>
+
+                <span id="bell-dot-static" class="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-red-500">
+                </span>
+
+            </button>
+
+        </header>
+
+        <nav class="flex-1">
+            <ul class="space-y-2">
+
+                <!-- PÁGINA PRINCIPAL -->
+                <li>
+                    <a href="#main"
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn" data-hash="#main">
+
+                        <div class="inner flex items-center gap-5 px-5 py-4 rounded-lg
+                        group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400
+                        transition-colors duration-300">
+
+                            <!-- icon -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+                                <path d="M3 9.5l9-7 9 7V19a2 2 0 0 1-2 2h-5v-5H10v5H5a2 2 0 0 1-2-2Z" />
+                            </svg>
+
+                            <!-- text -->
+                            <span
+                                class="flex-1 font-medium text-indigo-400 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white group-hover:font-semibold transition-all duration-300">
+
+                                Página Principal
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </li>
+
+                <!-- MÓDULO DE SISTEMA / PLANIFICACIÓN -->
+                <li>
+
+                    <div
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn">
+
+                        <button type="button" data-toggle="collapse" data-target="#mod-system"
+                            class="flex justify-between items-center w-full px-5 py-4 rounded-lg text-indigo-400 group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400 transition-colors duration-300">
+
+                            <div class="flex items-center gap-5">
+
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+
+                                    <path d="M3 3h18v18H3V3Z" />
+
+                                </svg>
+
+                                <span class="font-medium group-hover:text-white transition-all duration-300">
+
+                                    Sistema
+
+                                </span>
+
+                            </div>
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+
+                                <path d="M6 9l6 6 6-6" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <ul id="mod-system" class="pl-9 py-2 space-y-1 hidden">
+
+                            <li>
+
+                                <a href="#sys-users"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Usuarios
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#sys-roles"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Roles
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#sys-settings"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Configuración
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </li>
+
+                <!-- MÓDULO DE RECURSOS HUMANOS -->
+                <li>
+
+                    <div
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn">
+
+                        <button type="button" data-toggle="collapse" data-target="#mod-hr"
+                            class="flex justify-between items-center w-full px-5 py-4 rounded-lg text-indigo-400 group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400 transition-colors duration-300">
+
+                            <div class="flex items-center gap-5">
+
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+
+                                    <path d="M16 2v2" />
+
+                                    <path d="M17.915 22a6 6 0 0 0-12 0" />
+
+                                    <path d="M8 2v2" />
+
+                                    <circle cx="12" cy="12" r="4" />
+
+                                    <rect x="3" y="4" width="18" height="18" rx="2" />
+
+                                </svg>
+
+                                <span class="font-medium group-hover:text-white transition-all duration-300">
+
+                                    Recursos Humanos
+
+                                </span>
+
+                            </div>
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+
+                                <path d="M6 9l6 6 6-6" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <ul id="mod-hr" class="pl-9 py-2 space-y-1 hidden">
+
+                            <li>
+
+                                <a href="#hr-employees"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Gestión de Empleados
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </li>
+
+                <!-- MÓDULO DE REGISTRO ACADÉMICO -->
+                <li>
+
+                    <div
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn">
+
+                        <button type="button" data-toggle="collapse" data-target="#mod-ar"
+                            class="flex justify-between items-center w-full px-5 py-4 rounded-lg text-indigo-400 group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400 transition-colors duration-300">
+
+                            <div class="flex items-center gap-5">
+
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+
+                                    <path
+                                        d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
+
+                                </svg>
+
+                                <span class="font-medium group-hover:text-white transition-all duration-300">
+
+                                    Registro Académico
+
+                                </span>
+
+                            </div>
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+
+                                <path d="M6 9l6 6 6-6" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <ul id="mod-ar" class="pl-9 py-2 space-y-1 hidden">
+
+                            <li>
+
+                                <a href="#ar-users"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Uno
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#ar-roles"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Dos
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#ar-settings"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Tres
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </li>
+
+                <!-- MÓDULO DE PORTAL DE DOCENTE -->
+                <li>
+
+                    <div
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn">
+
+                        <button type="button" data-toggle="collapse" data-target="#mod-tp"
+                            class="flex justify-between items-center w-full px-5 py-4 rounded-lg text-indigo-400 group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400 transition-colors duration-300">
+
+                            <div class="flex items-center gap-5">
+
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+
+                                    <path
+                                        d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+
+                                </svg>
+
+                                <span class="font-medium group-hover:text-white transition-all duration-300">
+
+                                    Portal de Docente
+
+                                </span>
+
+                            </div>
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+
+                                <path d="M6 9l6 6 6-6" />
+
+                            </svg>
+
+                        </button>
+
+
+                        <ul id="mod-tp" class="pl-9 py-2 space-y-1 hidden">
+
+                            <li>
+
+                                <a href="#tp-users"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Uno
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#tp-roles"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Dos
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#tp-settings"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Tres
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </li>
+
+                <!-- MÓDULO DE PORTAL DE ESTUDIANTE -->
+                <li>
+
+                    <div
+                        class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300 nav-btn">
+
+                        <button type="button" data-toggle="collapse" data-target="#mod-sp"
+                            class="flex justify-between items-center w-full px-5 py-4 rounded-lg text-indigo-400 group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400 transition-colors duration-300">
+
+                            <div class="flex items-center gap-5">
+
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors duration-300">
+
+                                    <path
+                                        d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+
+                                    <path d="M22 10v6" />
+
+                                    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+
+                                </svg>
+
+                                <span class="font-medium group-hover:text-white transition-all duration-300">
+
+                                    Portal de Estudiante
+
+                                </span>
+
+                            </div>
+
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4 text-indigo-400 group-hover:text-white transition-transform duration-300">
+
+                                <path d="M6 9l6 6 6-6" />
+
+                            </svg>
+
+                        </button>
+
+                        <ul id="mod-sp" class="pl-9 py-2 space-y-1 hidden">
+
+                            <li>
+
+                                <a href="#sp-a-enrollments"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Inscripción de Materias
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#sp-record"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Expediente
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#sp-schedules"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Horario
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#sp-pensum"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Pensum
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="#sp-p-grades"
+                                    class="block px-3 py-1 rounded text-indigo-400 hover:text-indigo-600 transition-colors">
+
+                                    Notas Parciales
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+</div>

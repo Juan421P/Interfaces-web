@@ -8,7 +8,7 @@ export class Toast {
     */
     constructor(containerId = 'toast-container', defaults = {}) {
         this.containerId = containerId;
-        this.toastHtmlUrl = '../components/toast/toast.html';
+        this.toastHtmlUrl = new URL('./toast.html', import.meta.url).href;
         this.defaults = {
             dismissOnClick: true,
             url: null,
@@ -25,14 +25,13 @@ export class Toast {
         const html = await res.text();
         const template = document.createElement('template');
         template.innerHTML = html.trim();
-        this.toastTemplate = template.content.firstElementChild;
+        this.toastTemplate = template.content.querySelector('.toast');
         if (!this.toastTemplate) {
             console.error('[Toast] Toast template is null!');
         } else {
             console.log('[Toast] Toast template loaded successfully.');
         }
     }
-
 
     ensureContainer() {
         console.log('[Toast] Ensuring container...');
@@ -69,7 +68,12 @@ export class Toast {
     show(message, duration = 7500, opts = {}) {
         const { dismissOnClick, url } = { ...this.defaults, ...opts };
         const toast = this.toastTemplate.cloneNode(true);
-        toast.querySelector('.toast-message').textContent = message;
+        const messageSpan = toast.querySelector('.toast-message');
+        if (!messageSpan) {
+            console.error('[Toast] .toast-message not found in template:', toast);
+            return;
+        }
+        messageSpan.textContent = message;
         toast.style.userSelect = 'none';
         toast.style.cursor = 'pointer';
         toast.style.animation = `toast-fade ${duration}ms ease-in-out forwards`;

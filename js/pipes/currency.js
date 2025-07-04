@@ -1,3 +1,5 @@
+// Comentario por cualquier cosa
+
 export function formatCurrency(value, currency = 'USD', locale = 'es-SV') {
   return new Intl.NumberFormat(locale, {
     style: 'currency',

@@ -1,0 +1,24 @@
+{
+  "name": "interfaces-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juan421P/Interfaces-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Juan421P/Interfaces-web/issues"
+  },
+  "homepage": "https://github.com/Juan421P/Interfaces-web#readme",
+  "description": "",
+  "devDependencies": {
+    "vite": "^7.0.1"
+  }
+}

@@ -1,6 +1,6 @@
 export class Footer {
 
-    constructor(selector = '#footer', url = '../components/footer/footer.html') {
+    constructor(selector = '#footer', url = './../../components/footer/footer.html') {
         this.selector = selector;
         this.url = url;
         this.footerElement = null;
