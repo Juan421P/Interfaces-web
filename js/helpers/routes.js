@@ -39,6 +39,12 @@ export const ROUTES = {
             hash: '#notifications',
             file: '/interfaces/notifications/notifications.html',
             title: 'Notificaciones'
+        },
+
+        profile: {
+            hash: '#profile',
+            file: '/interfaces/profile/profile.html',
+            title: 'Perfil'
         }
 
     },
@@ -53,6 +59,11 @@ export const ROUTES = {
         footer: {
             html: '/components/footer/footer.html',
             js: '/components/footer/footer.js'
+        },
+
+        modal: {
+            html: '/components/modal/modal.html',
+            js: '/components/modal/modal.js'
         },
 
         navbar: {

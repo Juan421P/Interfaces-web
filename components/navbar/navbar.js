@@ -1,4 +1,6 @@
-import { UsersService } from "../../js/services/users";
+import { UsersService } from '../../js/services/users';
+import { buildInitials } from './../../js/helpers/common-methods.js';
+import { storage } from './../../js/helpers/storage.js';
 
 export class Navbar {
     constructor(opts = {}) {
@@ -27,8 +29,7 @@ export class Navbar {
 
     async injectProfilePicture() {
         try {
-            const user = await UsersService.me();
-            console.log('[Navbar] user payload →', user);
+            const user = storage.get('user');
 
             const { firstName, lastName, image: photo } = user;
             const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase();
@@ -44,25 +45,16 @@ export class Navbar {
                 img.className = 'h-14 w-14 rounded-full object-cover drop-shadow';
                 img.onerror = () => {
                     avatarHost.innerHTML = '';
-                    avatarHost.appendChild(this.buildInitials(initials || '?'));
+                    avatarHost.appendChild(buildInitials(initials || '?'));
                 };
                 avatarHost.appendChild(img);
             } else {
-                avatarHost.appendChild(this.buildInitials(initials || '?'));
+                avatarHost.appendChild(buildInitials(initials || '?'));
             }
 
         } catch (err) {
             console.error('[Navbar] user fetch failed:', err);
         }
-    }
-
-
-
-    buildInitials(text) {
-        const element = document.createElement('div');
-        element.className = 'h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-100 to-blue-100 flex items-center justify-center drop-shadow text-xs font-bold text-indigo-400 select-none';
-        element.textContent = text;
-        return element;
     }
 
     highlightActive() {

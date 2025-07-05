@@ -1,20 +1,28 @@
 import { fetchJSON } from './../helpers/network';
+import { storage } from './../helpers';
 
-const ENDPOINT = '/users/me';
+const ENDPOINT = '/aMIj5J/users';
+const SESSION_KEY = 'user';
 
 export const UsersService = {
-    me(){
-        const [user] = [{
-            firstName: 'Fernando Miguel',
-            lastname: 'Velásquez Pérez',
-            role: 'Adminsitrador',
-            image: 'https://i.imgur.com/FWqraiq.jpeg'
-        }];
-        return {
-            firstName: user.firstName,
-            lastName: user.lastname,
-            image: user.image,
-            role: user.role
-        }
+    async list() {
+        return fetchJSON(ENDPOINT);
+    },
+
+    async getByEmail(email) {
+        const users = await fetchJSON(`${ENDPOINT}?email=${email}`);
+        return users.length > 0 ? users[0] : null;
+    },
+
+    async login(email, password){
+        const user = await UsersService.getByEmail(email);
+        if(!user) throw new Error('Usuario no encontrado 🥺');
+        if(user.password.toString() !== password.toString()) throw new Error('Contraseña incorrecta 🥺');
+        storage.set(SESSION_KEY, user);
+        return user;
+    },
+
+    async logout(){
+        storage.remove(SESSION_KEY);
     }
-}
+};

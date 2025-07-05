@@ -1,31 +1,63 @@
+import { StatsService } from './../../js/services/stats';
+import { storage } from './../../js/helpers';
+
 export async function init() {
-    const dateTarget = document.querySelector('#main-date');
+    try {
+        const { firstName, lastName, image, role } = storage.get('user');
+
+        const welcome = document.getElementById('main-welcome');
+        if (welcome) welcome.textContent = `Bienvenido, ${firstName} ${lastName}`;
+
+        const roleEl = document.getElementById('main-role');
+        if (roleEl) roleEl.textContent = role;
+
+        const avatarHost = document.getElementById('main-avatar');
+        if (avatarHost) {
+            avatarHost.innerHTML = '';
+            if (image) {
+                const img = document.createElement('img');
+                img.src = image;
+                img.alt = `${firstName} ${lastName}`;
+                img.className = 'h-14 w-14 rounded-full object-cover drop-shadow';
+                img.onerror = () => {
+                    avatarHost.innerHTML = '';
+                    avatarHost.appendChild(
+                        buildInitials(`${firstName[0] ?? ''}${lastName[0] ?? ''}`.toUpperCase() || '?')
+                    );
+                };
+                avatarHost.appendChild(img);
+            } else {
+                avatarHost.appendChild(
+                    buildInitials(`${firstName[0] ?? ''}${lastName[0] ?? ''}`.toUpperCase() || '?')
+                );
+            }
+        }
+    } catch (error) {
+        console.error('[main] failed to load user data:', error);
+    }
+
+    const dateTarget = document.getElementById('main-date');
     if (dateTarget) {
-        const date = new Date();
-        dateTarget.textContent = date.toLocaleDateString('es-SV', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
+        dateTarget.textContent = new Date().toLocaleDateString('es-SV', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
         });
     }
 
-    const stats = await Promise.resolve({
-        students: 1280,
-        teachers: 102,
-        courses: 83,
-        notices: 4
-    });
+    try {
+        const stats = await StatsService.summary();
 
-    const statMap = {
-        '#stat-students': stats.students,
-        '#stat-teachers': stats.teachers,
-        '#stat-courses': stats.courses,
-        '#stat-notices': stats.notices
-    };
+        const map = {
+            '#stat-students': stats.students,
+            '#stat-teachers': stats.teachers,
+            '#stat-courses': stats.courses,
+            '#stat-notices': stats.notices
+        };
 
-    for (const [selector, value] of Object.entries(statMap)) {
-        const el = document.querySelector(selector);
-        if (el) el.textContent = value;
+        for (const [sel, val] of Object.entries(map)) {
+            const el = document.querySelector(sel);
+            if (el) el.textContent = val ?? '–';
+        }
+    } catch (error) {
+        console.error('[main] failed to load stats:', error);
     }
 }

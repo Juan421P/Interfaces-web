@@ -1,0 +1,84 @@
+export class Modal {
+
+    /**
+    *   @param {Object} opts
+    *   @param {'sm'|'md'|'lg'|'xl'} [opts.size]
+    *   @param {string} [opts.content]
+    *   @param {string} [opts.templateId]
+    *   @param {string} [opts.url]
+    */
+    constructor(opts = {}) {
+        this.url = opts.url || './components/modal/modal.html';
+        this.size = opts.size || 'md';
+        this.content = opts.content;
+        this.templateId = opts.templateId;
+        this.overlay = null;
+    }
+
+    _sizeClasses() {
+        return { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl', xl: 'max-w-4xl' };
+    }
+
+    _applySize() {
+        const cls = this._sizeClasses();
+        Object.values(cls).forEach(c => this.container.classList.remove(c));
+        this.container.classList.add(cls[this.size] ?? cls.md);
+    }
+
+    _setContent() {
+        this.contentHost.innerHTML = '';
+        if (this.templateId) {
+            const tpl = document.getElementById(this.templateId);
+            if (tpl) this.contentHost.appendChild(tpl.content.cloneNode(true));
+        } else if (typeof this.content === 'string') {
+            this.contentHost.innerHTML = this.content;
+        }
+    }
+
+
+    async load() {
+        if (this.overlay) return;
+
+        const markup = await (await fetch(this.url + '?raw')).text();
+        const tpl = document.createElement('template');
+        tpl.innerHTML = markup.trim();
+        document.body.appendChild(tpl.content.cloneNode(true));
+
+        this.overlay = document.getElementById('modal-overlay');
+        this.container = document.getElementById('modal-container');
+        this.contentHost = document.getElementById('modal-content');
+        this.closeBtn = document.getElementById('modal-close');
+
+        this.closeBtn.addEventListener('click', () => this.close());
+        this.overlay.addEventListener('click', e => {
+            if (e.target === this.overlay) this.close();
+        });
+
+        this._applySize();
+    }
+
+    async open() {
+        if (!this.overlay) await this.load();
+        this._setContent();
+
+        requestAnimationFrame(() => {
+            this.overlay.classList.remove('opacity-0', 'pointer-events-none');
+            this.overlay.classList.add('opacity-100');
+            this.container.classList.remove('scale-90', 'opacity-0');
+            this.container.classList.add('scale-100', 'opacity-100');
+        });
+    }
+
+    close() {
+        this.overlay.classList.remove('opacity-100');
+        this.overlay.classList.add('opacity-0', 'pointer-events-none');
+
+        this.container.classList.remove('scale-100', 'opacity-100');
+        this.container.classList.add('scale-90', 'opacity-0');
+
+        const done = () => {
+            this.overlay.removeEventListener('transitionend', done);
+        };
+        this.overlay.addEventListener('transitionend', done);
+    }
+}

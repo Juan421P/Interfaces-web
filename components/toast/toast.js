@@ -43,7 +43,7 @@ export class Toast {
         console.log(`[Toast] Container #${this.containerId} not found. Creating it.`);
         this.container = document.createElement('div');
         this.container.id = this.containerId;
-        this.container.classList.add('fixed', 'top-5', 'right-5', 'flex', 'flex-col', 'gap-2', 'max-w-xs', 'z-[9999]');
+        this.container.classList.add('fixed', 'top-5', 'right-5', 'flex', 'flex-col', 'gap-2', 'max-w-sm', 'z-[9999]');
         document.body.appendChild(this.container);
         const verified = document.getElementById(this.containerId);
         if (!verified) {
