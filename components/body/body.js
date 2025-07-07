@@ -1,4 +1,5 @@
-import { ROUTES } from "../../js/helpers/routes.js";
+import { ROUTES } from './../../js/helpers/routes.js';
+import { stripScripts } from './../../js/helpers/common-methods.js';
 
 export class Body {
 

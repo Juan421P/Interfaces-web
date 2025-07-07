@@ -1,14 +1,9 @@
-export class Modal {
+import { ROUTES } from './../../js/helpers/routes.js';
+import { stripScripts } from './../../js/helpers/common-methods.js';
 
-    /**
-    *   @param {Object} opts
-    *   @param {'sm'|'md'|'lg'|'xl'} [opts.size]
-    *   @param {string} [opts.content]
-    *   @param {string} [opts.templateId]
-    *   @param {string} [opts.url]
-    */
+export class Modal {
     constructor(opts = {}) {
-        this.url = opts.url || './components/modal/modal.html';
+        this.url = opts.url || ROUTES.components.modal.html;
         this.size = opts.size || 'md';
         this.content = opts.content;
         this.templateId = opts.templateId;
@@ -35,13 +30,12 @@ export class Modal {
         }
     }
 
-
     async load() {
         if (this.overlay) return;
 
         const markup = await (await fetch(this.url + '?raw')).text();
-        const tpl = document.createElement('template');
-        tpl.innerHTML = markup.trim();
+        const tpl = stripScripts(markup);
+
         document.body.appendChild(tpl.content.cloneNode(true));
 
         this.overlay = document.getElementById('modal-overlay');
@@ -73,11 +67,12 @@ export class Modal {
         this.overlay.classList.remove('opacity-100');
         this.overlay.classList.add('opacity-0', 'pointer-events-none');
 
-        this.container.classList.remove('scale-100', 'opacity-100');
-        this.container.classList.add('scale-90', 'opacity-0');
-
         const done = () => {
             this.overlay.removeEventListener('transitionend', done);
+            this.overlay.remove();
+            this.overlay = null;
+            this.container = null;
+            this.contentHost = null;
         };
         this.overlay.addEventListener('transitionend', done);
     }

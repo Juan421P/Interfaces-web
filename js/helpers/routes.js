@@ -41,10 +41,84 @@ export const ROUTES = {
             title: 'Notificaciones'
         },
 
+        planification: {
+
+            academicDates: {
+                hash: '#planification-dates',
+                file: '/interfaces/planification/academic-dates/academic-dates.html',
+                title: 'Fechas Académicas'
+            },
+            
+            careers: {
+                hash: '#planification-careers',
+                file: '/interfaces/planification/careers/careers.html',
+                title: 'Carreras'
+            },
+            
+            departments: {
+                hash: '#planification-departments',
+                file: '/interfaces/planification/departments/departments.html',
+                title: 'Departamentos'
+            },
+
+            faculties: {
+                hash: '#planification-faculties',
+                file: '/interfaces/planification/faculties/faculties.html',
+                title: 'Facultades'
+            },
+            
+            socialService: {
+                hash: '#planification-service',
+                file: '/interfaces/planification/service/service.html',
+                title: 'Roles'
+            },
+            
+            subjects: {
+                hash: '#planification-subjects',
+                file: '/interfaces/planification/subjects/subjects.html',
+                title: 'Roles'
+            },
+            
+            university: {
+                hash: '#planification-university',
+                file: '/interfaces/planification/university/university.html',
+                title: 'Roles'
+            }
+
+        },
+
         profile: {
             hash: '#profile',
             file: '/interfaces/profile/profile.html',
             title: 'Perfil'
+        },
+
+        system: {
+
+            audit: {
+                hash: '#system-audit',
+                file: '/interfaces/system/audit/audit.html',
+                title: 'Auditoría'
+            },
+
+            codes: {
+                hash: '#system-codes',
+                file: '/interfaces/system/codes/codes.html',
+                title: 'Códigos'
+            },
+            
+            roles: {
+                hash: '#system-roles',
+                file: '/interfaces/system/roles/roles.html',
+                title: 'Roles'
+            },
+            
+            users: {
+                hash: '#system-users',
+                file: '/interfaces/system/users/users.html',
+                title: 'Usuarios'
+            }
+
         }
 
     },

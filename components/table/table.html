@@ -1,20 +1,20 @@
-<div class="flowbite-table-wrapper overflow-x-auto w-full">
+<div class="flowbite-table-wrapper overflow-x-auto w-full select-none">
     
     <div class="relative">
 
         <div data-search class="mb-4 hidden">
 
-            <input type="text" placeholder="Buscar…"
-                class="search-input w-full p-2 rounded border border-indigo-200 focus:outline-none focus:ring focus:border-indigo-400 text-sm">
+            <input id="user-search" type="text" placeholder="Buscar" class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none" />
+
 
         </div>
 
-        <table class="min-w-full text-sm text-indigo-800 bg-white rounded-lg shadow-sm overflow-hidden">
+        <table class="min-w-full text-sm rounded-lg overflow-hidden" data-table>
 
-            <thead class="text-xs uppercase bg-indigo-100 select-none cursor-pointer">
+            <thead class="text-xs uppercase select-none cursor-pointer text-left">
             </thead>
 
-            <tbody class="divide-y divide-indigo-100">
+            <tbody class="divide-y divide-indigo-100 text-left">
             </tbody>
 
         </table>

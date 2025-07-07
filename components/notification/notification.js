@@ -1,8 +1,10 @@
+import { ROUTES } from './../../js/helpers/routes';
+
 export class Notification {
 
     constructor(opts = {}) {
         this.data = opts.data;
-        this.url = opts.url || new URL('./notification.html', import.meta.url).href;
+        this.url = opts.url || ROUTES.components.notification.html;
     }
 
     async render() {

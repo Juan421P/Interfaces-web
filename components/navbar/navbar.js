@@ -1,6 +1,9 @@
-import { UsersService } from '../../js/services/users';
-import { buildInitials } from './../../js/helpers/common-methods.js';
+import { UsersService } from './../../js/services/users.js';
+import { buildInitials, stripScripts } from './../../js/helpers/common-methods.js';
 import { storage } from './../../js/helpers/storage.js';
+import { ROUTES } from './../../js/helpers/routes.js';
+
+const { Modal } = await import(ROUTES.components.modal.js);
 
 export class Navbar {
     constructor(opts = {}) {
@@ -11,8 +14,7 @@ export class Navbar {
         const res = await fetch(this.url + '?raw');
         const htmlText = await res.text();
 
-        const tpl = document.createElement('template');
-        tpl.innerHTML = htmlText.trim();
+        const tpl = stripScripts(htmlText);
 
         if (window.currentUserPerms) filterByPerm(tpl.content, window.currentUserPerms);
 
@@ -25,13 +27,34 @@ export class Navbar {
         this.attachCollapses();
         this.highlightActive();
         window.addEventListener('hashchange', () => this.highlightActive());
+        this.attachLogoutHandler();
+    }
+
+    attachLogoutHandler() {
+        const btn = document.querySelector('#logout-btn');
+        if (!btn) return;
+
+        btn.addEventListener('click', async () => {
+            const modal = new Modal({ templateId: 'tmpl-logout-confirm', size: 'sm' });
+            await modal.open();
+
+            const cancel = modal.contentHost.querySelector('#logout-cancel');
+            const confirm = modal.contentHost.querySelector('#logout-confirm');
+
+            cancel?.addEventListener('click', () => modal.close());
+
+            confirm?.addEventListener('click', () => {
+                UsersService.logout();
+                modal.close();
+                window.location.href = '/interfaces/login/login.html';
+            });
+        });
     }
 
     async injectProfilePicture() {
         try {
             const user = storage.get('user');
-
-            const { firstName, lastName, image: photo } = user;
+            const { firstName, lastName, image: photo } = user || {};
             const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase();
 
             const avatarHost = document.querySelector('#profile-avatar');
@@ -43,15 +66,11 @@ export class Navbar {
                 const img = document.createElement('img');
                 img.src = photo;
                 img.className = 'h-14 w-14 rounded-full object-cover drop-shadow';
-                img.onerror = () => {
-                    avatarHost.innerHTML = '';
-                    avatarHost.appendChild(buildInitials(initials || '?'));
-                };
+                img.onerror = () => avatarHost.appendChild(buildInitials(initials || '?'));
                 avatarHost.appendChild(img);
             } else {
                 avatarHost.appendChild(buildInitials(initials || '?'));
             }
-
         } catch (err) {
             console.error('[Navbar] user fetch failed:', err);
         }
@@ -61,24 +80,24 @@ export class Navbar {
         const hash = window.location.hash || '#main';
 
         document.querySelectorAll('#sidebar .nav-btn').forEach(entry => {
-            entry.classList.remove('bg-white', 'shadow-lg');
-            const inner = entry.querySelector('.inner');
-            inner?.classList.remove('bg-gradient-to-r', 'from-indigo-400', 'to-blue-400');
-
+            entry.classList.remove(
+                'bg-gradient-to-r', 'from-indigo-400', 'to-blue-400', 'shadow-lg'
+            );
             entry.querySelectorAll('svg').forEach(s => s.classList.remove('text-white'));
             const sp = entry.querySelector('span');
             sp?.classList.remove('text-white');
             sp?.classList.add('text-indigo-400');
+
+            entry.querySelector('ul')?.classList.remove(
+                'bg-gradient-to-tr', 'from-indigo-50', 'to-blue-50'
+            );
         });
 
-        let entry = document.querySelector(`#sidebar [data-hash="${hash}"]`)?.closest('.nav-btn')
-            || document.querySelector(`#sidebar a[href="${hash}"]`)?.closest('.nav-btn');
+        const activeLink = document.querySelector(`#sidebar a[href="${hash}"]`);
+        const entry = activeLink?.closest('.nav-btn');
         if (!entry) return;
 
-        entry.classList.add('bg-white', 'shadow-lg');
-        const inner = entry.querySelector('.inner');
-        inner?.classList.add('bg-gradient-to-r', 'from-indigo-400', 'to-blue-400');
-
+        entry.classList.add('bg-gradient-to-r', 'from-indigo-400', 'to-blue-400', 'shadow-lg');
         entry.querySelectorAll('svg').forEach(s => {
             s.classList.remove('text-indigo-400');
             s.classList.add('text-white');
@@ -88,17 +107,45 @@ export class Navbar {
         if (sp) {
             sp.classList.remove('text-indigo-400');
             sp.classList.add('text-white');
-        }
-    }
+            sp.dataset.originalLabel ??= sp.textContent;
 
+            const label = activeLink.textContent.trim();
+            if (label) sp.textContent = label;
+        }
+
+        entry.querySelector('ul')?.classList.add(
+            'bg-gradient-to-tr', 'from-indigo-50', 'to-blue-50'
+        );
+    }
 
 
     attachCollapses() {
         document.querySelectorAll('[data-toggle="collapse"]').forEach(btn => {
-            const target = document.querySelector(btn.dataset.target);
+            const selector = btn.dataset.target;
+            const target = selector ? document.querySelector(selector) : null;
+            if (!target) {
+                console.warn('[Navbar] collapse target not found:', selector);
+                return;
+            }
             btn.addEventListener('click', () => {
+                const targetIsHidden = target.classList.contains('hidden');
                 target.classList.toggle('hidden');
                 btn.querySelector('svg:last-child')?.classList.toggle('rotate-180');
+
+                const span = btn.querySelector('span');
+                if (!span) return;
+
+                span.dataset.originalLabel ??= span.textContent;
+
+                if (!targetIsHidden) {
+                    const hash = window.location.hash || '#main';
+                    const activeLink = target.querySelector(`a[href="${hash}"]`);
+                    if (activeLink) {
+                        span.textContent = activeLink.textContent.trim();
+                    }
+                } else {
+                    span.textContent = span.dataset.originalLabel;
+                }
             });
         });
     }

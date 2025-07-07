@@ -1,6 +1,8 @@
-export class Footer {
+import { ROUTES } from "./../../js/helpers/routes";
+import { stripScripts } from './../../js/helpers/common-methods.js';
 
-    constructor(selector = '#footer', url = './../../components/footer/footer.html') {
+export class Footer {
+    constructor(selector = '#footer', url = ROUTES.components.footer.html) {
         this.selector = selector;
         this.url = url;
         this.footerElement = null;
@@ -11,13 +13,18 @@ export class Footer {
         try {
             const res = await fetch(this.url + '?raw');
             const html = await res.text();
+
+            const cleanHTML = stripScripts(html).innerHTML;
+
             const oldFooter = document.querySelector(this.selector);
             if (!oldFooter) throw new Error(`Element ${this.selector} not found`);
-            oldFooter.outerHTML = html;
+
+            oldFooter.outerHTML = cleanHTML;
             this.footerElement = document.querySelector(this.selector);
             if (!this.footerElement) {
                 throw new Error(`New ${this.selector} element not found after replacing HTML`);
             }
+
             this.attachListeners();
         } catch (error) {
             console.error('Footer failed to load :(', error);
@@ -43,5 +50,4 @@ export class Footer {
             this.footerElement.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
         }
     }
-
 }

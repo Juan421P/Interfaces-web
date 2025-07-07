@@ -4,3 +4,19 @@ export function buildInitials(text, size = 7) {
     element.textContent = text;
     return element;
 }
+
+/**
+*   Remove every <script> element from a HTML string or template.
+*   @param {string|DocumentFragment} htmlOrFragment
+*   @returns {HTMLTemplateElement} template with scripts stripped
+*/
+export function stripScripts(htmlOrFragment) {
+    const tpl = document.createElement('template');
+    if (typeof htmlOrFragment === 'string') {
+        tpl.innerHTML = htmlOrFragment.trim();
+    } else {
+        tpl.content.append(htmlOrFragment.cloneNode(true));
+    }
+    tpl.content.querySelectorAll('script').forEach(s => s.remove());
+    return tpl;
+}

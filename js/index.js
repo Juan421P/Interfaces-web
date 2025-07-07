@@ -9,8 +9,22 @@ const { Toast } = await import(ROUTES.components.toast.js);
 const toast = new Toast();
 await toast.init();
 
+function flattenRoutes(obj){
+    const result = [];
+    for (const val of Object.values(obj)){
+        if(val?.hash){
+            result.push(val);
+        }else if(typeof val === 'object'){
+            result.push(...flattenRoutes(val));
+        }
+    }
+    return result;
+}
+
+const ALL_VIEWS = flattenRoutes(ROUTES.views);
+
 async function render(hash = window.location.hash || '#main') {
-    const view = Object.values(ROUTES.views).find(v => v.hash === hash);
+    const view = ALL_VIEWS.find(v => v.hash === hash);
 
     if (!view) { window.location.hash = '#not-found'; return; }
 
