@@ -70,19 +70,19 @@ export const ROUTES = {
             socialService: {
                 hash: '#planification-service',
                 file: '/interfaces/planification/service/service.html',
-                title: 'Roles'
+                title: 'Servicio Social'
             },
             
             subjects: {
                 hash: '#planification-subjects',
                 file: '/interfaces/planification/subjects/subjects.html',
-                title: 'Roles'
+                title: 'Materias'
             },
             
             university: {
                 hash: '#planification-university',
                 file: '/interfaces/planification/university/university.html',
-                title: 'Roles'
+                title: 'Universidad'
             }
 
         },

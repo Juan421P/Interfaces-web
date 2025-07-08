@@ -9,6 +9,24 @@ export async function init() {
 
     await loadTokens();
     await loadEntityTypes();
+
+    document.querySelectorAll('.code-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('bg-indigo-50'));
+            btn.classList.add('bg-indigo-50');
+
+            const selected = btn.dataset.tab;
+
+            document.querySelector('#token-table').classList.toggle('hidden', selected !== 'tokens');
+            document.querySelector('#entity-type-table').classList.toggle('hidden', selected !== 'entities');
+        });
+    });
+
+    document.querySelector('#manage-codes-btn').addEventListener('click', async () => {
+        const { Modal } = await import(ROUTES.components.modal.js);
+        const modal = new Modal({ templateId: 'tmpl-manage-codes', size: 'sm' });
+        await modal.open();
+    });
 }
 
 async function loadTokens() {
