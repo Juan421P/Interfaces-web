@@ -22,7 +22,7 @@ export async function init() {
     await toast.init();
 
     await loadUniversity();
-    attachCollapses();
+    attachSectionCollapses();
 
     document.querySelector('#edit-university-btn')?.addEventListener('click', async () => {
         const { Modal } = await import(ROUTES.components.modal.js);
@@ -50,6 +50,21 @@ export async function init() {
         });
     });
 }
+
+function attachSectionCollapses(root = document) {
+    root.querySelectorAll('[data-toggle="collapse-sub"]').forEach(btn => {
+        const target = document.querySelector(btn.dataset.target);
+        if (!target) return;
+
+        btn.addEventListener('click', () => {
+            const isHidden = target.classList.toggle('hidden');
+            const arrow = btn.querySelector('svg');
+            if (arrow)
+                arrow.classList.toggle('rotate-180', !isHidden);
+        });
+    });
+}
+
 
 function fillEditForm() {
     const form = document.querySelector('#edit-university-form');
@@ -99,17 +114,4 @@ function updateLocalities() {
     countEl.textContent = mockLocalities.length;
     const main = mockLocalities.find(l => l.isMain);
     sedeEl.textContent = main ? main.name : '—';
-}
-
-function attachCollapses() {
-    document.querySelectorAll('[data-toggle="collapse"]').forEach(btn => {
-        const target = document.querySelector(btn.dataset.target);
-        if (!target) return;
-
-        btn.addEventListener('click', () => {
-            const hidden = target.classList.contains('hidden');
-            target.classList.toggle('hidden');
-            btn.querySelector('svg')?.classList.toggle('rotate-180', hidden);
-        });
-    });
 }
