@@ -1,109 +1,201 @@
 <main class="min-h-screen flex flex-col md:ml-80 p-10 space-y-8 pb-56">
 
-    <div class="bg-gradient-to-tr from-indigo-50 to-blue-50 shadow-md rounded-xl p-6 flex flex-col md:flex-row gap-10 items-center md:items-start md:h-96">
+    <div class="bg-gradient-to-bl from-indigo-50 to-blue-50 shadow-md rounded-xl p-6 flex items-center gap-6">
 
-        <div class="w-full max-w-xs aspect-square rounded-xl overflow-hidden bg-white shadow">
+        <div id="profile-avatar-main"
+            class="w-14 h-14 rounded-full bg-gradient-to-tr from-indigo-100 to-blue-100 flex items-center justify-center drop-shadow flex-shrink-0 overflow-hidden">
+
             <img id="university-logo" src="" alt="Logo de la universidad"
-                class="object-fill w-full bg-indigo-50" />
-        </div>
-
-        <div class="flex-1 space-y-4 md:h-full md:pt-10 md:pl-6">
-
-            <p class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow">
-                <span class="font-semibold">Nombre:</span>
-                <span id="university-name">—</span>
-            </p>
-
-            <p class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow">
-                <span class="font-semibold">Rector:</span>
-                <span id="university-rector">—</span>
-            </p>
-
-            <p class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow">
-                <span class="font-semibold">Sitio web:</span>
-                <a id="university-web" href="#" target="_blank">—</a>
-            </p>
+                class="object-cover w-full h-full hover:cursor-pointer transition-transform duration-200 hover:scale-105" />
 
         </div>
 
-        <div>
+        <div class="flex-shrink-1">
+
+            <p id="university-name"
+                class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none">
+
+                —
+
+            </p>
+
+            <p id="university-rector"
+                class="text-sm bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none">
+
+                —
+
+            </p>
+
+            <a id="university-web" href="#" target="_blank"
+                class="relative inline-block text-transparent bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-indigo-300 after:to-blue-300 after:transition-all duration-300 after:ease-in-out hover:after:w-full cursor-pointer text-xs mt-1 drop-shadow select-none">
+
+                —
+
+            </a>
+
+        </div>
+
+        <div class="ml-auto">
+
             <button id="edit-university-btn" type="button"
                 class="flex items-center gap-3 px-4 py-2 rounded-lg text-indigo-400 hover:drop-shadow group hover:bg-gradient-to-r hover:from-indigo-400 hover:to-blue-400 transition duration-300">
+
                 <svg xmlns="http://www.w3.org/2000/svg"
                     class="w-5 h-5 flex-shrink-0 text-indigo-400 group-hover:text-white transition-colors"
-                    stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" viewBox="0 0 24 24">
+                    stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    viewBox="0 0 24 24">
+
                     <path d="M12 20h9" />
+
                     <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+
                 </svg>
-                <span class="font-medium group-hover:text-white select-none">Editar</span>
+
+                <span class="font-medium group-hover:text-white select-none">
+
+                    Editar
+
+                </span>
+
             </button>
+
         </div>
+
     </div>
 
     <section>
+
         <button type="button" data-toggle="collapse-sub" data-target="#faculties-list"
             class="flex justify-between items-center w-full px-4 py-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 drop-shadow group">
-            <p class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow">
-                Facultades registradas: <span id="faculty-count">—</span>
+
+            <p
+                class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow">
+
+                Facultades registradas:
+
+                <span id="faculty-count">
+
+                    —
+
+                </span>
+
             </p>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round"
-                class="w-5 h-5 text-indigo-400 transition-transform duration-300">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="w-5 h-5 text-indigo-400 transition-transform duration-300">
+
                 <path d="M6 9l6 6 6-6" />
+
             </svg>
+
         </button>
 
         <ul id="faculties-list" class="hidden pl-5 list-disc text-sm space-y-1 mt-2">
         </ul>
+
     </section>
 
     <section class="space-y-2">
+
         <p class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow">
-            Localidades registradas: <span id="locality-count">—</span>
+
+            Localidades registradas:
+
+            <span id="locality-count">
+
+                —
+
+            </span>
+
         </p>
+
         <p class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow">
-            Localidad principal (sede): <span id="main-locality">—</span>
+
+            Localidad principal (sede):
+
+            <span id="main-locality">
+
+                —
+
+            </span>
+
         </p>
+
     </section>
+
 </main>
 
 <template id="tmpl-edit-university">
-    <div class="p-10 max-w-md mx-auto">
-        <h2
-            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow mb-6">
-            Editar Universidad
-        </h2>
-        <form id="edit-university-form" class="space-y-4 text-indigo-700">
 
-            <div>
-                <label class="block text-sm mb-1">Nombre</label>
-                <input type="text" id="universityName"
-                    class="w-full rounded-lg border-indigo-100 shadow px-3 py-2 bg-indigo-50" />
-            </div>
+    <form id="edit-university-form" novalidate class="max-w-md mx-auto flex flex-col px-6 gap-14 py-14">
 
-            <div>
-                <label class="block text-sm mb-1">Rector</label>
-                <input type="text" id="universityRector"
-                    class="w-full rounded-lg border-indigo-100 shadow px-3 py-2 bg-indigo-50" />
-            </div>
+        <div class="flex flex-col items-center">
 
-            <div>
-                <label class="block text-sm mb-1">Sitio web</label>
-                <input type="url" id="universityWeb"
-                    class="w-full rounded-lg border-indigo-100 shadow px-3 py-2 bg-indigo-50" />
-            </div>
+            <span
+                class="text-3xl font-bold text-center mb-2 drop-shadow bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
 
-            <div>
-                <label class="block text-sm mb-1">Logo</label>
-                <input type="url" id="universityLogo"
-                    class="w-full rounded-lg border-indigo-100 shadow px-3 py-2 bg-indigo-50" />
-            </div>
+                Editar Universidad
+
+            </span>
+
+            <span
+                class="text-xl font-semibold text-center drop-shadow bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+
+                Modifica los datos requeridos
+
+            </span>
+
+        </div>
+
+        <div class="flex flex-col gap-6">
+
+            <input id="university-name-mdl" type="text"
+                class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
+                placeholder="Nombre de la universidad" required>
+
+            <input id="university-rector-mdl" type="text"
+                class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
+                placeholder="Rector" required>
+
+            <input id="university-web-mdl" type="url"
+                class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
+                placeholder="Sitio web (https://...)" required>
+
+            <input id="university-logo-mdl" type="url"
+                class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
+                placeholder="URL del logo" required>
+
+        </div>
+
+        <div class="flex justify-end gap-3">
+
+            <button type="button" id="cancel-btn"
+                class="p-4 bg-gradient-to-tr from-indigo-100 to-blue-100 text-indigo-400 hover:scale-[1.015] hover:from-indigo-200 hover:to-blue-200 rounded-xl font-medium shadow-md transition-all text-indigo-400">
+
+                Cancelar
+
+            </button>
 
             <button type="submit"
-                class="w-full mt-4 bg-gradient-to-r from-indigo-400 to-blue-400 text-white font-semibold rounded-lg py-3 shadow hover:shadow-lg transition-shadow">
-                Guardar cambios
+                class="p-4 bg-gradient-to-tr from-indigo-400 to-blue-400 text-white drop-shadow rounded-xl font-medium shadow-md hover:from-indigo-500 hover:to-blue-500 hover:scale-[1.015] transition-all">
+
+                Guardar
+
             </button>
-        </form>
+
+        </div>
+
+    </form>
+
+</template>
+
+
+<template id="tmpl-image-preview">
+
+    <div class="flex items-center justify-center min-h-[70vh]">
+
+        <img id="modal-image-preview" src="" class="rounded-xl max-h-[70vh] object-contain shadow-xl" />
+
     </div>
+
 </template>

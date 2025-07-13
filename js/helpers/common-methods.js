@@ -20,3 +20,10 @@ export function stripScripts(htmlOrFragment) {
     tpl.content.querySelectorAll('script').forEach(s => s.remove());
     return tpl;
 }
+
+export async function showImageModal(src) {
+    const { Modal } = await import('./../../components/modal/modal.js');
+    const modal = new Modal({ templateId: 'tmpl-image-preview', size: 'lg', hideCloseButton: true });
+    await modal.open();
+    modal.contentHost.querySelector('#modal-image-preview').src = src;
+}

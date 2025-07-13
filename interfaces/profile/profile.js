@@ -1,7 +1,7 @@
 import { StatsService } from './../../js/services/stats.js';
 import { NotificationsService } from './../../js/services/notifications.js';
 import { AuditService } from './../../js/services/audit.js';
-import { buildInitials } from './../../js/helpers/common-methods.js';
+import { buildInitials, showImageModal } from './../../js/helpers/common-methods.js';
 import { storage } from './../../js/helpers/index.js';
 
 export async function init() {
@@ -24,6 +24,11 @@ export async function init() {
     await renderKPIs(user.universityID);
     await renderNotifications(user.userID);
     await renderAuditLog(user.userID);
+
+    document.querySelector('#profile-avatar-main')?.addEventListener('click', () => {
+        const img = document.querySelector('#profile-avatar-main img');
+        if (img?.src) showImageModal(img.src);
+    });
 }
 
 function renderAvatar(user, person) {
@@ -33,7 +38,7 @@ function renderAvatar(user, person) {
     if (user.image) {
         const img = document.createElement('img');
         img.src = user.image;
-        img.className = 'rounded-full object-cover';
+        img.className = 'rounded-full object-cover hover:cursor-pointer';
         img.onerror = () =>
             host.appendChild(buildInitials(person.firstName[0] + person.lastName[0]));
         host.appendChild(img);

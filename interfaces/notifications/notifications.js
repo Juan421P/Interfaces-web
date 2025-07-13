@@ -41,7 +41,7 @@ export async function init() {
 
     await loadNotifications();
 
-    document.getElementById('add-notification-btn')?.addEventListener('click', async () => {
+    document.querySelector('#add-notification-btn')?.addEventListener('click', async () => {
         const modal = new Modal({ templateId: 'tmpl-add-notification', size: 'md' });
         await modal.open();
 

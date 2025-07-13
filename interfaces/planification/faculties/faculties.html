@@ -1,0 +1,105 @@
+<main class="min-h-screen flex flex-col md:ml-80 p-10">
+
+  <div class="flex items-center justify-between mb-10">
+
+    <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none">
+      Facultades
+    </h1>
+
+    <div
+      class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300">
+
+      <button id="add-faculty-btn" type="button" class="flex items-center gap-5 px-5 py-4 rounded-lg text-indigo-400
+               group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400
+               transition-colors duration-300">
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6 flex-shrink-0 text-indigo-400 group-hover:text-white drop-shadow transition-colors duration-300 stroke-current fill-none"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+
+          <circle cx="12" cy="12" r="10" />
+
+          <path d="M8 12h8" />
+
+          <path d="M12 8v8" />
+
+        </svg>
+
+        <span
+          class="hidden lg:block font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none pr-1">
+
+          Agregar facultad
+
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <section id="faculty-list" class="flex flex-wrap gap-6">
+    <!-- Faculty cards go here -->
+  </section>
+
+  <template id="tmpl-add-faculty">
+    <form id="faculty-form" novalidate class="max-w-md mx-auto flex flex-col px-6 gap-14 py-14">
+
+      <div class="flex flex-col items-center">
+
+        <span
+          class="text-3xl font-bold text-center mb-2 drop-shadow bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+
+          Nueva facultad
+        </span>
+
+        <span
+          class="text-xl font-semibold text-center drop-shadow bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+
+          Llena los campos requeridos
+        </span>
+
+      </div>
+
+      <div class="flex flex-col gap-6">
+
+        <input id="faculty-name" name="name" type="text"
+          class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
+          placeholder="Nombre de la facultad" required>
+
+        <input id="faculty-code" name="code" type="text"
+          class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
+          placeholder="Código de facultad">
+
+        <input id="faculty-phone" name="phone" type="tel"
+          class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
+          placeholder="Teléfono de contacto">
+
+        <select id="faculty-locality" name="localityID" required
+          class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none">
+          <option value="" disabled selected>Selecciona la localidad</option>
+          <!-- JS will fill options here -->
+        </select>
+
+      </div>
+
+      <div class="flex justify-end gap-3">
+
+        <button type="button" id="cancel-btn"
+          class="p-4 bg-gradient-to-tr from-indigo-100 to-blue-100 text-indigo-400 hover:scale-[1.015] hover:from-indigo-200 hover:to-blue-200 rounded-xl font-medium shadow-md transition-all text-indigo-400">
+
+          Cancelar
+        </button>
+
+        <button type="submit"
+          class="p-4 bg-gradient-to-tr from-indigo-400 to-blue-400 text-white drop-shadow rounded-xl font-medium shadow-md hover:from-indigo-500 hover:to-blue-500 hover:scale-[1.015] transition-all">
+
+          Guardar
+        </button>
+
+      </div>
+
+    </form>
+  </template>
+
+</main>

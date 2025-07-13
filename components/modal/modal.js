@@ -8,6 +8,7 @@ export class Modal {
         this.content = opts.content;
         this.templateId = opts.templateId;
         this.overlay = null;
+        this.hideCloseButton = opts.hideCloseButton || false;
     }
 
     _sizeClasses() {
@@ -42,8 +43,11 @@ export class Modal {
         this.container = document.getElementById('modal-container');
         this.contentHost = document.getElementById('modal-content');
         this.closeBtn = document.getElementById('modal-close');
-
-        this.closeBtn.addEventListener('click', () => this.close());
+        if (!this.hideCloseButton) {
+            this.closeBtn.addEventListener('click', () => this.close());
+        } else {
+            this.closeBtn.classList.add('hidden');
+        }
         this.overlay.addEventListener('click', e => {
             if (e.target === this.overlay) this.close();
         });
