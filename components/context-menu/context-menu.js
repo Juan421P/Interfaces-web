@@ -7,7 +7,6 @@ export class ContextMenu {
         this.actions = opts.actions || [];
         this.menu = null;
         this.isOpen = false;
-        this._ignoreNextClick = false;
 
         this._handleOutsideClick = this._handleOutsideClick.bind(this);
     }
@@ -55,7 +54,6 @@ export class ContextMenu {
         this.menu.classList.remove('hidden');
         this.isOpen = true;
 
-        this._ignoreNextClick = true;
         document.addEventListener('click', this._handleOutsideClick, true);
     }
 
@@ -67,10 +65,6 @@ export class ContextMenu {
     }
 
     _handleOutsideClick(e) {
-        if (this._ignoreNextClick) {
-            this._ignoreNextClick = false;
-            return;
-        }
         if (!this.menu.contains(e.target)) {
             this.close();
         }
