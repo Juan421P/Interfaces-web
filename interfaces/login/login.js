@@ -4,6 +4,10 @@ import { isValidEmail, isValidPassword, checkInput } from '../../js/helpers/vali
 
 document.addEventListener('DOMContentLoaded', async () => {
 
+    if (sessionStorage.getItem('userID')) {
+        window.location.href = '/#main';
+    }
+
     const { Footer } = await import(ROUTES.components.footer.js);
     const { Toast } = await import(ROUTES.components.toast.js);
 

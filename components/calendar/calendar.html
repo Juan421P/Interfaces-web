@@ -1,0 +1,45 @@
+<template id="tmpl-calendar">
+    <div class="calendar-wrapper flex flex-col gap-6 select-none max-w-7xl w-full mx-auto">
+
+        <div class="flex items-center justify-between">
+            <button
+                class="calendar-prev px-4 py-2 rounded-lg font-medium bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow hover:scale-105 transition-transform select-none">
+                ◀
+            </button>
+            <h2
+                class="calendar-month text-xl font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow capitalize">
+            </h2>
+            <button
+                class="calendar-next px-4 py-2 rounded-lg font-medium bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow hover:scale-105 transition-transform select-none">
+                ▶
+            </button>
+        </div>
+
+        <div class="grid grid-cols-7 gap-2 text-center">
+            <div
+                class="font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">
+                Lun</div>
+            <div
+                class="font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">
+                Mar</div>
+            <div
+                class="font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">
+                Mié</div>
+            <div
+                class="font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">
+                Jue</div>
+            <div
+                class="font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">
+                Vie</div>
+            <div
+                class="font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">
+                Sáb</div>
+            <div
+                class="font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">
+                Dom</div>
+        </div>
+
+        <div class="calendar-grid grid grid-cols-7 gap-2 min-h-[60vh]">
+        </div>
+    </div>
+</template>

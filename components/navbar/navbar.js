@@ -1,6 +1,5 @@
 import { UsersService } from './../../js/services/users.js';
 import { buildInitials, stripScripts } from './../../js/helpers/common-methods.js';
-import { storage } from './../../js/helpers/storage.js';
 import { ROUTES } from './../../js/helpers/routes.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
@@ -53,7 +52,9 @@ export class Navbar {
 
     async injectProfilePicture() {
         try {
-            const user = storage.get('user');
+            const userID = sessionStorage.getItem('userID');
+            if(!userID) throw new Error('No user ID found');
+            const user = await UsersService.get(userID);
             const { firstName, lastName, image: photo } = user || {};
             const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase();
 

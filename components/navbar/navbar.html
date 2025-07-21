@@ -1,70 +1,44 @@
-<button id="burger-btn" class="fixed top-4 left-4 z-50 p-2 rounded-xl md:hidden
-               bg-white backdrop-blur shadow-md text-indigo-500 hover:text-indigo-700 drop-shadow">
-
+<button id="burger-btn"
+    class="fixed top-4 left-4 z-50 p-2 rounded-xl md:hidden bg-white backdrop-blur shadow-md text-indigo-500 hover:text-indigo-700 drop-shadow">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
         stroke-linejoin="round">
-
         <path d="M4 6h16M4 12h16M4 18h16" />
-
     </svg>
-
 </button>
 
 <div id="sidebar-wrapper"
     class="fixed inset-y-0 left-0 z-40 w-80 transform -translate-x-full transition-transform duration-300 md:translate-x-0 scrollbar-width-none">
-
     <aside id="sidebar"
         class="h-full w-full overflow-y-auto bg-white/70 backdrop-blur md:bg-transparent md:backdrop-blur-0 py-6 px-4 flex flex-col gap-6 scrollbar-width-none">
-
         <header class="flex items-center justify-between px-2">
-
             <div class="flex flex-1 items-center justify-between gap-2">
-
                 <svg width="64" height="80" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg"
                     class="hidden md:block text-d4 drop-shadow transition-all duration-200">
-
                     <defs>
-
                         <linearGradient id="header-gradient" x1="0" y1="0" x2="1" y2="1">
-
                             <stop offset="0%" stop-color="#818cf8" />
-
                             <stop offset="100%" stop-color="#60a5fa" />
-
                         </linearGradient>
-
                     </defs>
-
                     <path
                         d="M47.58,40.67a.83.83,0,0,0-.58,0H45.7l1-1a.89.89,0,0,0,0-1.2.8.8,0,0,0-1.1,0l-1,1a22,22,0,0,0-3.5-5.8l-.6-6.1a2.2,2.2,0,0,0-2.36-2,1,1,0,0,0-.24,0l-6.1,1a16.56,16.56,0,0,0-4.13-1.25A12.79,12.79,0,0,0,32,21.8c.4,1.6,1.6,5.3,3.9,3.5,0,0,2.39-1.49-1-3.69.4.18,6.49,2.9,6.68-2.61a.8.8,0,0,0-.82-.78.83.83,0,0,0-.48.18,5.37,5.37,0,0,1-2.2.4s6.3-3.6,2.2-6.4a1.21,1.21,0,0,0-1.65.4,1.49,1.49,0,0,0-.15.4s-1.3,3.6-4.6,4.4a9.15,9.15,0,0,0,.1-3.3,10.11,10.11,0,0,0-4.1-6.5C20.6-4.7,4.7,1.6,4.7,1.6L12,10.9A9.51,9.51,0,0,0,10.3,18a10.34,10.34,0,0,0,7.29,8.11A20.55,20.55,0,0,0,13.7,28L7.6,27A2.21,2.21,0,0,0,5,28.76L5,29l-.9,9.2a16,16,0,0,0-1.8,6.7c0,.5.1,1,.1,1.4H.8a.9.9,0,0,0-.8.9.89.89,0,0,0,.8.8H2.6l-1.5.7a.7.7,0,0,0-.45.88.61.61,0,0,0,0,.12.8.8,0,0,0,1,.5l1.2-.6-.6,1.3A.89.89,0,0,0,2.7,52a.81.81,0,0,0,1.08-.35s0,0,0,0l.3-.7C7.5,56.3,15.1,60,24,60c12,0,21.7-6.8,21.7-15.1v-.6l.8.3a.7.7,0,0,0,.94-.32.55.55,0,0,0,.06-.18.71.71,0,0,0-.28-1l-.12,0-1.7-.6h1.7v-.1a.9.9,0,1,0,.48-1.73ZM21,4.5c.4,0,.7.7.7,1.5s-.3,1.4-.7,1.4-.7-.6-.7-1.4S20.6,4.5,21,4.5Zm-2.6,7.3c.2-.1.3.1.3.2s.5,7.4,8,7.4h.1c.2,0,4.1,0,5.6-3.2L25.7,9.5a.2.2,0,0,1,0-.28l0,0h.4L32.9,16v.2c-1.6,3.8-6.1,3.7-6.1,3.7h-.1c-8,0-8.5-7.8-8.5-7.9Zm10,32.3h-.6a2.68,2.68,0,0,1-1.4-.4,1.84,1.84,0,0,1-.5-.7l-.4.6a2.58,2.58,0,0,1-2.1.8.29.29,0,0,1-.3-.3c0-.1.1-.2.3-.2a1.79,1.79,0,0,0,1.7-.7,1.4,1.4,0,0,0,.4-1V42L25,42c-1.37,0-2.43-.39-2.52-1s1.2-1.2,2.8-1.4,2.8.3,2.9,1S27.3,41.8,26,42v.3a3,3,0,0,0,.7,1.1,2.53,2.53,0,0,0,1.6.2l.3.2C28.6,43.9,28.6,44.1,28.4,44.1Z"
                         transform="translate(0 -0.01)" fill="url(#header-gradient)" />
-
                 </svg>
-
                 <a href="#notifications" id="bell-btn"
                     class="ml-auto md:ml-0 relative p-2 rounded-full cursor-pointer group">
-
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round"
                         class="w-6 h-6 text-indigo-300 transition-colors duration-300 group-hover:text-indigo-400 drop-shadow">
-
                         <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
-
                         <path d="M13.73 21a2 2 0 01-3.46 0" />
-
                     </svg>
-
                     <span id="bell-dot"
                         class="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-ping opacity-75">
                     </span>
-
                     <span id="bell-dot-static" class="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-red-500">
                     </span>
-
                 </a>
-
             </div>
-
         </header>
 
         <nav class="flex-1">

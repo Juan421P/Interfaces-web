@@ -1,9 +1,12 @@
 import { StatsService } from './../../js/services/stats';
-import { storage } from './../../js/helpers';
+import { UsersService } from '../../js/services/users';
 
 export async function init() {
     try {
-        const { firstName, lastName, image, role } = storage.get('user');
+        const userID = sessionStorage.getItem('userID');
+        if (!userID) throw new Error('No user ID found');
+        const user = await UsersService.get(userID);
+        const { firstName, lastName, image, role } = user || {};
 
         const welcome = document.getElementById('main-welcome');
         if (welcome) welcome.textContent = `Bienvenido, ${firstName} ${lastName}`;

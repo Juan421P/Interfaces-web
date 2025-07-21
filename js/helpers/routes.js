@@ -130,6 +130,16 @@ export const ROUTES = {
             js: '/components/body/body.js'
         },
 
+        calendar: {
+            html: '/components/calendar/calendar.html',
+            js: '/components/calendar/calendar.js'
+        },
+
+        contextMenu: {
+            html: '/components/context-menu/context-menu.html',
+            js: '/components/context-menu/context-menu.js'
+        },
+
         footer: {
             html: '/components/footer/footer.html',
             js: '/components/footer/footer.js'

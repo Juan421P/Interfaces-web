@@ -1,5 +1,11 @@
 import { ROUTES } from './helpers/routes.js';
 
+document.addEventListener('DOMContentLoaded', () => {
+    if(!sessionStorage.getItem('userID')){
+        window.location.href = '/interfaces/login/login.html';
+    }
+});
+
 const { Body } = await import(ROUTES.components.body.js);
 await new Body().load();
 

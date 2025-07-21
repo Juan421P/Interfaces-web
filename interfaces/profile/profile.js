@@ -1,11 +1,13 @@
 import { StatsService } from './../../js/services/stats.js';
 import { NotificationsService } from './../../js/services/notifications.js';
+import { UsersService } from '../../js/services/users.js';
 import { AuditService } from './../../js/services/audit.js';
 import { buildInitials, showImageModal } from './../../js/helpers/common-methods.js';
-import { storage } from './../../js/helpers/index.js';
 
 export async function init() {
-    const user = storage.get('user');
+    const userID = sessionStorage.getItem('userID');
+    if (!userID) throw new Error('No user ID found');
+    const user = await UsersService.get(userID);
     if (!user) {
         console.error('[Profile] No session user :(');
         return;

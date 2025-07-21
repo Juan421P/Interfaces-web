@@ -1,5 +1,4 @@
 import { fetchJSON } from './../helpers/network';
-import { storage } from './../helpers';
 
 const ENDPOINT = '/aMIj5J/users';
 const SESSION_KEY = 'user';
@@ -32,8 +31,12 @@ export const UsersService = {
             { userID: 19, firstName: 'Óscar', lastName: 'Jiménez', email: 'oscar.jimenez@uni.edu', studentID: 1007, careerName: 'Contaduría Pública' },
             { userID: 20, firstName: 'Patricia', lastName: 'Mejía', email: 'patricia.mejia@uni.edu', role: 'teacher', departmentName: 'Administración' }
         ]);
-    }
-    ,
+    },
+
+    async get(id){
+        const user = await fetchJSON(`${ENDPOINT}/${id}`);
+        return user;
+    },
 
     async getByEmail(email) {
         const users = await fetchJSON(`${ENDPOINT}?email=${email}`);
@@ -44,7 +47,9 @@ export const UsersService = {
         const user = await UsersService.getByEmail(email);
         if (!user) throw new Error('Usuario no encontrado 🥺');
         if (user.password.toString() !== password.toString()) throw new Error('Contraseña incorrecta 🥺');
-        storage.set(SESSION_KEY, user);
+        sessionStorage.setItem(
+            'userID', user.id
+        );
         return user;
     },
 
