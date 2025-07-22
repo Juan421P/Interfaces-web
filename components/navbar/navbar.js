@@ -15,7 +15,7 @@ export class Navbar {
 
         const tpl = stripScripts(htmlText);
 
-        if (window.currentUserPerms) filterByPerm(tpl.content, window.currentUserPerms);
+        if (tpl.content) await filterByRole(tpl.content);
 
         const host = document.querySelector('#navbar');
         host.innerHTML = '';
@@ -152,8 +152,39 @@ export class Navbar {
     }
 }
 
-function filterByPerm(root, allowed = []) {
-    root.querySelectorAll('[data-perm]').forEach(node => {
-        if (!allowed.includes(node.dataset.perm)) node.remove();
-    });
+async function filterByRole(root) {
+    try {
+        const userID = sessionStorage.getItem('userID');
+        if (!userID) throw new Error('No user ID found');
+
+        const { role } = await UsersService.get(userID);
+
+        const allowedMap = {
+            'Administrador': ['#system-', '#planification-'],
+            'Administrador RH': ['#hr-'],
+            'Administrador RA': ['#ar-'],
+            'Docente': ['#tp-'],
+            'Estudiante': ['#sp-']
+        };
+
+        const allowedPrefixes = allowedMap[role] || [];
+
+        root.querySelectorAll('a[href]').forEach(link => {
+            const hash = link.getAttribute('href');
+            const isGlobal = ['#main', '#notifications', '#not-found', '#profile', '#academic-calendar']
+                .includes(hash);
+
+            if (!isGlobal && !allowedPrefixes.some(pref => hash.startsWith(pref))) {
+                link.closest('li')?.remove();
+            }
+        });
+
+        root.querySelectorAll('ul').forEach(ul => {
+            if (!ul.querySelector('li')) {
+                ul.closest('.nav-btn')?.remove();
+            }
+        });
+    } catch (err) {
+        console.error('[Navbar] role filtering failed:', err);
+    }
 }

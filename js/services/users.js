@@ -1,7 +1,6 @@
 import { fetchJSON } from './../helpers/network';
 
 const ENDPOINT = '/aMIj5J/users';
-const SESSION_KEY = 'user';
 
 export const UsersService = {
     async list() {
@@ -54,6 +53,6 @@ export const UsersService = {
     },
 
     async logout() {
-        storage.remove(SESSION_KEY);
+        sessionStorage.clear();
     }
 };

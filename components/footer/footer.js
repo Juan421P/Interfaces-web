@@ -34,6 +34,10 @@ export class Footer {
     attachListeners() {
         window.addEventListener('scroll', this.onScroll);
         this.onScroll();
+        this.footerElement.addEventListener('click', () => {
+            this.footerElement.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            this.footerElement.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+        });
     }
 
     onScroll() {
