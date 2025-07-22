@@ -1,6 +1,6 @@
 import { ROUTES } from './../../js/helpers/routes.js';
 import { NotificationsService } from './../../js/services/notifications.js';
-import { storage } from './../../js/helpers/index.js';
+import { UsersService } from './../../js/services/users.js';
 import { checkInput, isValidNormalText as isValidMessage, isValidSimpleText as isValidTitle } from './../../js/helpers/index.js'
 
 export async function init() {
@@ -60,7 +60,9 @@ export async function init() {
                 return;
             }
 
-            const user = storage.get('user');
+            const userID = sessionStorage.getItem('userID');
+            if (!userID) throw new Error('No user ID found');
+            const user = await UsersService.get(userID);
             if (!user) {
                 toast.show('Usuario no autenticado 😭');
             }
