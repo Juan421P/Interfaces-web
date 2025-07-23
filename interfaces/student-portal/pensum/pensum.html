@@ -1,0 +1,38 @@
+<main class="min-h-screen flex flex-col md:ml-80 p-10 space-y-8 pb-80 md:pb-56">
+
+    <div class="flex items-center justify-between">
+        <h1
+            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none py-3">
+            Pensum Académico
+        </h1>
+    </div>
+
+    <div id="pensum-container" class="space-y-6"></div>
+
+</main>
+
+<template id="tmpl-pensum-cycle">
+    <div class="bg-white rounded-lg shadow-sm p-4">
+        <h2
+            class="text-lg font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-3 select-none">
+            Ciclo <span class="cycle-name">-</span>
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3" id="cycle-subjects"></div>
+    </div>
+</template>
+
+<template id="tmpl-pensum-subject">
+    <div class="border border-indigo-100 rounded-lg p-3 hover:shadow-md transition cursor-pointer group">
+        <div
+            class="font-semibold bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent drop-shadow">
+            <span class="subject-code"></span> | <span class="subject-name"></span>
+        </div>
+        <div class="text-xs text-indigo-400 mt-1">
+            <span class="italic">UV:</span> <span class="subject-uv">-</span>
+        </div>
+        <div class="mt-2">
+            <span
+                class="text-xs px-2 py-1 rounded bg-indigo-50 text-indigo-500 font-medium subject-status">Pendiente</span>
+        </div>
+    </div>
+</template>

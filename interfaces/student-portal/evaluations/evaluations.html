@@ -2,37 +2,32 @@
 
     <div class="flex items-center justify-between">
         <h1
-            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none">
-            Inscripción de Ciclo
+            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none py-3">
+            Evaluaciones
         </h1>
     </div>
 
     <div
         class="flex flex-wrap flex-col md:flex-row md:items-center md:justify-between gap-4 bg-indigo-50 rounded-lg p-4 px-6 shadow-sm">
         <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
-            <span id="cycle-student-id" class="text-lg font-semibold">-</span>
+            <span id="eval-student-id" class="text-lg font-semibold">-</span>
             <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Carnet</div>
         </div>
         <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
-            <span id="cycle-student-name" class="text-lg font-semibold">-</span>
+            <span id="eval-student-name" class="text-lg font-semibold">-</span>
             <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Nombre</div>
         </div>
         <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
-            <span id="cycle-student-lastname" class="text-lg font-semibold">-</span>
+            <span id="eval-student-lastname" class="text-lg font-semibold">-</span>
             <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Apellidos
             </div>
         </div>
-        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
-            <span id="cycle-admin" class="text-lg font-semibold">-</span>
-            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">
-                Administrador</div>
-        </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
             <div class="text-center">
-                <div id="cycle-student-code"
+                <div id="eval-student-code"
                     class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
                     -</div>
                 <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Código
@@ -41,7 +36,7 @@
         </div>
         <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
             <div class="text-center">
-                <div id="cycle-student-career"
+                <div id="eval-student-career"
                     class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
                     -</div>
                 <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Carrera
@@ -50,7 +45,7 @@
         </div>
         <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
             <div class="text-center">
-                <div id="cycle-student-plan"
+                <div id="eval-student-plan"
                     class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
                     -</div>
                 <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Plan
@@ -59,7 +54,7 @@
         </div>
         <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
             <div class="text-center">
-                <div id="cycle-student-modality"
+                <div id="eval-student-modality"
                     class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
                     -</div>
                 <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">
@@ -67,23 +62,40 @@
                 </div>
             </div>
         </div>
-        <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
-            <div class="text-center">
-                <div id="cycle-student-state"
-                    class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
-                    -</div>
-                <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Estado
-                </div>
-            </div>
-        </div>
     </div>
 
-    <div id="cycle-table" class="mt-4"></div>
-
-    <h2
-        class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow mt-6 select-none">
-        Horario Semanal
-    </h2>
-    <div id="cycle-calendar" class="mt-2"></div>
+    <div id="eval-subjects" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4"></div>
 
 </main>
+
+<template id="tmpl-eval-subject">
+    <div
+        class="flex justify-between items-center bg-indigo-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-300">
+        <div class="text-indigo-500 text-sm space-y-1">
+            <div class="font-semibold">
+                <span id="eval-subject-code"
+                    class="italic bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent"></span>
+                <span class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent"> | </span>
+                <span id="eval-subject-name"
+                    class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent"></span>
+            </div>
+            <div class="text-xs bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                Grupo Teórico <span id="eval-subject-group" class="font-semibold">-</span>
+            </div>
+            <div class="text-xs bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                <span id="eval-subject-date">-</span> |
+                <span id="eval-subject-room">-</span>
+            </div>
+            <div class="text-xs bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                <span id="eval-subject-time">-</span>
+            </div>
+        </div>
+        <div class="p-2 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-lg shadow-md cursor-pointer transition-all hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v16h16V4H4zm16-2a2 2 0 012 2v16a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h16zM8 10h8M8 14h5" />
+            </svg>
+        </div>
+    </div>
+</template>

@@ -204,15 +204,10 @@ export const ROUTES = {
                 file: '/interfaces/student-portal/pensum/pensum.html',
                 title: 'Pensum'
             },
-            recordEvaluations: {
-                hash: '#sp-record-evaluations',
-                file: '/interfaces/student-portal/record/evaluations/evaluations.html',
+            evaluations: {
+                hash: '#sp-evaluations',
+                file: '/interfaces/student-portal/evaluations/evaluations.html',
                 title: 'Evaluaciones'
-            },
-            recordPath: {
-                hash: '#sp-record-path',
-                file: '/interfaces/student-portal/record/path/path.html',
-                title: 'Ruta de aprendizaje'
             },
             schedule: {
                 hash: '#sp-schedule',
