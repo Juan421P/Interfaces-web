@@ -184,10 +184,25 @@ export const ROUTES = {
 
         /* ---------------------------- 5. ESTUDIANTE ---------------------------- */
         studentPortal: {
-            recordGrades: {
-                hash: '#sp-record-grades',
-                file: '/interfaces/student-portal/record/grades/grades.html',
-                title: 'Historial de notas'
+            enrollmentsCourses: {
+                hash: '#sp-enrollments-courses',
+                file: '/interfaces/student-portal/enrollments/courses/courses.html',
+                title: 'Inscripción de materias'
+            },
+            enrollmentsCycles: {
+                hash: '#sp-enrollments-cycles',
+                file: '/interfaces/student-portal/enrollments/cycles/cycles.html',
+                title: 'Inscripción a ciclos'
+            },
+            grades: {
+                hash: '#sp-grades',
+                file: '/interfaces/student-portal/grades/grades.html',
+                title: 'Notas parciales'
+            },
+            pensum: {
+                hash: '#sp-pensum',
+                file: '/interfaces/student-portal/pensum/pensum.html',
+                title: 'Pensum'
             },
             recordEvaluations: {
                 hash: '#sp-record-evaluations',
@@ -199,45 +214,10 @@ export const ROUTES = {
                 file: '/interfaces/student-portal/record/path/path.html',
                 title: 'Ruta de aprendizaje'
             },
-            recordCampus: {
-                hash: '#sp-record-campus',
-                file: '/interfaces/student-portal/record/campus/campus.html',
-                title: 'Campus'
-            },
-            enrollmentsCycles: {
-                hash: '#sp-enrollments-cycles',
-                file: '/interfaces/student-portal/enrollments/cycles/cycles.html',
-                title: 'Inscripción a ciclos'
-            },
-            enrollmentsCourses: {
-                hash: '#sp-enrollments-courses',
-                file: '/interfaces/student-portal/enrollments/courses/courses.html',
-                title: 'Inscripción de materias'
-            },
-            enrollmentsCyclesSlip: {
-                hash: '#sp-enrollments-cycles-slip',
-                file: '/interfaces/student-portal/enrollments/cycles-slip/cycles-slip.html',
-                title: 'Comprobante de inscripción a ciclo'
-            },
-            enrollmentsCoursesSlip: {
-                hash: '#sp-enrollments-courses-slip',
-                file: '/interfaces/student-portal/enrollments/courses-slip/courses-slip.html',
-                title: 'Comprobante de inscripción de materia'
-            },
             schedule: {
                 hash: '#sp-schedule',
                 file: '/interfaces/student-portal/schedule/schedule.html',
                 title: 'Horario de clase'
-            },
-            pensum: {
-                hash: '#sp-pensum',
-                file: '/interfaces/student-portal/pensum/pensum.html',
-                title: 'Pensum'
-            },
-            grades: {
-                hash: '#sp-grades',
-                file: '/interfaces/student-portal/grades/grades.html',
-                title: 'Notas parciales'
             }
         },
 

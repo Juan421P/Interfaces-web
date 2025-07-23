@@ -1,0 +1,89 @@
+<main class="min-h-screen flex flex-col md:ml-80 p-10 space-y-8 pb-80 md:pb-56">
+
+    <div class="flex items-center justify-between">
+        <h1
+            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none py-3">
+            Notas
+        </h1>
+    </div>
+
+    <div id="record-cycle-filters" class="flex flex-wrap gap-3">
+        <button data-cycle="all"
+            id="record-cycle-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent hover:bg-indigo-50 font-medium select-none drop-shadow">
+            Todos los Ciclos
+        </button>
+        <button data-cycle="I-2023"
+            id="record-cycle-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent hover:bg-indigo-50 font-medium select-none drop-shadow">
+            I-2023
+        </button>
+        <button data-cycle="II-2023"
+            id="record-cycle-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent hover:bg-indigo-50 font-medium select-none drop-shadow">
+            II-2023
+        </button>
+        <button data-cycle="I-2024"
+            id="record-cycle-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent hover:bg-indigo-50 font-medium select-none drop-shadow">
+            I-2024
+        </button>
+        <button data-cycle="II-2024"
+            id="record-cycle-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent hover:bg-indigo-50 font-medium select-none drop-shadow">
+            II-2024
+        </button>
+        <button data-cycle="I-2025"
+            id="record-cycle-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent hover:bg-indigo-50 font-medium select-none drop-shadow">
+            I-2025
+        </button>
+    </div>
+
+    <div class="flex flex-wrap flex-col md:flex-row md:items-center md:justify-between gap-4 bg-indigo-50 rounded-lg p-4 px-6 shadow-sm">
+        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+            <span id="record-student-id" class="text-lg font-semibold">-</span>
+            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Carnet</div>
+        </div>
+        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+            <span id="record-student-name" class="text-lg font-semibold">-</span>
+            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Nombre</div>
+        </div>
+        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+            <span id="record-student-lastname" class="text-lg font-semibold">-</span>
+            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Apellido</div>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-between border-b border-indigo-100 pb-1 px-4">
+        <span class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent font-medium select-none">CUM Relativo:
+            <span id="record-cum" class="font-bold">-</span>
+        </span>
+        <span class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent font-medium select-none">Ciclo:
+            <span id="record-cycle" class="font-bold">-</span>
+        </span>
+        <span class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent font-medium select-none">Promedio:
+            <span id="record-average" class="font-bold">-</span>
+        </span>
+    </div>
+
+    <div id="record-subjects" class="space-y-4 mt-4"></div>
+
+</main>
+
+<template id="tmpl-record-subject">
+    <div
+        class="flex justify-between items-center bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer">
+        <div class="flex items-center gap-4">
+            <div class="text-indigo-500 text-sm pl-4">
+                <div class="font-semibold">
+                    <span id="record-subject-code" class="italic bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent"></span><span class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent"> | </span><span id="record-subject-name" class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent"></span>
+                </div>
+                <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent text-xs">
+                    <span class="italic">U.V:</span> <span id="record-subject-uv" class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">-</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent text-xs">Matrícula 1</div>
+            <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent text-xs"><span class="italic">U.M:</span> <span id="record-subject-um" class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">-</span></div>
+            <div class="text-lg font-bold text-indigo-500 bg-indigo-50 rounded-md px-2 py-1 inline-block">
+                <span id="record-subject-grade" class="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">-</span>
+            </div>
+        </div>
+    </div>
+</template>
