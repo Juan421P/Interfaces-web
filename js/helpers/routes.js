@@ -208,11 +208,6 @@ export const ROUTES = {
                 hash: '#sp-evaluations',
                 file: '/interfaces/student-portal/evaluations/evaluations.html',
                 title: 'Evaluaciones'
-            },
-            schedule: {
-                hash: '#sp-schedule',
-                file: '/interfaces/student-portal/schedule/schedule.html',
-                title: 'Horario de clase'
             }
         },
 
@@ -221,7 +216,7 @@ export const ROUTES = {
             courses: {
                 hash: '#tp-courses',
                 file: '/interfaces/teacher-portal/courses/courses.html',
-                title: 'Cursos'
+                title: 'Materias'
             },
             evaluationPlans: {
                 hash: '#tp-evaluation-plans',

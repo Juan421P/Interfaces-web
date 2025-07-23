@@ -38,10 +38,10 @@ function renderPensum() {
 
         c.subjects.forEach(s => {
             const subjEl = tmplSubject.content.cloneNode(true);
-            subjEl.querySelector('.subject-code').textContent = s.code;
-            subjEl.querySelector('.subject-name').textContent = s.name;
-            subjEl.querySelector('.subject-uv').textContent = s.uv;
-            subjEl.querySelector('.subject-status').textContent = s.status;
+            subjEl.querySelector('#subject-code').textContent = s.code;
+            subjEl.querySelector('#subject-name').textContent = s.name;
+            subjEl.querySelector('#subject-uv').textContent = s.uv;
+            subjEl.querySelector('#subject-status').textContent = s.status;
             subjContainer.appendChild(subjEl);
         });
 
