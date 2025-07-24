@@ -1,5 +1,5 @@
 import { ROUTES } from './../../../js/helpers/routes.js';
-import { InstrumentsService } from './../../../js/services/instruments.js';
+import { InstrumentsService } from './../../../js/services/evaluation-instruments.js';
 import { Toast } from './../../../components/toast/toast.js';
 
 export async function init() {
