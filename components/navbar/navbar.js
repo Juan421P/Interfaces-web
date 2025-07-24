@@ -161,8 +161,8 @@ async function filterByRole(root) {
 
         const allowedMap = {
             'Administrador': ['#system-', '#planification-'],
-            'Administrador RH': ['#hr-'],
-            'Administrador RA': ['#ar-'],
+            'RH': ['#hr-'],
+            'RA': ['#ar-'],
             'Docente': ['#tp-'],
             'Estudiante': ['#sp-']
         };

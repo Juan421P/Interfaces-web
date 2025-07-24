@@ -92,9 +92,9 @@ export const ROUTES = {
                 file: '/interfaces/planification/careers/careers.html',
                 title: 'Carreras'
             },
-            pensum: {
-                hash: '#planification-pensum',
-                file: '/interfaces/planification/pensum/pensum.html',
+            pensums: {
+                hash: '#planification-pensums',
+                file: '/interfaces/planification/pensums/pensums.html',
                 title: 'Pensums'
             },
             subjects: {
@@ -144,7 +144,7 @@ export const ROUTES = {
             }
         },
 
-        /* ----------------------- 3. ADMINISTRADOR RH -------------------------- */
+        /* ----------------------- 3. RH -------------------------- */
         humanResources: {
             employees: {
                 hash: '#hr-employees',
@@ -153,7 +153,7 @@ export const ROUTES = {
             }
         },
 
-        /* ----------------------- 4. ADMINISTRADOR RA -------------------------- */
+        /* ----------------------- 4. RA -------------------------- */
         academicRecords: {
             students: {
                 hash: '#ar-students',
@@ -173,7 +173,7 @@ export const ROUTES = {
             courseEnrollments: {
                 hash: '#ar-course-enrollments',
                 file: '/interfaces/academic-records/course-enrollments/course-enrollments.html',
-                title: 'Inscripción a materias'
+                title: 'Inscripción a clases'
             },
             studentPerformance: {
                 hash: '#ar-student-performance',

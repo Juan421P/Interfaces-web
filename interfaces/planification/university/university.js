@@ -1,5 +1,6 @@
 import { ROUTES } from './../../../js/helpers/routes.js';
 import { showImageModal } from './../../../js/helpers/common-methods.js';
+const { Modal } = await import(ROUTES.components.modal.js);
 
 let toast;
 let data = null;
@@ -20,7 +21,6 @@ export async function init() {
     await loadUniversity();
     attachSectionCollapses();
     document.querySelector('#edit-university-btn')?.addEventListener('click', async () => {
-        const { Modal } = await import(ROUTES.components.modal.js);
         const modal = new Modal({ templateId: 'tmpl-edit-university', size: 'sm' });
         await modal.open();
         fillEditForm();
@@ -76,7 +76,7 @@ async function loadUniversity() {
 
 function updateView() {
     document.querySelector('#university-name').textContent = data.universityName || '—';
-    document.querySelector('#university-rector').textContent = data.rector || '—';
+    document.querySelector('#university-rector').textContent = `Rector: ${data.rector}` || '—';
     const web = document.querySelector('#university-web');
     web.textContent = data.webPage || '—';
     web.href = data.webPage || '#';

@@ -9,7 +9,7 @@ const patterns = {
   password: /^[A-Za-z0-9#!@&]$/,
   number: /^\d$/,
   decimal: /^\d*\.?\d{0,3}$/,
-  email: /^[A-Za-z0-9._%+-@]$/
+  email: /^[A-Za-z0-9@.]$/
 }
 
 /**
@@ -23,8 +23,17 @@ export function checkInput(selector, kind = 'username') {
   if (!element) return;
 
   element.addEventListener('keydown', e => {
-    if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) return;
-    if (!patterns[kind].test(e.key)) e.preventDefault();
+    console.log(`Key pressed: ${e.key}, Pattern used: ${kind}`); // Log the kind being used
+    if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+      console.log('Allowed key or modifier, returning.');
+      return;
+    }
+    const isAllowedChar = patterns[kind].test(e.key);
+    console.log(`Is character allowed by pattern (${patterns[kind].source})? ${isAllowedChar}`);
+    if (!isAllowedChar) {
+      e.preventDefault();
+      console.log(`Prevented default for key: ${e.key}`);
+    }
   });
 
   element.addEventListener('paste', e => {
@@ -51,4 +60,4 @@ export const isValidNumber = str => /^\d+$/.test(str.trim());
 export const isValidDecimal = str => /^\d+(\.\d{1,3})?$/.test(str.trim());
 
 /** @param {string} str – Para correos xd */
-export const isValidEmail = str => /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(str.trim());
+export const isValidEmail = str => /^[A-Za-z0-9.]+@[A-Za-z0-9.]+\.(?:[A-Za-z]{2,}|edu\.sv)$/.test(str.trim());

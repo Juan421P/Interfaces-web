@@ -5,14 +5,16 @@ const { Table } = await import(ROUTES.components.table.js);
 const toast = new (await import(ROUTES.components.toast.js)).Toast();
 await toast.init();
 
-// Mock services (replace later)
+// json de gpt xdddd
 const roles = [
     { roleID: 1, roleName: 'Administrador del Sistema', roleType: 'admin' },
-    { roleID: 2, roleName: 'Coordinador Académico', roleType: 'academic' },
+    { roleID: 2, roleName: 'Administrador de RA', roleType: 'ar' },
     { roleID: 3, roleName: 'Docente', roleType: 'teacher' },
-    { roleID: 4, roleName: 'Secretaría', roleType: 'staff' }
+    { roleID: 4, roleName: 'Administrador de RH', roleType: 'hr' },
+    { roleID: 5, roleName: 'Estudiante', roleType: 'student' }
 ];
 
+// si json de gpt es tan bueno por qué no hay json de gpt 2; json de gpt 2:
 const permissions = [
     { permissionID: 1, permissionName: 'Ver usuarios', categoryName: 'Usuarios' },
     { permissionID: 2, permissionName: 'Editar usuarios', categoryName: 'Usuarios' },
@@ -24,33 +26,30 @@ const permissions = [
 let roleTable, permissionTable;
 
 export async function init() {
-    // Roles table
     roleTable = new Table({
         host: '#role-table',
         headers: ['ID', 'Nombre del Rol', 'Tipo'],
         rows: roles.map(r => [r.roleID, r.roleName, formatRoleType(r.roleType)]),
         tableClasses: 'min-w-full text-sm table-fixed',
         headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow text-md',
-        rowClasses: 'divide-y divide-indigo-100 text-indigo-700',
+        rowClasses: 'bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent',
         columnClasses: ['text-right', '', ''],
         fixedLayout: true
     });
     await roleTable.render();
 
-    // Permissions table
     permissionTable = new Table({
         host: '#permission-table',
         headers: ['ID', 'Permiso', 'Categoría'],
         rows: permissions.map(p => [p.permissionID, p.permissionName, p.categoryName]),
         tableClasses: 'min-w-full text-sm table-fixed',
         headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow text-md',
-        rowClasses: 'divide-y divide-indigo-100 text-indigo-700',
+        rowClasses: 'bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent',
         columnClasses: ['text-right', '', ''],
         fixedLayout: true
     });
     await permissionTable.render();
 
-    // Tab switching
     document.querySelectorAll('.role-tab-btn').forEach(btn =>
         btn.addEventListener('click', () => {
             document.querySelectorAll('.role-tab-btn').forEach(b => b.classList.remove('bg-indigo-50'));
@@ -72,9 +71,10 @@ export async function init() {
 function formatRoleType(type) {
     switch (type) {
         case 'admin': return 'Administrador';
-        case 'academic': return 'Académico';
+        case 'ar': return 'Registro Académico';
         case 'teacher': return 'Docente';
-        case 'staff': return 'Personal';
+        case 'hr': return 'Recursos Humanos';
+        case 'student': return 'Estudiante';
         default: return '—';
     }
 }

@@ -26,20 +26,17 @@ export async function init() {
             'bg-gradient-to-tr from-indigo-50 to-blue-50 rounded-lg shadow p-6 w-80 flex flex-col justify-between';
 
         card.innerHTML = `
-      <h3 class="font-semibold text-indigo-700 mb-1">${faculty.facultyName}</h3>
-      <p class="text-sm text-indigo-500 mb-1">Código: ${faculty.facultyCode || '-'}</p>
-      <p class="text-sm text-indigo-500 mb-1">Teléfono: ${faculty.contactPhone || '-'}</p>
+            <h3 class="font-semibold text-indigo-700 mb-1">${faculty.facultyName}</h3>
+            <p class="text-sm text-indigo-500 mb-1">Código: ${faculty.facultyCode || '-'}</p>
+            <p class="text-sm text-indigo-500 mb-1">Teléfono: ${faculty.contactPhone || '-'}</p>
 
-      <div class="mt-4 p-3 bg-indigo-100 rounded-md">
-        <h4 class="font-semibold text-indigo-600 mb-1">Localidad</h4>
-        <p class="text-sm text-indigo-600 mb-0.5">${locality.address || 'N/A'}</p>
-        <p class="text-sm text-indigo-600 mb-0.5">Teléfono: ${locality.phoneNumber || 'N/A'}</p>
-        ${locality.isMainLocality
-                ? `<span class="inline-block mt-1 px-2 py-0.5 text-xs rounded bg-indigo-400 text-white font-semibold select-none">Sede principal</span>`
-                : ''
-            }
-      </div>
-    `;
+            <div class="mt-4 p-3 bg-indigo-100 rounded-md">
+                <h4 class="font-semibold text-indigo-600 mb-1">Localidad</h4>
+                <p class="text-sm text-indigo-600 mb-0.5">${locality.address || 'N/A'}</p>
+                <p class="text-sm text-indigo-600 mb-0.5">Teléfono: ${locality.phoneNumber || 'N/A'}</p>
+                ${locality.isMainLocality ? `<span class="inline-block mt-1 px-2 py-0.5 text-xs rounded bg-indigo-400 text-white font-semibold select-none">Sede principal</span>` : ''}
+            </div>
+        `;
 
         return card;
     }

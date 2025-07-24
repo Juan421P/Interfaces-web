@@ -12,7 +12,7 @@
 }
 
 .animate-left-spin-pulse {
-    animation: left-spin-pulse 10s ease-in-out infinite;
+    animation: left-spin-pulse 30s ease-in-out infinite;
 }
 
 @keyframes right-spin-pulse {
@@ -29,7 +29,7 @@
 }
 
 .animate-right-spin-pulse {
-    animation: right-spin-pulse 10s ease-in-out infinite;
+    animation: right-spin-pulse 20s ease-in-out infinite;
 }
 
 @keyframes toast-fade {

@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const form = document.querySelector('#login-form');
     const emailInput = document.querySelector('#email');
+    checkInput('#email', 'email');
     const passwordInput = document.querySelector('#password');
+    checkInput('#password', 'password');
 
     const btnPassword = document.querySelector('#btn-password');
     const openEye = document.querySelector('#open-eye');
@@ -31,9 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         openEye.classList.toggle('hidden', !hidden);
         closedEye.classList.toggle('hidden', hidden);
     });
-
-    checkInput('#email', 'email');
-    checkInput('#password', 'password');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();

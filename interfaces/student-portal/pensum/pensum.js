@@ -32,7 +32,7 @@ function renderPensum() {
 
     pensum.forEach(c => {
         const cycleEl = tmplCycle.content.cloneNode(true);
-        cycleEl.querySelector('.cycle-name').textContent = c.cycle;
+        cycleEl.querySelector('#cycle-name').textContent = c.cycle;
 
         const subjContainer = cycleEl.querySelector('#cycle-subjects');
 
