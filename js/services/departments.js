@@ -3,7 +3,7 @@ export const DepartmentsService = {
     return Promise.resolve([
       {
         departmentID: 'd1',
-        departmentName: 'Departamento de Ingeniería Civil',
+        departmentName: 'Departamento de Ciencias de la Computación',
         departmentType: 'Académico',
         facultyID: 'f1'
       },

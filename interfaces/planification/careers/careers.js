@@ -1,5 +1,8 @@
 import { ROUTES } from './../../../js/helpers/routes.js';
 import { stripScripts } from './../../../js/helpers/common-methods.js';
+import { CareersService } from '../../../js/services/careers.js';
+import { DepartmentsService } from '../../../js/services/departments.js';
+import { FacultiesService } from '../../../js/services/faculties.js';
 
 export async function init() {
     const toast = new (await import(ROUTES.components.toast.js)).Toast();
@@ -8,37 +11,31 @@ export async function init() {
     const section = document.querySelector('#career-list');
     const addBtn = document.querySelector('#add-career-btn');
     const tmpl = document.querySelector('#tmpl-add-career');
-    let careers = [];
-
-    careers = [
-        {
-            careerName: 'Ingeniería en Sistemas',
-            careerCode: 'INS-01',
-            minPassingScore: 6.0,
-            totalValueUnits: 180,
-            description: 'Carrera enfocada en desarrollo de software y sistemas.'
-        },
-        {
-            careerName: 'Arquitectura',
-            careerCode: 'ARQ-02',
-            minPassingScore: 6.5,
-            totalValueUnits: 200,
-            description: 'Formación en diseño y construcción de espacios habitables.'
-        }
-    ];
+    const [careers, departments, faculties] = await Promise.all([
+        CareersService.list(),
+        DepartmentsService.list(),
+        FacultiesService.list()
+    ]);
 
     function renderCareers() {
         section.innerHTML = '';
         careers.forEach(career => {
             const card = document.createElement('div');
-            card.className =
-                'w-72 p-6 bg-gradient-to-tr from-indigo-50 to-blue-50 rounded-xl shadow hover:shadow-lg hover:scale-[1.015] transition-transform duration-300 cursor-pointer';
+            card.className = 'w-72 p-6 bg-gradient-to-tr from-indigo-50 to-blue-50 rounded-xl shadow hover:shadow-lg hover:scale-[1.015] transition-transform duration-300 cursor-pointer flex flex-col justify-between';
             card.innerHTML = `
-                <h2 class="font-bold bg-gradient-to-tr from-indigo-500 to-blue-500 bg-clip-text text-transparent text-lg drop-shadow">${career.careerName}</h2>
-                <p class="text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent italic mb-2 drop-shadow">${career.careerCode}</p>
-                <p class="text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-2 drop-shadow">${career.description || 'Sin descripción'}</p>
-                <p class="text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">Nota mínima: ${career.minPassingScore}</p>
-                <p class="text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow">UV Totales: ${career.totalValueUnits}</p>
+                <div class="mb-10">
+                    <h2 class="font-bold bg-gradient-to-tr from-indigo-500 to-blue-500 bg-clip-text text-transparent text-lg">${career.careerName}</h2>
+                    <p class="text-md font-bold text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent italic mb-2">ID ${career.careerCode}</p>
+                    <p class="text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent mb-2">${career.description || 'Sin descripción'}</p>
+                    <p class="text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent">Nota mínima: ${career.minPassingScore}</p>
+                    <p class="text-sm bg-gradient-to-tr from-indigo-400 to-blue-400 bg-clip-text text-transparent">UV Totales: ${career.totalValueUnits}</p>
+                </div>
+                <div>
+                    <span class="inline-block mt-1 px-2 py-0.5 text-xs rounded bg-indigo-400 text-white font-semibold select-none">Departamento</span>
+                    <span class="inline-block mt-1 px-2 py-0.5 text-xs rounded bg-indigo-400 text-white font-semibold select-none">Facultad</span>
+                    <span class="inline-block mt-1 px-2 py-0.5 text-xs rounded bg-indigo-400 text-white font-semibold select-none">Localidad</span>
+                    <span class="inline-block mt-1 px-2 py-0.5 text-xs rounded bg-indigo-400 text-white font-semibold select-none">Pensum</span>
+                </div>
             `;
             section.appendChild(card);
         });
