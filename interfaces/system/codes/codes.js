@@ -1,86 +1,75 @@
 import { ROUTES } from './../../../js/helpers/routes.js';
+import { CodePatternsService } from './../../../js/services/code-patterns.js';
+import { CodeGeneratorsService } from './../../../js/services/code-generators.js';
+import { SubjectFamilyAllocationsService } from './../../../js/services/subject-family-allocations.js';
+import { CodeSequencesService } from './../../../js/services/code-sequences.js';
+import { CodeGenerationLogService } from './../../../js/services/code-generation-log.js';
+import { EntityTypesService } from './../../../js/services/entity-types.js';
+import { innerJOIN } from './../../../js/helpers/index.js';
 
 const { Table } = await import(ROUTES.components.table.js);
-let toast;
+const { Toast } = await import(ROUTES.components.toast.js);
+const toast = new Toast();
+await toast.init();
+const { Button } = await import(ROUTES.components.button.js);
+const { TabBar } = await import(ROUTES.components.tabBar.js);
+const { Form } = await import(ROUTES.components.form.js);
 
 export async function init() {
-    toast = new (await import(ROUTES.components.toast.js)).Toast();
-    await toast.init();
 
-    await loadTokens();
-    await loadEntityTypes();
+    new Button({
+        host: '#manage-codes-btn-container',
+        text: 'Agregar código',
+        onClick: async () => {
+            const { Modal } = await import(ROUTES.components.modal.js);
+            const modal = new Modal({ templateId: 'tmpl-manage-codes', size: 'sm' });
+            await modal.open();
+        }
+    });
 
-    document.querySelectorAll('.code-tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('bg-indigo-50'));
-            btn.classList.add('bg-indigo-50');
+    new TabBar({
+        host: '#tabs',
+        tabs: [
+            { id: 'patterns', label: 'Patrones de generación', targetSelector: '#patterns-table' },
+            { id: 'generators', label: 'Generadores', targetSelector: '#generators-table' },
+            { id: 'allocations', label: 'Asignaciones', targetSelector: '#allocations-table' },
+            { id: 'sequences', label: 'Secuencias', targetSelector: '#sequences-table' },
+            { id: 'log', label: 'Historial', targetSelector: '#log-table' }
+        ],
+        activeId: 'patterns'
+    });
 
-            const selected = btn.dataset.tab;
+    async function render() {
+        const [patterns, entityTypes] = await Promise.all([
+            CodePatternsService.list(),
+            EntityTypesService.list()
+        ]);
 
-            document.querySelector('#token-table').classList.toggle('hidden', selected !== 'tokens');
-            document.querySelector('#entity-type-table').classList.toggle('hidden', selected !== 'entities');
+        const patternsWithTypes = innerJOIN(
+            patterns,
+            [
+                {
+                    data: entityTypes,
+                    foreignKey: 'entityTypeID',
+                    referenceKey: 'entityTypeID',
+                    alias: 'entityTypeData',
+                    fields: ['entityType']
+                }
+            ]
+        );
+
+        const patternList = document.querySelector('#pattern-list');
+        patternList.innerHTML = '';
+
+        patternsWithTypes.forEach(pattern => {
+            const tpl = document.querySelector('#tmpl-pattern-card').content.cloneNode(true);
+            tpl.querySelector('#pattern-entity').textContent = pattern.entityTypeData?.entityType || `Tipo ${pattern.entityTypeID}`;
+            tpl.querySelector('#pattern-template').textContent = pattern.patternTemplate;
+            tpl.querySelector('#pattern-detail').textContent = pattern.detail;
+            patternList.appendChild(tpl);
         });
-    });
+    }
 
-    document.querySelector('#manage-codes-btn').addEventListener('click', async () => {
-        const { Modal } = await import(ROUTES.components.modal.js);
-        const modal = new Modal({ templateId: 'tmpl-manage-codes', size: 'sm' });
-        await modal.open();
-    });
-}
+    await render();
 
-async function loadTokens() {
-    const data = await listMockTokens();
-
-    const table = new Table({
-        host: '#token-table',
-        headers: ['Clave', 'Descripción', ''],
-        rows: data.map(t => [t.tokenKey, t.description, '']),
-        headerClasses: 'px-4 py-2 font-bold text-indigo-400',
-        rowClasses: 'text-indigo-700',
-        columnClasses: ['', '', 'text-right'],
-        paginated: false,
-        searchable: false,
-        sortable: false
-    });
-
-    await table.render();
-}
-
-async function loadEntityTypes() {
-    const data = await listMockEntityTypes();
-
-    const table = new Table({
-        host: '#entity-type-table',
-        headers: ['Tipo de entidad', '¿Código automático?', ''],
-        rows: data.map(e => [
-            e.entityType,
-            e.isAutoCodeEnabled ? '✅' : '❌',
-            ''
-        ]),
-        headerClasses: 'px-4 py-2 font-bold text-indigo-400',
-        rowClasses: 'text-indigo-700',
-        columnClasses: ['', '', 'text-right'],
-        paginated: false,
-        searchable: false,
-        sortable: false
-    });
-
-    await table.render();
-}
-
-async function listMockTokens() {
-    return Promise.resolve([
-        { tokenKey: 'UNI', description: 'Universidad base' },
-        { tokenKey: 'FAC', description: 'Facultad' },
-        { tokenKey: 'DEP', description: 'Departamento académico' }
-    ]);
-}
-
-async function listMockEntityTypes() {
-    return Promise.resolve([
-        { entityType: 'Estudiante', isAutoCodeEnabled: true },
-        { entityType: 'Empleado', isAutoCodeEnabled: false },
-        { entityType: 'Carrera', isAutoCodeEnabled: true }
-    ]);
 }

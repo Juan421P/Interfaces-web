@@ -17,7 +17,7 @@ export async function init() {
         sortable: false,
         paginated: false,
         tableClasses: 'min-w-full text-sm table-fixed',
-        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow text-md',
+        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow text-md',
         rowClasses: 'divide-y divide-indigo-100 text-indigo-700',
         columnClasses: ['', '', 'text-center', 'text-center', ''],
         fixedLayout: true
@@ -31,7 +31,7 @@ export async function init() {
         paginated: false,
         sortable: false,
         tableClasses: 'min-w-full text-sm table-fixed',
-        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow text-md',
+        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow text-md',
         rowClasses: 'divide-y divide-indigo-100 text-indigo-700',
         fixedLayout: true
     });
@@ -68,7 +68,7 @@ async function loadCycleData() {
             );
 
             row.push(subject
-                ? `<span class="block -mx-4 -my-3 px-4 py-3 rounded bg-gradient-to-tr from-indigo-400 to-blue-400 text-white font-medium">
+                ? `<span class="block -mx-4 -my-3 px-4 py-3 rounded bg-gradient-to-tr from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] text-white font-medium">
                  ${subject.name} (G${subject.group})
                </span>`
                 : '');

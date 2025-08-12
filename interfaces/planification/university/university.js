@@ -91,7 +91,7 @@ function updateFaculties() {
     mockFaculties.forEach(name => {
         const li = document.createElement('li');
         li.textContent = name;
-        li.className = 'bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent select-none drop-shadow';
+        li.className = 'bg-gradient-to-r from-[rgb(var(--body-from))]0 to-[rgb(var(--body-to))]0 bg-clip-text text-transparent select-none drop-shadow';
         list.appendChild(li);
     });
 }

@@ -1,7 +1,7 @@
 import { ROUTES } from './helpers/routes.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    if(!sessionStorage.getItem('userID')){
+    if (!sessionStorage.getItem('userID')) {
         window.location.href = '/interfaces/login/login.html';
     }
 });
@@ -9,18 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
 const { Body } = await import(ROUTES.components.body.js);
 await new Body().load();
 
-await (await import(ROUTES.components.footer.js)).Footer.prototype.load?.call(new (await import(ROUTES.components.footer.js)).Footer());
+const { Footer } = await import(ROUTES.components.footer.js);
+await new Footer().load();
 
 const { Toast } = await import(ROUTES.components.toast.js);
 const toast = new Toast();
 await toast.init();
 
-function flattenRoutes(obj){
+function flattenRoutes(obj) {
     const result = [];
-    for (const val of Object.values(obj)){
-        if(val?.hash){
+    for (const val of Object.values(obj)) {
+        if (val?.hash) {
             result.push(val);
-        }else if(typeof val === 'object'){
+        } else if (typeof val === 'object') {
             result.push(...flattenRoutes(val));
         }
     }

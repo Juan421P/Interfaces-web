@@ -9,10 +9,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const { Footer } = await import(ROUTES.components.footer.js);
+    
     const { Toast } = await import(ROUTES.components.toast.js);
 
     const footer = new Footer();
-    footer.load();
+    await footer.load();
 
     const toast = new Toast();
     await toast.init();

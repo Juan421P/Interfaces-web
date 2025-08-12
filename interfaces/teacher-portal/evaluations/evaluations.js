@@ -41,9 +41,9 @@ export async function init() {
 
 function renderEvaluations() {
     document.querySelector('#evaluations-container').innerHTML = rawEvaluations.map(ev => `
-        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-all flex flex-col justify-between">
+        <div class="bg-gradient-to-br from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] rounded-xl p-6 shadow-md hover:shadow-lg transition-all flex flex-col justify-between">
             <div class="space-y-2">
-                <h2 class="text-lg font-bold bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent drop-shadow select-none">
+                <h2 class="text-lg font-bold bg-gradient-to-r from-[rgb(var(--body-from))]0 to-[rgb(var(--body-to))]0 bg-clip-text text-transparent drop-shadow select-none">
                     ${ev.title}
                 </h2>
                 <p class="text-xs text-indigo-400 font-semibold">${ev.date}</p>
@@ -70,7 +70,7 @@ function renderEvaluations() {
                 </button>
 
                 <button type="button"
-                    class="p-3 bg-gradient-to-tr from-indigo-400 to-blue-400 text-white drop-shadow rounded-xl font-medium shadow-md hover:from-indigo-500 hover:to-blue-500 hover:scale-[1.015] transition-all view-results-btn"
+                    class="p-3 bg-gradient-to-tr from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] text-white drop-shadow rounded-xl font-medium shadow-md hover:from-[rgb(var(--body-from))]0 hover:to-[rgb(var(--body-to))]0 hover:scale-[1.015] transition-all view-results-btn"
                     data-title="${ev.title}">
                     Ver Resultados
                 </button>

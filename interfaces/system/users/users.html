@@ -1,58 +1,42 @@
-<main class="min-h-screen flex flex-col md:ml-80 p-10 space-y-8 pb-80 md:pb-56">
+<main class="flex flex-col min-h-screen p-10 space-y-8 md:ml-80 pb-80 md:pb-56">
     <div class="flex items-center justify-between">
         <h1
-            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none">
+            class="text-2xl font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none">
             Gestión de Usuarios
         </h1>
-        <div
-            class="group block rounded-xl bg-transparent hover:bg-white hover:shadow-lg transition-shadow duration-300">
-            <button id="add-user-btn" type="button" class="flex items-center gap-5 px-5 py-4 rounded-lg text-indigo-400
-               group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400
-               transition-colors duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6 flex-shrink-0 text-indigo-400 group-hover:text-white drop-shadow transition-colors duration-300 stroke-current fill-none"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M8 12h8" />
-                    <path d="M12 8v8" />
-                </svg>
-                <span
-                    class="hidden lg:block font-medium group-hover:text-white transition-all duration-300 drop-shadow select-none pr-1">
-                    Agregar usuario
-                </span>
-            </button>
+        <div class="block bg-transparent group rounded-xl">
+            <div id="add-user-btn-container"></div>
         </div>
     </div>
     <div id="user-filters" class="flex flex-wrap gap-3">
         <button data-type="all"
-            class="user-filter-btn px-4 py-2 rounded-lg text-indigo-400 hover:bg-indigo-50 font-medium select-none drop-shadow text-shadow">
-            Todos
+            class="px-4 py-2 font-medium rounded-lg select-none user-filter-btn hover:bg-indigo-50 drop-shadow">
+            <span class="bg-gradient-to-r text-transparent bg-clip-text from-[rgb(var(--text-from))] to-[rgb(var(--text-to))]">Todos</span>
         </button>
         <button data-type="students"
-            class="user-filter-btn px-4 py-2 rounded-lg text-indigo-400 hover:bg-indigo-50 font-medium select-none drop-shadow text-shadow">
-            Estudiantes
+            class="px-4 py-2 font-medium rounded-lg select-none user-filter-btn hover:bg-indigo-50 drop-shadow">
+            <span class="bg-gradient-to-r text-transparent bg-clip-text from-[rgb(var(--text-from))] to-[rgb(var(--text-to))]">Estudiantes</span>
         </button>
         <button data-type="teachers"
-            class="user-filter-btn px-4 py-2 rounded-lg text-indigo-400 hover:bg-indigo-50 font-medium select-none drop-shadow text-shadow">
-            Profesores
+            class="px-4 py-2 font-medium rounded-lg select-none user-filter-btn hover:bg-indigo-50 drop-shadow">
+            <span class="bg-gradient-to-r text-transparent bg-clip-text from-[rgb(var(--text-from))] to-[rgb(var(--text-to))]">Profesores</span>
         </button>
         <button data-type="staff"
-            class="user-filter-btn px-4 py-2 rounded-lg text-indigo-400 hover:bg-indigo-50 font-medium select-none drop-shadow text-shadow">
-            Personal
+            class="px-4 py-2 font-medium rounded-lg select-none user-filter-btn hover:bg-indigo-50 drop-shadow">
+            <span class="bg-gradient-to-r text-transparent bg-clip-text from-[rgb(var(--text-from))] to-[rgb(var(--text-to))]">Personal</span>
         </button>
     </div>
     <div class="sm:max-w-xs">
         <input id="user-search" type="text" placeholder="Buscar"
-            class="w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-4 py-3 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 placeholder:italic text-shadow shadow-md border-none select-none focus:ring-0" />
+            class="w-full bg-gradient-to-r from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] px-4 py-3 rounded-lg focus:outline-none text-[rgb(var(--text-from))] placeholder:text-[rgb(var(--placeholder-from))] placeholder:italic text-shadow shadow-md border-none select-none focus:ring-0" />
     </div>
     <div id="user-table" class="mt-4">
     </div>
 </main>
-
 <template id="tmpl-add-user">
-    <div class="p-10 max-w-md mx-auto">
+    <div class="max-w-md p-10 mx-auto">
         <h2
-            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow mb-6">
+            class="text-2xl font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow mb-6">
             Nuevo usuario
         </h2>
         <p class="text-indigo-400">

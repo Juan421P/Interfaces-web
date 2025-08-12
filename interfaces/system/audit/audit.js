@@ -15,7 +15,7 @@ async function renderAuditLog(userID) {
 
     audits.forEach(a => {
         const card = document.createElement('div');
-        card.className = 'bg-gradient-to-tr from-indigo-50 to-blue-50 text-indigo-700 rounded-lg shadow p-4';
+        card.className = 'bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] text-indigo-700 rounded-lg shadow p-4';
         card.innerHTML = `
             <p class="text-sm text-indigo-600">${a.operationType} en <span class="font-semibold">${a.affectedTable}</span></p>
             <p class="text-xs text-indigo-400">Registro #${a.recordID} • ${new Date(a.operationAt).toLocaleString()}</p>

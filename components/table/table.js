@@ -55,16 +55,7 @@ export class Table {
         const host = document.querySelector(this.hostSel);
         host.innerHTML = '';
         host.appendChild(this.root);
-
-        requestAnimationFrame(() => {
-            const input = this.root.querySelector('[data-search] input');
-            if (input) {
-                input.className = "w-full bg-gradient-to-r from-indigo-50 to-blue-50 px-6 py-4 rounded-lg focus:outline-none focus:ring-0 text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none";
-                input.placeholder = 'Buscar…';
-            }
-        });
     }
-
 
     setRows(rows) {
         this.rows = rows;
@@ -74,9 +65,12 @@ export class Table {
 
     _renderHeaders() {
         if (!this.headers.length) return;
-        this.$thead.innerHTML =
-            `<tr>${this.headers.map((h, i) => `
-                <th class="px-4 py-3 ${this.headerClasses} ${this.columnClasses[i] || ''}" data-col="${i}">${h} ${this.sortable ? '<span class="ml-1 sort-indicator hidden">▲</span>' : ''}
+        this.$thead.innerHTML =`
+            <tr>${this.headers.map((h, i) => `
+                <th class="px-4 py-3 text-left ${this.headerClasses} ${this.columnClasses[i] || ''}" data-col="${i}">
+                    <div class="flex bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow">
+                        ${h} ${this.sortable ? '<span class="sort-indicator hidden cursor-pointer">▲</span>' : ''}
+                    </div>
                 </th>`).join('')}
             </tr>`;
     }
@@ -120,16 +114,19 @@ export class Table {
         const pageRows = this._paginate(data);
 
         // El tbody viene a la existencia
-        this.$tbody.innerHTML = pageRows.length
-            ? pageRows.map(r => `
-            <tr class="${this.rowClasses}">${r.map((c, i) => `<td class="px-4 py-3 whitespace-nowrap bg-transparent bg-clip-text text-transparent text-left from-indigo-500 to-blue-500 bg-gradient-to-r drop-shadow ${this.columnClasses[i] || ''}">${c}</td>`).join('')}
-            </tr>`).join('')
+        this.$tbody.innerHTML = pageRows.length ? pageRows.map(r => `
+        <tr class="${this.rowClasses}">${r.map((c, i) => `
+            <td class="px-4 py-3 whitespace-nowrap text-left ${this.columnClasses[i] || ''}">
+                <div class="flex bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow">
+                    ${c}
+                </div>
+            </td>`).join('')}</tr>`).join('')
             : `
-            <tr>
-                <td class="px-4 py-3 text-center text-gray-400" colspan="${this.headers.length}">
-                    Sin datos
-                </td>
-            </tr>`;
+        <tr>
+            <td class="px-4 py-3 text-center text-gray-400" colspan="${this.headers.length}">
+                Sin datos
+            </td>
+        </tr>`;
 
         // Indicador de filtro
         if (this.sortable) {
@@ -153,8 +150,8 @@ export class Table {
 
         const btn = (label, page, disabled = false) =>
             `<button ${disabled ? 'disabled' : ''} data-page="${page}"
-               class="px-2 py-1 rounded border text-indigo-600
-                      ${disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-indigo-50'}">${label}</button>`;
+               class="px-2 py-1
+                      ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent'}">${label}</button>`;
 
         this.$pagination.innerHTML = `
       ${btn('‹', this.page - 1, this.page === 1)}
@@ -169,5 +166,4 @@ export class Table {
             });
         });
     }
-
 }

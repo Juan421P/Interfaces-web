@@ -242,6 +242,10 @@ export const ROUTES = {
             html: '/components/body/body.html',
             js: '/components/body/body.js'
         },
+        button: {
+            html: '/components/button/button.html',
+            js: '/components/button/button.js'
+        },
         calendar: {
             html: '/components/calendar/calendar.html',
             js: '/components/calendar/calendar.js'
@@ -254,6 +258,14 @@ export const ROUTES = {
             html: '/components/footer/footer.html',
             js: '/components/footer/footer.js'
         },
+        form: {
+            html: '/components/form/form.html',
+            js: '/components/form/form.js'
+        },
+        formInput: {
+            html: '/components/form-input/form-input.html',
+            js: '/components/form-input/form-input.js'
+        },
         modal: {
             html: '/components/modal/modal.html',
             js: '/components/modal/modal.js'
@@ -262,9 +274,13 @@ export const ROUTES = {
             html: '/components/navbar/navbar.html',
             js: '/components/navbar/navbar.js'
         },
-        notification: {
-            html: '/components/notification/notification.html',
-            js: '/components/notification/notification.js'
+        select: {
+            html: '/components/select/select.html',
+            js: '/components/select/select.js'
+        },
+        tabBar: {
+            html: '/components/tab-bar/tab-bar.html',
+            js: '/components/tab-bar/tab-bar.js'
         },
         table: {
             html: '/components/table/table.html',

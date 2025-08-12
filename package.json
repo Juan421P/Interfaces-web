@@ -19,6 +19,12 @@
   "homepage": "https://github.com/Juan421P/Interfaces-web#readme",
   "description": "",
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "vite": "^7.0.1"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/vite": "^4.1.11",
+    "tailwindcss": "^4.1.11"
   }
 }

@@ -1,78 +1,78 @@
-<main class="min-h-screen flex flex-col md:ml-80 p-10 space-y-8 pb-80 md:pb-56">
+<main class="flex flex-col min-h-screen p-10 space-y-8 md:ml-80 pb-80 md:pb-56">
 
     <div class="flex items-center justify-between">
         <h1
-            class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow select-none py-3">
+            class="text-2xl font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none py-3">
             Inscripción de Ciclo
         </h1>
     </div>
 
     <div
-        class="flex flex-wrap flex-col md:flex-row md:items-center md:justify-between gap-4 bg-indigo-50 rounded-lg p-4 px-6 shadow-sm">
-        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+        class="flex flex-col flex-wrap gap-4 p-4 px-6 rounded-lg shadow-sm md:flex-row md:items-center md:justify-between bg-indigo-50">
+        <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent select-none">
             <span id="cycle-student-id" class="text-lg font-semibold">-</span>
-            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Carnet</div>
+            <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">Carnet</div>
         </div>
-        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+        <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent select-none">
             <span id="cycle-student-name" class="text-lg font-semibold">-</span>
-            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Nombre</div>
+            <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">Nombre</div>
         </div>
-        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+        <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent select-none">
             <span id="cycle-student-lastname" class="text-lg font-semibold">-</span>
-            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Apellidos
+            <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">Apellidos
             </div>
         </div>
-        <div class="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent select-none">
+        <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent select-none">
             <span id="cycle-admin" class="text-lg font-semibold">-</span>
-            <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">
+            <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">
                 Administrador</div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-5">
+        <div class="flex items-center justify-center p-4 rounded-lg shadow-sm bg-indigo-50">
             <div class="text-center">
                 <div id="cycle-student-code"
-                    class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                    class="text-lg font-semibold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent">
                     -</div>
-                <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Código
+                <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">Código
                 </div>
             </div>
         </div>
-        <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
+        <div class="flex items-center justify-center p-4 rounded-lg shadow-sm bg-indigo-50">
             <div class="text-center">
                 <div id="cycle-student-career"
-                    class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                    class="text-lg font-semibold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent">
                     -</div>
-                <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Carrera
+                <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">Carrera
                 </div>
             </div>
         </div>
-        <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
+        <div class="flex items-center justify-center p-4 rounded-lg shadow-sm bg-indigo-50">
             <div class="text-center">
                 <div id="cycle-student-plan"
-                    class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                    class="text-lg font-semibold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent">
                     -</div>
-                <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Plan
+                <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">Plan
                 </div>
             </div>
         </div>
-        <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
+        <div class="flex items-center justify-center p-4 rounded-lg shadow-sm bg-indigo-50">
             <div class="text-center">
                 <div id="cycle-student-modality"
-                    class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                    class="text-lg font-semibold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent">
                     -</div>
-                <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">
+                <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">
                     Modalidad
                 </div>
             </div>
         </div>
-        <div class="bg-indigo-50 rounded-lg p-4 shadow-sm flex justify-center items-center">
+        <div class="flex items-center justify-center p-4 rounded-lg shadow-sm bg-indigo-50">
             <div class="text-center">
                 <div id="cycle-student-state"
-                    class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
+                    class="text-lg font-semibold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent">
                     -</div>
-                <div class="text-sm bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text text-transparent">Estado
+                <div class="text-sm text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 bg-clip-text">Estado
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
     <div id="cycle-table" class="mt-4"></div>
 
     <h2
-        class="text-lg font-semibold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow mt-6 select-none">
+        class="text-lg font-semibold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow mt-6 select-none">
         Horario Semanal
     </h2>
     <div id="cycle-calendar" class="mt-2"></div>

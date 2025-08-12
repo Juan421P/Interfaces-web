@@ -33,7 +33,7 @@ const table = new Table({
     paginated: true,
     perPage: 8,
     tableClasses: 'min-w-full text-sm table-fixed',
-    headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow text-md',
+    headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow text-md',
     rowClasses: 'text-indigo-700',
     columnClasses: ['', 'text-center', 'text-center', 'text-center'],
     fixedLayout: true
@@ -82,7 +82,7 @@ async function openStudentsModal(course) {
         headers: ['#', 'Nombre del Estudiante'],
         rows: course.students.map((s, i) => [i + 1, s]),
         tableClasses: 'min-w-full text-sm table-fixed',
-        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow text-md',
+        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow text-md',
         rowClasses: 'text-indigo-700',
         columnClasses: ['text-center', ''],
         fixedLayout: true

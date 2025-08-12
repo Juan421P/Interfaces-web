@@ -17,7 +17,7 @@ export async function init() {
         paginated: true,
         perPage: 10,
         tableClasses: 'min-w-full text-sm table-fixed',
-        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent drop-shadow text-md',
+        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow text-md',
         rowClasses: 'divide-y divide-indigo-100 text-indigo-700',
         columnClasses: ['text-right', '', '', '', ''],
         fixedLayout: true

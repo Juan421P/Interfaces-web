@@ -1,10 +1,10 @@
 export class Toast {
 
     /**
-    *   @param {string} containerId
-    *   @param {Object} [defaults]
-    *   defaults.dismissOnClick {Boolean} default = true
-    *   defaults.url {String|null}
+    * @param {string} containerId
+    * @param {Object} [defaults]
+    * defaults.dismissOnClick {Boolean} default = true
+    * defaults.url {String|null}
     */
     constructor(containerId = 'toast-container', defaults = {}) {
         this.containerId = containerId;
@@ -59,11 +59,11 @@ export class Toast {
     }
 
     /**
-    *   @param {String}  message
-    *   @param {Number}  duration – ms
-    *   @param {Object}  opts – per-toast overrides
-    *   opts.dismissOnClick {Boolean}
-    *   opts.url {String|null}
+    * @param {String}  message
+    * @param {Number}  duration
+    * @param {Object}  opts
+    * opts.dismissOnClick {Boolean}
+    * opts.url {String|null}
     */
     show(message, duration = 7500, opts = {}) {
         const { dismissOnClick, url } = { ...this.defaults, ...opts };
@@ -77,19 +77,30 @@ export class Toast {
         toast.style.userSelect = 'none';
         toast.style.cursor = 'pointer';
         toast.style.animation = `toast-fade ${duration}ms ease-in-out forwards`;
+
         const progressBar = toast.querySelector('.progress-bar');
         if (progressBar) {
             progressBar.style.width = '100%';
-            progressBar.style.transition = `width ${duration}ms linear`;
-            requestAnimationFrame(() => (progressBar.style.width = '0%'));
+            progressBar.style.transition = `none`;
+
+            requestAnimationFrame(() => {
+                progressBar.offsetWidth; 
+                progressBar.style.transition = `width ${duration-100}ms linear`;
+                progressBar.style.width = '0%';
+            });
         }
+
         toast.addEventListener('click', () => {
             if (url) window.location.href = url;
             if (dismissOnClick) toast.remove();
         });
-        this.container.appendChild(toast);
-        const autoRemove = setTimeout(() => toast.remove(), duration);
-        toast.addEventListener('transitionend', () => clearTimeout(autoRemove));
-    }
 
+        this.container.appendChild(toast);
+
+        toast.addEventListener('animationend', (event) => {
+            if (event.animationName === 'toast-fade' && toast.style.animationFillMode === 'forwards') {
+                toast.remove();
+            }
+        });
+    }
 }

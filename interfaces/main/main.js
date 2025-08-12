@@ -58,7 +58,7 @@ export async function init() {
 
         for (const [sel, val] of Object.entries(map)) {
             const el = document.querySelector(sel);
-            if (el) el.textContent = val ?? '–';
+            if (el) el.textContent = val ?? '-';
         }
     } catch (error) {
         console.error('[main] failed to load stats:', error);

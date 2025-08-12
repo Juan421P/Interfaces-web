@@ -35,7 +35,6 @@ export class Navbar {
 
         btn.addEventListener('click', async () => {
             const modal = new Modal({ templateId: 'tmpl-logout-confirm', size: 'sm' });
-            await modal.open();
 
             const cancel = modal.contentHost.querySelector('#logout-cancel');
             const confirm = modal.contentHost.querySelector('#logout-confirm');
@@ -66,7 +65,7 @@ export class Navbar {
             if (photo) {
                 const img = document.createElement('img');
                 img.src = photo;
-                img.className = 'h-14 w-14 rounded-full object-cover drop-shadow';
+                img.className = 'object-cover rounded-full h-14 w-14 drop-shadow';
                 img.onerror = () => avatarHost.appendChild(buildInitials(initials || '?'));
                 avatarHost.appendChild(img);
             } else {
@@ -82,15 +81,15 @@ export class Navbar {
 
         document.querySelectorAll('#sidebar .nav-btn').forEach(entry => {
             entry.classList.remove(
-                'bg-gradient-to-r', 'from-indigo-400', 'to-blue-400', 'shadow-lg'
+                'bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg'
             );
             entry.querySelectorAll('svg').forEach(s => s.classList.remove('text-white'));
             const sp = entry.querySelector('span');
             sp?.classList.remove('text-white');
-            sp?.classList.add('text-indigo-400');
+            sp?.classList.add('text-[rgb(var(--button-from))]');
 
             entry.querySelector('ul')?.classList.remove(
-                'bg-gradient-to-tr', 'from-indigo-50', 'to-blue-50'
+                'bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]'
             );
         });
 
@@ -98,15 +97,15 @@ export class Navbar {
         const entry = activeLink?.closest('.nav-btn');
         if (!entry) return;
 
-        entry.classList.add('bg-gradient-to-r', 'from-indigo-400', 'to-blue-400', 'shadow-lg');
+        entry.classList.add('bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg');
         entry.querySelectorAll('svg').forEach(s => {
-            s.classList.remove('text-indigo-400');
+            s.classList.remove('text-[rgb(var(--button-from))]');
             s.classList.add('text-white');
         });
 
         const sp = entry.querySelector('span');
         if (sp) {
-            sp.classList.remove('text-indigo-400');
+            sp.classList.remove('text-[rgb(var(--button-from))]');
             sp.classList.add('text-white');
             sp.dataset.originalLabel ??= sp.textContent;
 
@@ -115,7 +114,7 @@ export class Navbar {
         }
 
         entry.querySelector('ul')?.classList.add(
-            'bg-gradient-to-tr', 'from-indigo-50', 'to-blue-50'
+            'bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]'
         );
     }
 

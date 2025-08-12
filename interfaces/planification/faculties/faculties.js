@@ -22,7 +22,7 @@ export async function init() {
         const locality = localitiesMap[faculty.localityID] || {};
 
         const card = document.createElement('div');
-        card.className = 'bg-gradient-to-tr from-indigo-50 to-blue-50 rounded-lg shadow p-6 w-80 flex flex-col justify-between';
+        card.className = 'bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] rounded-lg shadow p-6 w-80 flex flex-col justify-between';
 
         card.innerHTML = `
             <h3 class="font-semibold text-indigo-700 mb-1">${faculty.facultyName}</h3>

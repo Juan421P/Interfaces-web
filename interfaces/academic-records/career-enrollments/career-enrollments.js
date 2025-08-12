@@ -1,71 +1,51 @@
 import { ROUTES } from './../../../js/helpers/routes.js';
-const { Modal } = await import(ROUTES.components.modal.js);
+import { CareersService } from './../../../js/services/careers.js';
+import { StudentCareerEnrollmentsService } from './../../../js/services/student-career-enrollments.js';
 
-const mockCareerEnrollments = [
-    {
-        studentName: 'Ana María López',
-        studentCode: 'AL23001',
-        careerName: 'Ingeniería en Sistemas',
-        startDate: '2023-02-10',
-        status: 'Activa',
-        statusDate: '2025-07-15'
-    },
-    {
-        studentName: 'Carlos Hernández',
-        studentCode: 'CH21001',
-        careerName: 'Licenciatura en Matemática',
-        startDate: '2021-08-20',
-        status: 'Finalizada',
-        statusDate: '2024-12-11'
-    }
-];
+const { Modal } = await import(ROUTES.components.modal.js);
+const { Button } = await import(ROUTES.components.button.js);
+const { Select } = await import(ROUTES.components.select.js);
+const { FormInput } = await import(ROUTES.components.formInput.js);
 
 export async function init() {
-    populateFilters();
-    document.querySelector('#search-career-enrollments-btn')
-        .addEventListener('click', () => searchEnrollments());
-}
+    const careers = await CareersService.list();
+    const studentCareerEnrollments = await StudentCareerEnrollmentsService.list();
 
-function populateFilters() {
-    const careers = [...new Set(mockCareerEnrollments.map(e => e.careerName))];
-    const careerSelect = document.querySelector('#filter-career');
-    careers.forEach(c => careerSelect.insertAdjacentHTML('beforeend', `<option value="${c}">${c}</option>`));
-}
-
-function searchEnrollments() {
-    const career = document.querySelector('#filter-career').value;
-    const status = document.querySelector('#filter-status').value;
-    const studentSearch = document.querySelector('#filter-student').value.toLowerCase();
-
-    const filtered = mockCareerEnrollments.filter(e => {
-        return (!career || e.careerName === career)
-            && (!status || e.status === status)
-            && (!studentSearch || e.studentName.toLowerCase().includes(studentSearch) || e.studentCode.toLowerCase().includes(studentSearch));
+    new Select({
+        host: '#career-select-container',
+        data: careers,
+        tableOrigin: true,
+        idField: 'careerID',
+        labelField: 'careerName',
+        label: 'Filtrar por carreras',
+        placeholder: 'Todas',
+        name: 'filter-career',
+        onChange: (value, text) => console.log('Selected:', value, text)
     });
 
-    renderEnrollments(filtered);
-}
+    new Select({
+        host: '#status-select-container',
+        data: [...new Set(studentCareerEnrollments.map(sce => sce.status))],
+        tableOrigin: false,
+        idField: 'careerID',
+        labelField: 'careerName',
+        label: 'Filtrar por estado',
+        placeholder: 'Todos',
+        name: 'filter-status',
+        onChange: (value, text) => console.log('Selected:', value, text)
+    });
 
-function renderEnrollments(enrollments) {
-    const container = document.querySelector('#career-enrollments-container');
-    container.innerHTML = '';
+    new FormInput({
+        host: '#search-input-container',
+        placeholder: 'Buscar',
+        label: 'Buscar',
+        validationMethod: 'simpleText'
+    });
 
-    if (!enrollments.length) {
-        container.innerHTML = `<p class="text-indigo-400 text-sm">No se encontraron resultados.</p>`;
-        return;
-    }
-
-    enrollments.forEach(en => {
-        const tpl = document.querySelector('#tmpl-career-enrollment-card').content.cloneNode(true);
-
-        tpl.querySelector('#student-name').textContent = en.studentName;
-        tpl.querySelector('#career-info').textContent = `${en.careerName} • ${en.studentCode}`;
-        tpl.querySelector('#status').textContent = en.status;
-        tpl.querySelector('#start-date').textContent = en.startDate;
-        tpl.querySelector('#status-date').textContent = en.statusDate;
-
-        tpl.querySelector('#view-career-enrollment-btn').addEventListener('click', () => openDetail(en));
-        container.appendChild(tpl);
+    new Button({
+        host: '#button-host',
+        text: 'Buscar',
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current fill-none w-6 h-6"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>'
     });
 }
 
