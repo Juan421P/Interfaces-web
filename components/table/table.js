@@ -63,15 +63,15 @@ export class Table {
                 });
             }
 
-            this.__renderHeaders();
+            this._renderHeaders();
             this._bindHeaderEvents();
-            this.__renderBody('');
+            this._renderBody('');
         } catch (err) {
             console.error('[Table] render failed', err);
         }
     }
 
-    __renderHeaders() {
+    _renderHeaders() {
         if (!this.headers.length) {
             this.$thead.innerHTML = '';
             return;
@@ -81,7 +81,7 @@ export class Table {
       <tr>
         ${this.headers.map((h, i) => `
           <th data-col="${i}" class="px-4 py-3 text-left select-none ${this.sortable ? 'cursor-pointer' : ''}">
-            <div class="flex bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow">
+            <div class="flex bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text text-transparent drop-shadow">
               ${h} ${this.sortable ? '<span class="sort-indicator hidden ml-2">▲</span>' : ''}
             </div>
           </th>
@@ -108,7 +108,7 @@ export class Table {
         return array.slice(start, start + this.perPage);
     }
 
-    __renderBody(filterStr = '') {
+    _renderBody(filterStr = '') {
         let data = Array.isArray(this.data) ? this.data.slice() : [];
 
         if (filterStr) {
@@ -138,13 +138,13 @@ export class Table {
 
         this.$tbody.innerHTML = pageRows.length ? pageRows.map(row => {
             const cells = Array.isArray(row) ? row : this.headers.map((h, i) => row[h] ?? row[i] ?? '');
-            return `<tr class="hover:bg-[rgb(var(--card-from))] transition-colors duration-150">${cells.map(cell => `
+            return `<tr class="group hover:bg-gradient-to-r hover:from-[rgb(var(--button-from))] hover:to-[rgb(var(--button-to))] transition-colors cursor-pointer duration-150">${cells.map(cell => `
         <td class="px-4 py-3 whitespace-nowrap text-left">
-          <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow">
+          <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow group-hover:text-[rgb(var(--button-text))]">
             ${cell}
           </div>
         </td>`).join('')}</tr>`;
-        }).join('') : `<tr><td class="px-4 py-3 text-center text-gray-400" colspan="${Math.max(1, this.headers.length)}">Sin datos</td></tr>`;
+        }).join('') : `<tr><td class="px-4 py-3 text-center" colspan="${Math.max(1, this.headers.length)}">Sin datos</td></tr>`;
 
         if (this.sortable) {
             this.$thead.querySelectorAll('th').forEach(th => {
