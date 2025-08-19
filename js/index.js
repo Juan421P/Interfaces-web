@@ -1,4 +1,5 @@
 import { ROUTES } from './helpers/routes.js';
+import { THEMES } from './helpers/themes.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!sessionStorage.getItem('userID')) {
@@ -7,10 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const { Body } = await import(ROUTES.components.body.js);
-await new Body().load();
+await new Body();
 
 const { Footer } = await import(ROUTES.components.footer.js);
-await new Footer().load();
+await new Footer();
 
 const { Toast } = await import(ROUTES.components.toast.js);
 const toast = new Toast();
@@ -65,10 +66,14 @@ async function render(hash = window.location.hash || '#main') {
     }
 }
 
-window.addEventListener('hashchange', () => render());
+window.addEventListener('hashchange', () => {
+    THEMES.loadTheme();
+    render();
+});
 
 if (!window.location.hash) {
     window.location.hash = '#main';
 } else {
+    THEMES.loadTheme();
     render();
 }

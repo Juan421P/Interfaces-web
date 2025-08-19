@@ -20,6 +20,11 @@ export const ROUTES = {
             file: '/interfaces/main/main.html',
             title: 'Inicio'
         },
+        testing: {
+            hash: '#testing',
+            file: '/interfaces/testing/testing.html',
+            title: 'Zona de pruebas'
+        },
         notifications: {
             hash: '#notifications',
             file: '/interfaces/notifications/notifications.html',
@@ -250,6 +255,10 @@ export const ROUTES = {
             html: '/components/calendar/calendar.html',
             js: '/components/calendar/calendar.js'
         },
+        checkbox: {
+            html: '/components/checkbox/checkbox.html',
+            js: '/components/checkbox/checkbox.js'
+        },
         contextMenu: {
             html: '/components/context-menu/context-menu.html',
             js: '/components/context-menu/context-menu.js'
@@ -274,9 +283,17 @@ export const ROUTES = {
             html: '/components/navbar/navbar.html',
             js: '/components/navbar/navbar.js'
         },
+        searchInput: {
+            html: '/components/search-input/search-input.html',
+            js: '/components/search-input/search-input.js'
+        },
         select: {
             html: '/components/select/select.html',
             js: '/components/select/select.js'
+        },
+        submitInput: {
+            html: '/components/submit-input/submit-input.html',
+            js: '/components/submit-input/submit-input.js'
         },
         tabBar: {
             html: '/components/tab-bar/tab-bar.html',

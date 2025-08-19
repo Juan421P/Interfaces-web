@@ -7,17 +7,21 @@
   <div class="relative w-full" data-input-wrapper>
     <input type="text" data-field
       class="px-4 py-3 shadow-md rounded-lg w-full bg-gradient-to-r from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] placeholder-[rgb(var(--placeholder-from))] focus:outline-none transition-all duration-300 placeholder:italic text-[rgb(var(--text-from))]">
-    <button type="button" data-password-btn
-      class="absolute inset-y-0 flex items-center right-3">
-      <svg data-eye-open xmlns="http://www.w3.org/2000/svg" class="text-[rgb(var(--text-from))] w-5 h-5 stroke-current fill-none" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+    <button type="button" data-password-btn class="absolute inset-y-0 flex items-center right-3">
+      <svg data-eye-open xmlns="http://www.w3.org/2000/svg"
+        class="text-[rgb(var(--placeholder-from))] hover:text-[rgb(var(--text-from))] w-5 h-5 stroke-current fill-none cursor-pointer transition-colors duration-300" viewBox="0 0 24 24" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path
+          d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+        <circle cx="12" cy="12" r="3" />
       </svg>
-      <svg data-eye-closed xmlns="http://www.w3.org/2000/svg" class="hidden w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M3 3l18 18M9.88 9.88a3 3 0 104.24 4.24M6.1 6.1a9.975 9.975 0 00-3.64 5.9c1.274 4.057 5.065 7 9.54 7a9.953 9.953 0 005.9-3.64M17.9 17.9A9.975 9.975 0 0021.54 12a9.953 9.953 0 00-3.64-5.9" />
+      <svg data-eye-closed xmlns="http://www.w3.org/2000/svg"
+        class="hidden text-[rgb(var(--placeholder-from))] hover:text-[rgb(var(--text-from))] w-5 h-5 stroke-current fill-none cursor-pointer transition-colors duration-300" viewBox="0 0 24 24"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+        <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+        <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+        <path d="m2 2 20 20" />
       </svg>
     </button>
   </div>

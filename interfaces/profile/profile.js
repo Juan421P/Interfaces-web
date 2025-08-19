@@ -1,19 +1,20 @@
 import { UsersService } from '../../js/services/users.js';
 import { AuditService } from './../../js/services/audit.js';
-import { THEMES, buildInitials, showImageModal } from './../../js/helpers/index.js';
+import { buildInitials, showImageModal } from './../../js/helpers/index.js';
 import { ROUTES } from './../../js/helpers/routes.js';
+import { THEMES } from './../../js/helpers/themes.js';
 
 const { Button } = await import(ROUTES.components.button.js);
-const { Modal } = await import(ROUTES.components.modal.js);
 const { Toast } = await import(ROUTES.components.toast.js);
 const toast = new Toast();
 await toast.init();
 
 export async function init() {
-    THEMES.loadTheme();
-
     const userID = sessionStorage.getItem('userID');
-    if (!userID) throw new Error('No user ID found');
+    if (!userID) {
+        throw new Error('No user ID found');
+    }
+
     const user = await UsersService.get(userID);
     if (!user) {
         console.error('[Profile] No session user :(');
@@ -32,6 +33,7 @@ export async function init() {
     renderUserInfo(person, user, role);
     await renderAuditLog(user.userID);
 
+    setInitialThemeMode();
     renderThemeSwatches();
 
     new Button({
@@ -48,70 +50,60 @@ export async function init() {
                 return;
             }
 
-            const modal = new Modal({
-                templateId: 'theme-preview-template',
-                size: 'md',
-                components: [
-                    {
-                        type: Button,
-                        opts: {
-                            host: '#confirm-theme',
-                            text: 'Aplicar',
-                            buttonType: 2,
-                            showIcon: false,
-                            onClick: () => {
-                                const applied = THEMES.setTheme(selectedPalette, mode, true);
-                                if (applied) {
-                                    toast.show('Tema aplicado ✨');
-                                } else {
-                                    toast.show('No se pudo aplicar el tema 😕');
-                                }
-                                modal.close();
-                            }
-                        }
-                    }
-                ]
-            });
+            const currentTheme = THEMES.getCurrent();
 
-            requestAnimationFrame(() => {
-                const preview = modal.rootQuery ? modal.rootQuery('#theme-preview-box') : document.getElementById('theme-preview-box');
-                if (!preview) return;
+            if (selectedPalette === currentTheme.palette && mode === currentTheme.mode) {
+                toast.show('Ese tema ya está seleccionado. ✨');
+                return;
+            }
 
-                const p = THEMES.palettes.find(x => x.name === selectedPalette);
-                if (!p) return;
-
-                const colors = (mode === 'dark' && p.dark) ? p.dark : p.light;
-                const fromRgb = colors.textFrom;
-                const toRgb = colors.textTo;
-
-                preview.style.background = `linear-gradient(90deg, rgb(${fromRgb}), rgb(${toRgb}))`;
-                if (colors.buttonText) preview.style.color = `rgb(${colors.buttonText})`;
-
-                preview.style.border = 'none';
-            });
-
+            const applied = THEMES.setTheme(selectedPalette, mode, true);
+            if (applied) {
+                toast.show('Tema aplicado ✨');
+            } else {
+                toast.show('No se pudo aplicar el tema 😕');
+            }
         }
     });
 
     document.querySelector('#profile-avatar-main')?.addEventListener('click', () => {
         const img = document.querySelector('#profile-avatar-main img');
-        if (img?.src) showImageModal(img.src);
+        if (img?.src) {
+            showImageModal(img.src);
+        }
     });
+
+    document.querySelector('#profile-avatar-main')?.addEventListener('click', () => {
+        const img = document.querySelector('#profile-avatar-main img');
+        if (img?.src) {
+            showImageModal(img.src);
+        }
+    });
+}
+
+function setInitialThemeMode() {
+    const currentTheme = THEMES.getCurrent();
+    const radio = document.querySelector(`input[name="theme-mode"][value="${currentTheme.mode}"]`);
+    if (radio) {
+        radio.checked = true;
+    }
 }
 
 function renderAvatar(user, person) {
     const host = document.querySelector('#profile-avatar-main');
     if (!host) return;
+
     host.innerHTML = '';
+    const initials = (person.firstName?.[0] || '') + (person.lastName?.[0] || '');
 
     if (user.image) {
         const img = document.createElement('img');
         img.src = user.image;
         img.className = 'object-cover rounded-full hover:cursor-pointer';
-        img.onerror = () => host.appendChild(buildInitials((person.firstName?.[0] || '') + (person.lastName?.[0] || '')));
+        img.onerror = () => host.appendChild(buildInitials(initials));
         host.appendChild(img);
     } else {
-        host.appendChild(buildInitials((person.firstName?.[0] || '') + (person.lastName?.[0] || '')));
+        host.appendChild(buildInitials(initials));
     }
 }
 
@@ -119,6 +111,7 @@ function renderUserInfo(person, user, role) {
     const nameEl = document.querySelector('#profile-name');
     const roleEl = document.querySelector('#profile-role');
     const emailEl = document.querySelector('#profile-email');
+
     if (nameEl) nameEl.textContent = `${person.firstName} ${person.lastName}`;
     if (roleEl) roleEl.textContent = role.roleName || 'Rol desconocido';
     if (emailEl) emailEl.textContent = person.contactEmail || user.email;
@@ -130,22 +123,23 @@ async function renderAuditLog(userID) {
         console.error('[profile.js]', 'Container #audit-log not found :(');
         return;
     }
-    container.innerHTML = '';
 
+    container.innerHTML = '';
     const auditTemplate = document.querySelector('#tmpl-audit-card');
     if (!auditTemplate) {
         console.error('[profile.js]', 'Template #tmpl-audit-card not found :(');
         container.innerHTML = '<p class="text-red-500">Hubo un error cargando la plantilla #tmpl-audit-card</p>';
         return;
     }
+
     const templateHTML = auditTemplate.innerHTML;
     const audits = await AuditService.recent(userID, 5);
 
     audits.forEach(audit => {
-        let renderedHTML = templateHTML;
-        renderedHTML = renderedHTML.replaceAll('{{operationType}}', String(audit.operationType || 'N/A'));
-        renderedHTML = renderedHTML.replaceAll('{{affectedTable}}', String(audit.affectedTable || 'N/A'));
-        renderedHTML = renderedHTML.replaceAll('{{recordID}}', String(audit.recordID || 'N/A'));
+        let renderedHTML = templateHTML
+            .replaceAll('{{operationType}}', String(audit.operationType || 'N/A'))
+            .replaceAll('{{affectedTable}}', String(audit.affectedTable || 'N/A'))
+            .replaceAll('{{recordID}}', String(audit.recordID || 'N/A'));
 
         const formattedDate = audit.operationAt ? new Date(audit.operationAt).toLocaleString() : 'N/A';
         renderedHTML = renderedHTML.replaceAll('{{operationAt}}', formattedDate);
@@ -154,7 +148,9 @@ async function renderAuditLog(userID) {
         tempParser.innerHTML = renderedHTML.trim();
 
         const card = tempParser.content.firstElementChild;
-        if (card) container.appendChild(card.cloneNode(true));
+        if (card) {
+            container.appendChild(card.cloneNode(true));
+        }
     });
 }
 
@@ -164,9 +160,9 @@ function renderThemeSwatches() {
 
     container.innerHTML = '';
     const current = THEMES.getCurrent();
+    const modeRadios = document.querySelectorAll('input[name="theme-mode"]');
 
     function updateSelectionOutlines() {
-        const mode = document.querySelector('input[name="theme-mode"]:checked')?.value || 'light';
         container.querySelectorAll('.swatch-item').forEach(item => {
             const input = item.querySelector('input[type="radio"]');
             const visual = item.querySelector('.swatch-visual');
@@ -174,7 +170,7 @@ function renderThemeSwatches() {
             const palette = THEMES.palettes.find(p => p.name === paletteName);
             if (!palette) return;
 
-            const outlineRgb = (mode === 'dark' ? (palette.dark?.textFrom || palette.light.textFrom) : palette.light.textFrom);
+            const outlineRgb = palette.light.textFrom;
 
             if (input.checked) {
                 visual.style.boxShadow = `0 0 0 4px rgba(${outlineRgb}, 0.95)`;
@@ -188,7 +184,6 @@ function renderThemeSwatches() {
 
     THEMES.palettes.forEach(p => {
         const light = p.light;
-
         const label = document.createElement('label');
         label.className = 'inline-flex items-center justify-center mx-1 cursor-pointer swatch-item';
         label.setAttribute('title', p.name);
@@ -198,7 +193,9 @@ function renderThemeSwatches() {
         input.name = 'selected-theme';
         input.value = p.name;
         input.className = 'hidden';
-        if (p.name === current.palette) input.checked = true;
+        if (p.name === current.palette) {
+            input.checked = true;
+        }
 
         const visual = document.createElement('div');
         visual.className = 'w-10 h-10 transition-all duration-200 rounded-full swatch-visual';
@@ -214,13 +211,12 @@ function renderThemeSwatches() {
     updateSelectionOutlines();
 
     container.addEventListener('change', e => {
-        if (!e.target) return;
-        if (e.target.name === 'selected-theme') updateSelectionOutlines();
+        if (e.target?.name === 'selected-theme') {
+            updateSelectionOutlines();
+        }
     });
 
-    document.querySelectorAll('input[name="theme-mode"]').forEach(r => {
+    modeRadios.forEach(r => {
         r.addEventListener('change', () => updateSelectionOutlines());
     });
-
-    container.addEventListener('click', () => updateSelectionOutlines());
 }

@@ -13,9 +13,10 @@ export class Body {
         this.url = opts.url || ROUTES.components.body.html;
         this.content = opts.content || '';
         this.afterLoad = opts.afterLoad || null;
+        this._load();
     }
 
-    async load() {
+    async _load() {
         try {
             const res = await fetch(this.url + '?raw');
             if (!res.ok) throw new Error(`Cannot fetch ${this.url} :(`);

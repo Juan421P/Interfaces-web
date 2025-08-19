@@ -3,6 +3,7 @@ import { buildInitials, stripScripts } from './../../js/helpers/common-methods.j
 import { ROUTES } from './../../js/helpers/routes.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
+const { Button } = await import(ROUTES.components.button.js);
 
 export class Navbar {
     constructor(opts = {}) {
@@ -34,17 +35,27 @@ export class Navbar {
         if (!btn) return;
 
         btn.addEventListener('click', async () => {
-            const modal = new Modal({ templateId: 'tmpl-logout-confirm', size: 'sm' });
-
-            const cancel = modal.contentHost.querySelector('#logout-cancel');
-            const confirm = modal.contentHost.querySelector('#logout-confirm');
-
-            cancel?.addEventListener('click', () => modal.close());
-
-            confirm?.addEventListener('click', () => {
-                UsersService.logout();
-                modal.close();
-                window.location.href = '/interfaces/login/login.html';
+            const logoutModal = new Modal({
+                templateId: 'tmpl-logout-confirm',
+                size: 'sm',
+                components: [
+                    {
+                        type: Button,
+                        opts: {
+                            host: '#logout-confirm',
+                            text: 'Confirmar',
+                            buttonType: 2,
+                            onClick: (e) => {
+                                e.preventDefault();
+                                UsersService.logout();
+                                logoutModal.close();
+                                window.location.href = '/interfaces/login/login.html';
+                            },
+                            showIcon: false,
+                            sizeMultiplier: .75
+                        }
+                    }
+                ]
             });
         });
     }
@@ -52,7 +63,7 @@ export class Navbar {
     async injectProfilePicture() {
         try {
             const userID = sessionStorage.getItem('userID');
-            if(!userID) throw new Error('No user ID found');
+            if (!userID) throw new Error('No user ID found');
             const user = await UsersService.get(userID);
             const { firstName, lastName, image: photo } = user || {};
             const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase();

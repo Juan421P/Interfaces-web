@@ -13,6 +13,10 @@ export class Button {
         this.url = opts.url || ROUTES.components.button.html;
         this.buttonType = opts.buttonType || 1;
         this.showIcon = opts.showIcon !== undefined ? opts.showIcon : true;
+        this.sizeMultiplier = opts.sizeMultiplier || 1;
+        this.iconSize = opts.iconSize || null;
+        this.color = opts.color || null;
+        this.roundness = opts.color || null;
 
         if (!this.showIcon) {
             this.collapseText = false;
@@ -35,25 +39,44 @@ export class Button {
             const template = stripScripts(html);
             this.root = template.content.firstElementChild.cloneNode(true);
 
-            if (this.buttonType === 1) {
-                this.root.classList.add('btn-component');
-            } else if (this.buttonType === 2) {
-                this.root.classList.add('secondary-btn-component');
+            switch (this.buttonType) {
+                case 1:
+                    this.root.classList.add('btn-component');
+                    break;
+                case 2:
+                    this.root.classList.add('secondary-btn-component');
+                    break;
+                case 3:
+                    this.root.classList.add('btn-confirm');
+                    break;
+                case 4:
+                    this.root.classList.add('btn-deny');
+                    break;
+                default:
+                    this.root.classList.add('btn-component');
+                    break;  
             }
 
-            const iconEl = this.root.querySelector('#button-icon');
-            const textEl = this.root.querySelector('#button-text');
+            const basePx = 20;
+            const basePy = 16;
+            this.root.style.padding = `${basePy * this.sizeMultiplier}px ${basePx * this.sizeMultiplier}px`;
 
+            const iconEl = this.root.querySelector('#button-icon');
             if (iconEl) {
                 if (this.showIcon) {
                     if (this.icon) {
                         iconEl.outerHTML = this.icon;
+                    }
+                    if (this.iconSize) {
+                        iconEl.style.width = `${this.iconSize}px`;
+                        iconEl.style.height = `${this.iconSize}px`;
                     }
                 } else {
                     iconEl.remove();
                 }
             }
 
+            const textEl = this.root.querySelector('#button-text');
             if (textEl) {
                 if (this.text) {
                     textEl.textContent = this.text;
@@ -93,5 +116,4 @@ export class Button {
         const iconEl = this.root?.querySelector('#button-icon');
         if (iconEl && icon) iconEl.outerHTML = icon;
     }
-
 }

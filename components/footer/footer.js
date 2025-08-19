@@ -7,9 +7,10 @@ export class Footer {
         this.url = url;
         this.footerElement = null;
         this.onScroll = this.onScroll.bind(this);
+        this._load();
     }
 
-    async load() {
+    async _load() {
         try {
             const res = await fetch(this.url + '?raw');
             const html = await res.text();

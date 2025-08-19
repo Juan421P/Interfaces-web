@@ -1,3 +1,4 @@
+// formInput.js
 import { ROUTES } from '../../js/helpers/routes.js';
 import { stripScripts } from '../../js/helpers/common-methods.js';
 
@@ -18,27 +19,26 @@ const patterns = {
 export class FormInput {
 	constructor(opts = {}) {
 		Object.assign(this, {
-			hostSel: opts.host,
+			id: opts.id || null,
+			host: typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host || null,
 			url: opts.url || ROUTES.components.formInput.html,
 			type: opts.type || 'text',
 			label: opts.label || null,
 			placeholder: opts.placeholder || '',
-			name: opts.name || 'custom-input',
-			onChange: opts.onChange || (() => {}),
+			name: opts.name || opts.id || 'custom-input',
+			onChange: opts.onChange || (() => { }),
 			validationMethod: opts.validationMethod || null,
 			numberInputOpts: opts.numberInputOpts || {},
-			rows: opts.rows || 3,
-			renderMode: opts.renderMode || 'append'
+			rows: opts.rows || 3
 		});
 
-		this.validateNumberOpts();
-		this.render();
+		this._validateNumberOpts();
+		this._render();
 	}
 
-	validateNumberOpts() {
+	_validateNumberOpts() {
 		if (this.type !== 'number') return;
 		const { min, max, step, allowsDecimals } = this.numberInputOpts;
-
 		if (allowsDecimals === false) {
 			[min, max, step].forEach(val => {
 				if (val !== undefined && val % 1 !== 0) {
@@ -48,11 +48,13 @@ export class FormInput {
 		}
 	}
 
-	async render() {
+	async _render() {
 		const txt = await (await fetch(this.url + '?raw')).text();
 		const tpl = stripScripts(txt);
 
-		this.root = tpl.content.firstElementChild;
+		this.root = tpl.content.firstElementChild.cloneNode(true);
+		if (this.id) this.root.id = this.id;
+
 		this.labelEl = this.root.querySelector('[data-label]');
 		this.field = this.root.querySelector('[data-field]');
 		this.textarea = this.root.querySelector('[data-textarea]');
@@ -61,27 +63,39 @@ export class FormInput {
 		this.eyeClosed = this.root.querySelector('[data-eye-closed]');
 
 		if (this.label) {
-			this.labelEl.textContent = this.label;
+			if (this.labelEl) this.labelEl.textContent = this.label;
 		} else {
-			this.labelEl.classList.add('hidden');
+			if (this.labelEl) this.labelEl.classList.add('hidden');
 		}
 
 		if (this.type === 'textarea') {
-			this.field.classList.add('hidden');
-			this.pwBtn.classList.add('hidden');
-			this.textarea.classList.remove('hidden');
-			this.textarea.name = this.name;
-			this.textarea.placeholder = this.placeholder;
-			this.textarea.rows = this.rows;
-		} else {
-			this.field.type = this.type === 'password' ? 'password' : (this.type === 'number' ? 'number' : 'text');
-			this.field.name = this.name;
-			this.field.placeholder = this.placeholder;
-
-			if (this.type !== 'password') {
-				this.pwBtn.classList.add('hidden');
+			if (this.field) this.field.classList.add('hidden');
+			if (this.pwBtn) this.pwBtn.classList.add('hidden');
+			if (this.textarea) {
+				this.textarea.classList.remove('hidden');
+				this.textarea.name = this.name;
+				this.textarea.placeholder = this.placeholder;
+				this.textarea.rows = this.rows;
 			}
-			if (this.type === 'number') {
+		} else {
+			if (this.field) {
+				this.field.classList.remove('hidden');
+				this.field.name = this.name;
+				this.field.placeholder = this.placeholder;
+				if (this.id) this.field.id = this.id;
+				if (this.textarea) this.textarea.classList.add('hidden');
+
+				if (this.type === 'password') {
+					this.field.type = 'password';
+					if (this.eyeOpen) this.eyeOpen.classList.add('hidden');
+					if (this.eyeClosed) this.eyeClosed.classList.remove('hidden');
+				} else {
+					this.field.type = this.type === 'number' ? 'number' : 'text';
+					if (this.pwBtn) this.pwBtn.classList.add('hidden');
+				}
+			}
+
+			if (this.type === 'number' && this.field) {
 				const { min, max, step } = this.numberInputOpts;
 				if (min !== undefined) this.field.min = min;
 				if (max !== undefined) this.field.max = max;
@@ -89,28 +103,24 @@ export class FormInput {
 			}
 		}
 
-		this.attachEvents();
+		this._attachEvents();
 
-		if (this.renderMode === 'append') {
-			const host = document.querySelector(this.hostSel);
-			host.innerHTML = '';
-			host.appendChild(this.root);
+		if (this.host && this.host instanceof HTMLElement) {
+			this.host.innerHTML = '';
+			this.host.appendChild(this.root);
 		}
 	}
 
-	getHTML() {
-		return this.root;
-	}
-
-	attachEvents() {
+	_attachEvents() {
 		const inputEl = this.type === 'textarea' ? this.textarea : this.field;
+		if (!inputEl) return;
 
-		if (this.type === 'password') {
+		if (this.type === 'password' && this.pwBtn) {
 			this.pwBtn.addEventListener('click', () => {
 				const hidden = inputEl.type === 'password';
 				inputEl.type = hidden ? 'text' : 'password';
-				this.eyeOpen.classList.toggle('hidden', !hidden);
-				this.eyeClosed.classList.toggle('hidden', hidden);
+				if (this.eyeOpen) this.eyeOpen.classList.toggle('hidden', !hidden);
+				if (this.eyeClosed) this.eyeClosed.classList.toggle('hidden', hidden);
 			});
 		}
 
@@ -129,11 +139,35 @@ export class FormInput {
 		});
 	}
 
+	getHTML() {
+		return this.root;
+	}
+
+	getValue() {
+		const el = this.type === 'textarea' ? this.textarea : this.field;
+		return el?.value ?? '';
+	}
+
+	setValue(value) {
+		const el = this.type === 'textarea' ? this.textarea : this.field;
+		if (el) el.value = value;
+	}
+
+	validate(validationType = this.validationMethod) {
+		const val = this.getValue();
+		if (!validationType) return true;
+		if (validationType === 'email') {
+			return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+		}
+		if (validationType === 'password') {
+			return val.length >= 8 && val.length <= 256;
+		}
+		return true;
+	}
+
 	reset() {
 		const inputEl = this.type === 'textarea' ? this.textarea : this.field;
-		inputEl.value = '';
-		inputEl.className = inputEl.className.replace(/bg-gradient-to-r.*bg-clip-text/, '').trim();
-		inputEl.classList.add('text-[rgb(var(--placeholder-from))]', 'italic');
+		if (inputEl) inputEl.value = '';
 		this.onChange('');
 	}
 }

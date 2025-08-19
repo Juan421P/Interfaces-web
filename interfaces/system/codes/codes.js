@@ -30,11 +30,11 @@ export async function init() {
     new TabBar({
         host: '#tabs',
         tabs: [
-            { id: 'patterns', label: 'Patrones de generación', targetSelector: '#patterns-table' },
-            { id: 'generators', label: 'Generadores', targetSelector: '#generators-table' },
-            { id: 'allocations', label: 'Asignaciones', targetSelector: '#allocations-table' },
-            { id: 'sequences', label: 'Secuencias', targetSelector: '#sequences-table' },
-            { id: 'log', label: 'Historial', targetSelector: '#log-table' }
+            { id: 'patterns', label: 'Patrones de generación', targetSelector: '#pattern-list' },
+            { id: 'generators', label: 'Generadores', targetSelector: '#generator-list' },
+            { id: 'allocations', label: 'Asignaciones', targetSelector: '#allocation-list' },
+            { id: 'sequences', label: 'Secuencias', targetSelector: '#sequence-list' },
+            { id: 'log', label: 'Historial', targetSelector: '#log' }
         ],
         activeId: 'patterns'
     });
@@ -45,7 +45,13 @@ export async function init() {
             EntityTypesService.list()
         ]);
 
-        const patternsWithTypes = innerJOIN(
+        const patternList = document.querySelector('#pattern-list');
+        patternList.innerHTML = '';
+
+        const generatorList = document.querySelector('#generator-list');
+        patternList.innerHTML = '';
+
+        innerJOIN(
             patterns,
             [
                 {
@@ -56,17 +62,31 @@ export async function init() {
                     fields: ['entityType']
                 }
             ]
-        );
-
-        const patternList = document.querySelector('#pattern-list');
-        patternList.innerHTML = '';
-
-        patternsWithTypes.forEach(pattern => {
+        ).forEach(pattern => {
             const tpl = document.querySelector('#tmpl-pattern-card').content.cloneNode(true);
             tpl.querySelector('#pattern-entity').textContent = pattern.entityTypeData?.entityType || `Tipo ${pattern.entityTypeID}`;
             tpl.querySelector('#pattern-template').textContent = pattern.patternTemplate;
             tpl.querySelector('#pattern-detail').textContent = pattern.detail;
             patternList.appendChild(tpl);
+        });
+
+        innerJOIN(
+            patterns,
+            [
+                {
+                    data: entityTypes,
+                    foreignKey: 'entityTypeID',
+                    referenceKey: 'entityTypeID',
+                    alias: 'entityTypeData',
+                    fields: ['entityType']
+                }
+            ]
+        ).forEach(pattern => {
+            const tpl = document.querySelector('#tmpl-generator-card').content.cloneNode(true);
+            tpl.querySelector('#generator-entity').textContent = pattern.entityTypeData?.entityType || `Tipo ${pattern.entityTypeID}`;
+            tpl.querySelector('#generator-template').textContent = pattern.patternTemplate;
+            tpl.querySelector('#generator-detail').textContent = pattern.detail;
+            generatorList.appendChild(tpl);
         });
     }
 

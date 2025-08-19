@@ -15,7 +15,9 @@ export const THEMES = (() => {
                 buttonTo: '96, 165, 250',        // blue-400
                 buttonText: '255, 255, 255',     // white
                 placeholderFrom: '165, 180, 252',// indigo-300
-                placeholderTo: '147, 197, 253'   // blue-300
+                placeholderTo: '147, 197, 253',   // blue-300
+                offFrom: '199, 210, 254',       // indigo-200
+                offTo: '191, 219, 254'           // blue-200
             },
             dark: {
                 bodyFrom: '38, 38, 38',          // neutral-800
@@ -28,7 +30,9 @@ export const THEMES = (() => {
                 buttonTo: '59, 130, 246',        // blue-500
                 buttonText: '255, 255, 255',
                 placeholderFrom: '165, 180, 252',
-                placeholderTo: '147, 197, 253'
+                placeholderTo: '147, 197, 253',
+                offFrom: '99, 102, 241',         // indigo-500 (darker in dark mode)
+                offTo: '59, 130, 246'            // blue-500 (darker in dark mode)
             }
         },
 
@@ -45,7 +49,9 @@ export const THEMES = (() => {
                 buttonTo: '132, 204, 22',
                 buttonText: '255, 255, 255',
                 placeholderFrom: '134, 239, 172', // green-300 (approx)
-                placeholderTo: '190, 242, 112'    // lime-300 (approx)
+                placeholderTo: '190, 242, 112',   // lime-300 (approx)
+                offFrom: '167, 243, 152',        // green-200
+                offTo: '217, 249, 157'           // lime-200
             },
             dark: {
                 bodyFrom: '30, 30, 30',
@@ -58,7 +64,9 @@ export const THEMES = (() => {
                 buttonTo: '101, 163, 13',        // lime-600
                 buttonText: '255, 255, 255',
                 placeholderFrom: '134, 239, 172',
-                placeholderTo: '190, 242, 112'
+                placeholderTo: '190, 242, 112',
+                offFrom: '21, 128, 61',          // green-600
+                offTo: '101, 163, 13'            // lime-600
             }
         },
 
@@ -75,7 +83,9 @@ export const THEMES = (() => {
                 buttonTo: '249, 115, 22',
                 buttonText: '255, 255, 255',
                 placeholderFrom: '252, 165, 165', // red-300
-                placeholderTo: '253, 186, 116'    // orange-300
+                placeholderTo: '253, 186, 116',   // orange-300
+                offFrom: '254, 202, 202',        // red-200
+                offTo: '254, 215, 170'           // orange-200
             },
             dark: {
                 bodyFrom: '32, 32, 32',
@@ -88,7 +98,9 @@ export const THEMES = (() => {
                 buttonTo: '234, 88, 12',         // orange-600
                 buttonText: '255, 255, 255',
                 placeholderFrom: '252, 165, 165',
-                placeholderTo: '253, 186, 116'
+                placeholderTo: '253, 186, 116',
+                offFrom: '220, 38, 38',          // red-600
+                offTo: '234, 88, 12'            // orange-600
             }
         },
 
@@ -105,7 +117,9 @@ export const THEMES = (() => {
                 buttonTo: '234, 179, 8',
                 buttonText: '255, 255, 255',
                 placeholderFrom: '99, 211, 199',  // teal-300 (approx)
-                placeholderTo: '253, 224, 71'     // yellow-300
+                placeholderTo: '253, 224, 71',    // yellow-300
+                offFrom: '153, 230, 217',       // teal-200
+                offTo: '253, 230, 138'          // yellow-200
             },
             dark: {
                 bodyFrom: '34, 34, 34',
@@ -118,7 +132,9 @@ export const THEMES = (() => {
                 buttonTo: '202, 138, 4',         // yellow-600
                 buttonText: '255, 255, 255',
                 placeholderFrom: '99, 211, 199',
-                placeholderTo: '253, 224, 71'
+                placeholderTo: '253, 224, 71',
+                offFrom: '15, 118, 110',        // teal-600
+                offTo: '202, 138, 4'            // yellow-600
             }
         },
 
@@ -135,7 +151,9 @@ export const THEMES = (() => {
                 buttonTo: '34, 211, 238',
                 buttonText: '255, 255, 255',
                 placeholderFrom: '147, 197, 253', // blue-300
-                placeholderTo: '125, 211, 252'    // cyan-300
+                placeholderTo: '125, 211, 252',   // cyan-300
+                offFrom: '191, 219, 254',       // blue-200
+                offTo: '165, 243, 252'          // cyan-200
             },
             dark: {
                 bodyFrom: '30, 30, 30',
@@ -148,9 +166,45 @@ export const THEMES = (() => {
                 buttonTo: '6, 182, 212',         // cyan-ish
                 buttonText: '255, 255, 255',
                 placeholderFrom: '147, 197, 253',
-                placeholderTo: '125, 211, 252'
+                placeholderTo: '125, 211, 252',
+                offFrom: '59, 130, 246',       // blue-500
+                offTo: '6, 182, 212'            // cyan-500
             }
-        }
+        },
+
+        {
+            name: 'fuchsia-pink',
+            light: {
+                bodyFrom: '253, 242, 248',       // fuchsia-50
+                bodyTo: '253, 242, 248',         // pink-50
+                cardFrom: '255, 247, 250',
+                cardTo: '255, 247, 250',
+                textFrom: '232, 121, 249',       // fuchsia-400
+                textTo: '244, 114, 182',         // pink-400
+                buttonFrom: '232, 121, 249',
+                buttonTo: '244, 114, 182',
+                buttonText: '255, 255, 255',
+                placeholderFrom: '240, 171, 252',// fuchsia-300
+                placeholderTo: '249, 168, 212',   // pink-300
+                offFrom: '244, 185, 255',       // fuchsia-200
+                offTo: '251, 207, 232'           // pink-200
+            },
+            dark: {
+                bodyFrom: '38, 38, 38',
+                bodyTo: '64, 64, 64',
+                cardFrom: '31, 31, 31',
+                cardTo: '38, 38, 38',
+                textFrom: '255, 255, 255',
+                textTo: '243, 244, 246',         // pink-400
+                buttonFrom: '232, 121, 249',
+                buttonTo: '244, 114, 182',
+                buttonText: '255, 255, 255',
+                placeholderFrom: '240, 171, 252',// fuchsia-300
+                placeholderTo: '249, 168, 212',   // pink-300
+                offFrom: '244, 185, 255',       // fuchsia-200
+                offTo: '251, 207, 232'
+            }
+        },
     ];
 
     const STORAGE_KEY = 'app_theme_v1';

@@ -1,0 +1,73 @@
+<main class="flex flex-col min-h-screen p-10 mb-20 md:ml-80">
+
+    <div class="flex items-center justify-between mb-10">
+        <h1
+            class="text-2xl font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none">
+            Pruebas bellakitas
+        </h1>
+
+        <div class="flex items-center gap-3">
+            <input id="tracking-input" type="text"
+                class="w-full max-w-sm bg-gradient-to-r from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] px-6 py-3 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-sm placeholder:italic shadow-md border-none"
+                placeholder="Ingresar número de rastreo">
+
+            <div id="button-container" class="group"></div>
+        </div>
+    </div>
+
+    <div id="delivery-steps-container" class="relative flex flex-col gap-8 pb-36">
+        <div id="timeline-line" class="absolute w-1 rounded-full left-4 bg-gradient-to-r from-indigo-300 to-blue-300">
+        </div>
+        <p id="message-text" class="text-sm font-medium text-center text-indigo-400">
+            Ingresa un número de rastreo para ver el estado de tu entrega.
+        </p>
+    </div>
+
+</main>
+
+<template id="tmpl-delivery-summary">
+    <div id="delivery-summary-card"
+        class="bg-gradient-to-bl from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] shadow-md rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+        <img id="delivery-status-avatar" src="" alt="Estado de la entrega"
+            class="flex-shrink-0 object-cover rounded-full w-14 h-14 bg-gradient-to-tr from-indigo-100 to-blue-100 drop-shadow">
+        <div class="flex-shrink-1">
+            <p id="delivery-title"
+                class="text-lg font-semibold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none">
+            </p>
+            <p id="delivery-sender"
+                class="text-sm bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none">
+            </p>
+            <span id="delivery-status"
+                class="block text-xs bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent mt-1 drop-shadow select-none">
+            </span>
+        </div>
+        <div
+            class="sm:ml-auto text-sm bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none font-semibold text-right">
+            <p id="delivery-tracking-id">Cargando...</p>
+            <p id="delivery-estimated-delivery">Cargando...</p>
+            <p id="delivery-step-count">Cargando...</p>
+        </div>
+    </div>
+</template>
+
+<template id="tmpl-delivery-step">
+    <div id="delivery-step-card" class="relative pl-10 z-[50]">
+
+        <div class="absolute w-3 h-3 rounded-full shadow-md top-8 left-3"></div>
+
+        <div
+            class="bg-gradient-to-br from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] rounded-xl p-6 shadow-md hover:shadow-lg transition-all">
+            <div class="flex items-start justify-between">
+                <div class="flex flex-col gap-2">
+                    <div id="step-checkbox" class="flex items-center gap-2"></div>
+                    <h2 id="step-description"
+                        class="text-lg font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none">
+                    </h2>
+                    <p id="step-timestamp"
+                        class="text-xs bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent font-semibold">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
