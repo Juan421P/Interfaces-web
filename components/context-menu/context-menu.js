@@ -1,5 +1,5 @@
-import { ROUTES } from './../../js/helpers/routes.js';
-import { stripScripts } from './../../js/helpers/common-methods.js';
+import { ROUTES } from './../../js/lib/routes.js';
+import { stripScripts } from './../../js/lib/index.js';
 
 export class ContextMenu {
     constructor(opts = {}) {
@@ -55,7 +55,7 @@ export class ContextMenu {
         actions.forEach(action => {
             const btn = document.createElement('button');
             btn.textContent = action.label;
-            btn.className = `block w-full text-left px-3 py-1 rounded transition-colors ${action.className || ''}`;
+            btn.className = `block cursor-pointer w-full text-left px-3 py-1 rounded transition-colors hover:bg-[rgb(var(--card-from))] hover:text-[rgb(var(--text-from))] ${action.className || ''}`;
             if (action.disabled) {
                 btn.disabled = true;
                 btn.classList.add('opacity-50', 'cursor-not-allowed');

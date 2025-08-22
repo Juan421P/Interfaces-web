@@ -1,4 +1,4 @@
-export const PensumsService = {
+export const PensaService = {
     async list() {
         return Promise.resolve([
             {

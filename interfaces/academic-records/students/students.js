@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 
 const HEADERS = ['ID', 'Nombre', 'Código', 'Carrera', 'Correo'];
 let table, toast, rawStudents = [];

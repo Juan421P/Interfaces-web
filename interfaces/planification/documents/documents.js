@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 import { DocumentsService } from './../../../js/services/documents.js';
 import { Toast } from './../../../components/toast/toast.js';
 

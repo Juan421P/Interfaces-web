@@ -1,5 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
-import { stripScripts } from './../../../js/helpers/common-methods.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 import { CareersService } from '../../../js/services/careers.js';
 import { DepartmentsService } from '../../../js/services/departments.js';
 import { FacultiesService } from '../../../js/services/faculties.js';

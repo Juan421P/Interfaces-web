@@ -1,4 +1,4 @@
-import { fetchJSON } from "./../helpers/network";
+import { fetchJSON } from "./../lib/network";
 
 const ENDPOINT = '/FIH7Wg/stats';
 

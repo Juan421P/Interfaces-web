@@ -1,6 +1,6 @@
-import { UsersService } from './../../js/services/users.js';
-import { buildInitials, stripScripts } from './../../js/helpers/common-methods.js';
-import { ROUTES } from './../../js/helpers/routes.js';
+import { UsersService } from './../../js/services/users.service.js';
+import { buildInitials, stripScripts } from './../../js/lib/index.js';
+import { ROUTES } from './../../js/lib/routes.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
 const { Button } = await import(ROUTES.components.button.js);

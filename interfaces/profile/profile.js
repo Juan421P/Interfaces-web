@@ -1,8 +1,8 @@
 import { UsersService } from '../../js/services/users.js';
 import { AuditService } from './../../js/services/audit.js';
-import { buildInitials, showImageModal } from './../../js/helpers/index.js';
-import { ROUTES } from './../../js/helpers/routes.js';
-import { THEMES } from './../../js/helpers/themes.js';
+import { buildInitials, showImageModal } from './../../js/lib/index.js';
+import { ROUTES } from './../../js/lib/routes.js';
+import { THEMES } from './../../js/lib/themes.js';
 
 const { Button } = await import(ROUTES.components.button.js);
 const { Toast } = await import(ROUTES.components.toast.js);

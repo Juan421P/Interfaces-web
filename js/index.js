@@ -1,5 +1,5 @@
-import { ROUTES } from './helpers/routes.js';
-import { THEMES } from './helpers/themes.js';
+import { ROUTES } from './lib/routes.js';
+import { THEMES } from './lib/themes.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     if (!sessionStorage.getItem('userID')) {

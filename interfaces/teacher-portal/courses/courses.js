@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 // import { CoursesService } from './../../../js/services/courses.js'; // for real data
 
 const { Modal } = await import(ROUTES.components.modal.js);

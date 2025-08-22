@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 import { SubjectsService } from './../../../js/services/subjects.js';
 
 export async function init() {

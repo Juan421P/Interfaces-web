@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes';
+import { ROUTES } from './../../../js/lib/routes';
 
 let evaluations = [];
 

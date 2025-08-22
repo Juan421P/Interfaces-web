@@ -1,5 +1,5 @@
-import { ROUTES } from './../../js/helpers/routes.js';
-import { stripScripts } from './../../js/helpers/common-methods.js';
+import { ROUTES } from './../../js/lib/routes.js';
+import { stripScripts } from './../../js/lib/index.js';
 const { ContextMenu } = await import(ROUTES.components.contextMenu.js);
 
 export class Calendar {
@@ -81,7 +81,7 @@ export class Calendar {
         const event = this.events.find(e => e.date === dayStr);
         const isLargeScreen = window.innerWidth >= 1024;
 
-        cell.className = 'rounded-lg p-2 cursor-pointer flex flex-col justify-center items-center select-none transition-all transform hover:scale-105';
+        cell.className = 'flex flex-col items-center justify-center p-2 transition-all transform rounded-lg cursor-pointer select-none hover:scale-105';
         if (isLargeScreen) {
             cell.classList.add('h-24');
         } else {
@@ -90,7 +90,7 @@ export class Calendar {
 
         const dateSpan = document.createElement('span');
         dateSpan.textContent = day.getDate();
-        dateSpan.className = 'select-none text-sm sm:text-base font-semibold drop-shadow';
+        dateSpan.className = 'text-sm font-semibold select-none sm:text-base drop-shadow';
 
         if (isEventDay) {
             cell.classList.add('bg-gradient-to-tr', 'from-indigo-400', 'to-blue-400', 'text-white');
@@ -99,7 +99,7 @@ export class Calendar {
                 eventSpan.textContent =
                     event.name.length > 8 ? event.name.slice(0, 8) + '…' : event.name;
                 eventSpan.className =
-                    'text-xs font-medium mt-1 bg-gradient-to-r from-indigo-100 to-blue-100 bg-clip-text text-transparent drop-shadow';
+                    'mt-1 text-xs font-medium text-transparent bg-gradient-to-r from-indigo-100 to-blue-100 bg-clip-text drop-shadow';
                 cell.appendChild(dateSpan);
                 cell.appendChild(eventSpan);
             } else {

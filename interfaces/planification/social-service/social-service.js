@@ -1,5 +1,5 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
-import { stripScripts } from './../../../js/helpers/common-methods.js';
+import { ROUTES } from './../../../js/lib/routes.js';
+import { stripScripts } from './../../../js/lib/common-methods.js';
 
 export async function init() {
     const toast = new (await import(ROUTES.components.toast.js)).Toast();

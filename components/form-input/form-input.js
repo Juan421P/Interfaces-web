@@ -1,6 +1,5 @@
-// formInput.js
-import { ROUTES } from '../../js/helpers/routes.js';
-import { stripScripts } from '../../js/helpers/common-methods.js';
+import { ROUTES } from '../../js/lib/routes.js';
+import { stripScripts } from '../../js/lib/index.js';
 
 const allowedKeys = [
 	'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End', 'Enter'

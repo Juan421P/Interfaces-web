@@ -1,4 +1,4 @@
-import { ROUTES } from './../../js/helpers/routes.js';
+import { ROUTES } from './../../js/lib/routes.js';
 import { DeliveriesService } from './../../js/services/testing.js';
 const { Button } = await import(ROUTES.components.button.js);
 const { Checkbox } = await import(ROUTES.components.checkbox.js);

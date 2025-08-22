@@ -1,5 +1,5 @@
-import { StatsService } from './../../js/services/stats';
-import { UsersService } from '../../js/services/users';
+import { StatsService } from './../../js/services/stats.service.js';
+import { UsersService } from './../../js/services/users.service.js';
 
 export async function init() {
     try {
@@ -21,7 +21,7 @@ export async function init() {
                 const img = document.createElement('img');
                 img.src = image;
                 img.alt = `${firstName} ${lastName}`;
-                img.className = 'h-14 w-14 rounded-full object-cover drop-shadow';
+                img.className = 'object-cover rounded-full h-14 w-14 drop-shadow';
                 img.onerror = () => {
                     avatarHost.innerHTML = '';
                     avatarHost.appendChild(

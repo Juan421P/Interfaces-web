@@ -1,5 +1,5 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
-import { showImageModal } from './../../../js/helpers/common-methods.js';
+import { ROUTES } from './../../../js/lib/routes.js';
+import { showImageModal } from './../../../js/lib/common-methods.js';
 const { Modal } = await import(ROUTES.components.modal.js);
 
 let toast;

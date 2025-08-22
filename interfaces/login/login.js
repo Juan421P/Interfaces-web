@@ -1,6 +1,5 @@
-import { ROUTES } from './../../js/helpers/routes.js';
-import { UsersService } from './../../js/services/users.js';
-import { isValidEmail, isValidPassword } from '../../js/helpers/validation.js';
+import { ROUTES } from './../../js/lib/routes.js';
+import { UsersService } from './../../js/services/users.service.js';
 
 const { Form } = await import(ROUTES.components.form.js);
 const { FormInput } = await import(ROUTES.components.formInput.js);
@@ -52,7 +51,6 @@ await new Form({
     onSubmit: async (values) => {
         const emailContent = (values['email-input'] || '').trim();
         const passwordContent = (values['password-input'] || '').trim();
-
         try {
             await UsersService.login(emailContent, passwordContent);
             window.location.href = '/#main';

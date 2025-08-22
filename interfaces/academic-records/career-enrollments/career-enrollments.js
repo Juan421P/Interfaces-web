@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 import { CareersService } from './../../../js/services/careers.js';
 import { StudentCareerEnrollmentsService } from './../../../js/services/student-career-enrollments.js';
 

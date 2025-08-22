@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 const { Modal } = await import(ROUTES.components.modal.js);
 const { Calendar } = await import(ROUTES.components.calendar.js)
 

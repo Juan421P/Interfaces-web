@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 import { CyclesService } from './../../../js/services/cycles.js';
 
 export async function init() {

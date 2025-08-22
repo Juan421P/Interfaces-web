@@ -1,6 +1,5 @@
-// submitInput.js
-import { ROUTES } from '../../js/helpers/routes.js';
-import { stripScripts } from '../../js/helpers/common-methods.js';
+import { ROUTES } from '../../js/lib/routes.js';
+import { stripScripts } from '../../js/lib/index.js';
 
 export class SubmitInput {
 	constructor(opts = {}) {

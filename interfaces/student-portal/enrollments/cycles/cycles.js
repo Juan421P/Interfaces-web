@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../../js/helpers/routes.js';
+import { ROUTES } from './../../../../js/lib/routes.js';
 
 const HEADERS = ['Código', 'Nombre', 'UV', 'Grupo', 'Profesor'];
 const CALENDAR_HEADERS = ['Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];

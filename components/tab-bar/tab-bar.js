@@ -1,5 +1,5 @@
-import { ROUTES } from '../../js/helpers/routes.js';
-import { stripScripts } from '../../js/helpers/common-methods.js';
+import { ROUTES } from '../../js/lib/routes.js';
+import { stripScripts } from '../../js/lib/index.js';
 
 export class TabBar {
     /**
@@ -18,7 +18,7 @@ export class TabBar {
         this.tabs = opts.tabs;
         this.activeId = opts.activeId || this.tabs[0].id;
         this.url = opts.url || ROUTES.components.tabBar.html;
-        this.activeClass = opts.activeClass || 'bg-indigo-50';
+        this.activeClass = opts.activeClass || 'bg-[rgb(var(--card-from))]';
 
         this.render();
     }

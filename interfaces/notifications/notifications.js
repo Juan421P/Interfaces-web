@@ -1,7 +1,6 @@
-import { ROUTES } from './../../js/helpers/routes.js';
-import { NotificationsService } from './../../js/services/notifications.js';
-import { UsersService } from './../../js/services/users.js';
-import { checkInput, isValidNormalText as isValidMessage, isValidSimpleText as isValidTitle } from './../../js/helpers/index.js';
+import { ROUTES } from '../../js/lib/routes.js';
+import { NotificationsService } from '../../js/services/notifications.service.js';
+import { UsersService } from './../../js/services/users.service.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
 const { Toast } = await import(ROUTES.components.toast.js);

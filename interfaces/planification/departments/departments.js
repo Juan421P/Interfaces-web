@@ -1,4 +1,4 @@
-import { ROUTES } from './../../../js/helpers/routes.js';
+import { ROUTES } from './../../../js/lib/routes.js';
 import { DepartmentsService } from './../../../js/services/departments.js';
 import { FacultiesService } from './../../../js/services/faculties.js';
 
