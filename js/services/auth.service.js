@@ -12,9 +12,9 @@ export const AuthService = {
                 email, password
             }, 'login'));
             sessionStorage.setItem(
-                'userID', user.id
+                'userID', user.userId
             );
-            return user;
+            window.location.href = '/#main';
         } catch (error) {
             console.error('Login failed :(', error);
             throw error;

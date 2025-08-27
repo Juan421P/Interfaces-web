@@ -7,9 +7,9 @@ const { SubmitInput } = await import(ROUTES.components.submitInput.js);
 const { Footer } = await import(ROUTES.components.footer.js);
 const { Toast } = await import(ROUTES.components.toast.js);
 
-if (sessionStorage.getItem('userID')) {
-    window.location.href = '/#main';
-}
+// if (sessionStorage.getItem('userID')) {
+//     window.location.href = '/#main';
+// }
 
 await new Footer();
 
@@ -53,7 +53,6 @@ await new Form({
         const passwordContent = (values['password-input'] || '').trim();
         try {
             await AuthService.login(emailContent, passwordContent);
-            window.location.href = '/#main';
         } catch (error) {
             toast.show(error.message);
         }

@@ -1,12 +1,15 @@
-import { StatsService } from './../../js/services/stats.service.js';
 import { UsersService } from './../../js/services/users.service.js';
+import { buildInitials } from './../../js/lib/index.js';
 
 export async function init() {
     try {
         const userID = sessionStorage.getItem('userID');
         if (!userID) throw new Error('No user ID found');
         const user = await UsersService.get(userID);
-        const { firstName, lastName, image, role } = user || {};
+        const firstName = user.personName || null;
+        const lastName = user.personLastName || null;
+        const image = user.image || null;
+        const role = user.rolesName || null;
 
         const welcome = document.getElementById('main-welcome');
         if (welcome) welcome.textContent = `Bienvenido, ${firstName} ${lastName}`;
@@ -44,23 +47,5 @@ export async function init() {
         dateTarget.textContent = new Date().toLocaleDateString('es-SV', {
             weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
         });
-    }
-
-    try {
-        const stats = await StatsService.summary();
-
-        const map = {
-            '#stat-students': stats.students,
-            '#stat-teachers': stats.teachers,
-            '#stat-courses': stats.courses,
-            '#stat-notices': stats.notices
-        };
-
-        for (const [sel, val] of Object.entries(map)) {
-            const el = document.querySelector(sel);
-            if (el) el.textContent = val ?? '-';
-        }
-    } catch (error) {
-        console.error('[main] failed to load stats:', error);
     }
 }

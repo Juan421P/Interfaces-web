@@ -166,16 +166,18 @@ export class Navbar {
 async function filterByRole(root) {
     try {
         const userID = sessionStorage.getItem('userID');
+        console.log(userID);
         if (!userID) throw new Error('No user ID found');
 
-        const { role } = await UsersService.get(userID);
+        const role = (await UsersService.get(userID)).rolesName;
+        console.log(role);
 
         const allowedMap = {
-            'Administrador': ['#system-', '#planification-'],
-            'RH': ['#hr-'],
-            'RA': ['#ar-'],
-            'Docente': ['#tp-'],
-            'Estudiante': ['#sp-']
+            'administrador': ['#system-', '#planification-'],
+            'recursos': ['#hr-'],
+            'registro': ['#ar-'],
+            'docente': ['#tp-'],
+            'estudiante': ['#sp-']
         };
 
         const allowedPrefixes = allowedMap[role] || [];

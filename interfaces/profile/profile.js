@@ -1,5 +1,4 @@
-import { UsersService } from '../../js/services/users.js';
-import { AuditService } from './../../js/services/audit.js';
+import { UsersService } from './../../js/services/users.service.js';
 import { buildInitials, showImageModal } from './../../js/lib/index.js';
 import { ROUTES } from './../../js/lib/routes.js';
 import { THEMES } from './../../js/lib/themes.js';
@@ -22,16 +21,13 @@ export async function init() {
     }
 
     const person = {
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: user.personName,
+        lastName: user.personLastName,
         contactEmail: user.email
     };
 
-    const role = { roleName: user.role };
-
     renderAvatar(user, person);
-    renderUserInfo(person, user, role);
-    await renderAuditLog(user.userID);
+    renderUserInfo(person, user, { roleName: user.rolesName });
 
     setInitialThemeMode();
     renderThemeSwatches();
@@ -115,43 +111,6 @@ function renderUserInfo(person, user, role) {
     if (nameEl) nameEl.textContent = `${person.firstName} ${person.lastName}`;
     if (roleEl) roleEl.textContent = role.roleName || 'Rol desconocido';
     if (emailEl) emailEl.textContent = person.contactEmail || user.email;
-}
-
-async function renderAuditLog(userID) {
-    const container = document.querySelector('#audit-log');
-    if (!container) {
-        console.error('[profile.js]', 'Container #audit-log not found :(');
-        return;
-    }
-
-    container.innerHTML = '';
-    const auditTemplate = document.querySelector('#tmpl-audit-card');
-    if (!auditTemplate) {
-        console.error('[profile.js]', 'Template #tmpl-audit-card not found :(');
-        container.innerHTML = '<p class="text-red-500">Hubo un error cargando la plantilla #tmpl-audit-card</p>';
-        return;
-    }
-
-    const templateHTML = auditTemplate.innerHTML;
-    const audits = await AuditService.recent(userID, 5);
-
-    audits.forEach(audit => {
-        let renderedHTML = templateHTML
-            .replaceAll('{{operationType}}', String(audit.operationType || 'N/A'))
-            .replaceAll('{{affectedTable}}', String(audit.affectedTable || 'N/A'))
-            .replaceAll('{{recordID}}', String(audit.recordID || 'N/A'));
-
-        const formattedDate = audit.operationAt ? new Date(audit.operationAt).toLocaleString() : 'N/A';
-        renderedHTML = renderedHTML.replaceAll('{{operationAt}}', formattedDate);
-
-        const tempParser = document.createElement('template');
-        tempParser.innerHTML = renderedHTML.trim();
-
-        const card = tempParser.content.firstElementChild;
-        if (card) {
-            container.appendChild(card.cloneNode(true));
-        }
-    });
 }
 
 function renderThemeSwatches() {

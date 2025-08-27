@@ -175,7 +175,6 @@ export function makeContract({ schema, scopes = {}, refine }) {
 	}
 
 	function parse(input, scopeName) {
-		console.log(input);
 		const res = validate(input, scopeName);
 		if (!res.ok) {
 			const msg = res.errors.map(e => `${e.field}: ${e.msg}`).join(' | ');
