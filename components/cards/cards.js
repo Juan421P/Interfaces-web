@@ -1,11 +1,12 @@
-import { ROUTES } from './../../js/lib/routes.js';
-import { stripScripts } from './../../js/lib/index.js';
+import { ROUTES } from '../../js/lib/routes.js';
+import { stripScripts } from '../../js/lib/index.js';
 
 export class Cards {
     /**
      * @param {Object} opts
      * @param {string|HTMLElement} opts.host
      * @param {Array|Object} [opts.data=[]]
+     * @param {Object} [opts.service] - service with { list(), create?, update?, delete? }
      * @param {string} [opts.url=ROUTES.components.cards.html]
      * @param {'tile'|'block'} [opts.variant='tile']
      * @param {string} [opts.templateId]
@@ -17,12 +18,12 @@ export class Cards {
      */
     constructor(opts = {}) {
         if (!opts.host) throw new Error('[Cards] host is required');
-
         this.host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
         if (!this.host) throw new Error('[Cards] host element not found');
 
         this.url = opts.url || ROUTES.components.cards.html;
         this.data = Array.isArray(opts.data) ? opts.data : (opts.data ? [opts.data] : []);
+        this.service = opts.service || null;
         this.variant = opts.variant || 'tile';
         this.templateId = opts.templateId || null;
         this.bindings = Array.isArray(opts.bindings) ? opts.bindings : [];
@@ -43,7 +44,27 @@ export class Cards {
         this._ctxMenu = null;
         this._loaded = false;
 
+        this._bindServiceEvents();
         this._render();
+    }
+
+    _bindServiceEvents() {
+        if (!this.service) return;
+        document.addEventListener(`${this.service.constructor.name}:changed`, () => {
+            this._fetchAndRender();
+        });
+    }
+
+    async _fetchAndRender() {
+        if (this.service && typeof this.service.list === 'function') {
+            try {
+                this.data = await this.service.list();
+            } catch (err) {
+                console.error('[Cards] failed to fetch from service', err);
+                this.data = [];
+            }
+        }
+        await this._render();
     }
 
     async _loadMarkup() {
@@ -103,6 +124,11 @@ export class Cards {
         const tpl = this._resolveTemplate();
 
         const cards = this.data || [];
+        if (cards.length === 0) {
+            this.$grid.innerHTML = '<p class="text-indigo-400">No hay registros jiji 😅</p>';
+            return;
+        }
+
         for (let i = 0; i < cards.length; i++) {
             const item = cards[i];
             const node = tpl.content.cloneNode(true);
@@ -164,16 +190,6 @@ export class Cards {
 
     async setData(data) {
         this.data = Array.isArray(data) ? data : (data ? [data] : []);
-        await this._render();
-    }
-
-    async setTemplate(templateIdOrVariant) {
-        if (templateIdOrVariant.startsWith('#')) {
-            this.templateId = templateIdOrVariant;
-        } else {
-            this.templateId = null;
-            this.variant = templateIdOrVariant;
-        }
         await this._render();
     }
 }

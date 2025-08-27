@@ -17,6 +17,9 @@ export const AuthContract = makeContract({
 		}),
 	},
 	scopes: {
-		login: ['email', 'password']
+		login: [
+			'email',
+			'password'
+		]
 	},
 });

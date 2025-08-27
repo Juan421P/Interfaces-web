@@ -7,6 +7,7 @@ const { Toast } = await import(ROUTES.components.toast.js);
 const { Button } = await import(ROUTES.components.button.js);
 const { Form } = await import(ROUTES.components.form.js);
 const { FormInput } = await import(ROUTES.components.formInput.js);
+const { Cards } = await import(ROUTES.components.cards.js);
 
 export async function init() {
 
@@ -87,52 +88,19 @@ export async function init() {
         }
     });
 
-    const container = document.querySelector('#notifications-list');
-    if (!container) {
-        console.warn('[notifications.js] #notifications-list not found :(');
-        return;
-    }
+    const cards = new Cards({
+        host: '#notifications-list',
+        service: NotificationsService,
+        templateId: '#notification-tmpl',
+        bindings: [
+            { selector: 'img', key: 'senderPicture', mode: 'attr', attr: 'src' },
+            { selector: 'img', key: 'sender', mode: 'attr', attr: 'alt' },
+            { selector: 'p:nth-of-type(1)', key: 'title' },
+            { selector: 'p:nth-of-type(2)', key: 'content' },
+            { selector: 'span', key: 'sentAt' }
+        ]
+    });
 
-    const notificationTemplateElement = document.querySelector('#notification-tmpl');
-    if (!notificationTemplateElement) {
-        console.error('[notifications.js]', 'Notification template (#notification-tmpl) not found in the DOM.');
-        return;
-    }
-    const notificationTemplateHtml = notificationTemplateElement.innerHTML;
-
-    async function loadNotifications() {
-        container.innerHTML = '';
-
-        try {
-            const notifications = await NotificationsService.list();
-            if (!Array.isArray(notifications) || notifications.length === 0) {
-                container.innerHTML =
-                    '<p class="text-indigo-400">No hay notificaciones 😅</p>';
-                return;
-            }
-            for (const notif of notifications) {
-                let renderedHtml = notificationTemplateHtml;
-
-                Object.entries(notif).forEach(([key, value]) => {
-                    renderedHtml = renderedHtml.replaceAll(`{{${key}}}`, String(value));
-                });
-
-                const tempContainer = document.createElement('template');
-                tempContainer.innerHTML = renderedHtml.trim();
-
-                const element = Array.from(tempContainer.content.children).find(n => n.nodeType === Node.ELEMENT_NODE) || tempContainer.content.firstElementChild;
-
-                if (element) {
-                    container.appendChild(element.cloneNode(true));
-                }
-            }
-        } catch (error) {
-            container.innerHTML =
-                '<p class="text-red-500">No se pudieron cargar las notificaciones.</p>';
-            console.error(error);
-        }
-    }
-
-    await loadNotifications();
+    await cards.reload();
 
 }

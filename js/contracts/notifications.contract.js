@@ -4,20 +4,48 @@ const { types: t } = makeContract({ schema: {} });
 
 export const NotificationsContract = makeContract({
 	schema: {
-		id: t.int({ 
+		notificationID: t.string({
 			required: false
+		}),
+		userID: t.string({
+			required: true
 		}),
 		title: t.string({
 			required: true,
 			min: 1,
-			max: 120, trim: true }),
-		body: t.string({ required: true, min: 1, max: 2000, trim: true }),
-		status: t.enum(['draft', 'published'], { default: 'draft' }),
-		createdAt: t.date({ required: false, coerce: true }),
+			max: 120,
+			trim: true
+		}),
+		body: t.string({
+			required: true,
+			min: 1,
+			max: 2000,
+			trim: true
+		}),
+		sentAt: t.date({
+			required: false,
+			coerce: true
+		}),
+		userName: t.string({
+			required: false
+		}),
 	},
 	scopes: {
-		create: ['title', 'body', 'status'],
-		update: ['id', 'title', 'body', 'status'],
-		table: ['id', 'title', 'status', 'createdAt'],
+		create: [
+			'userID',
+			'title',
+			'body'
+		],
+		update: [
+			'notificationID',
+			'title',
+			'body'
+		],
+		table: [
+			'notificationID',
+			'title',
+			'userName',
+			'sentAt'
+		],
 	},
 });
