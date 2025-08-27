@@ -1,15 +1,15 @@
 export function buildInitials(text, size = 14) {
 	const element = document.createElement('div');
-	element.className = `h-${size} w-${size} rounded-full bg-gradient-to-tr from-indigo-100 to-blue-100 flex items-center justify-center drop-shadow text-xs font-bold text-indigo-400 select-none`;
+	element.className = `h-${size} w-${size} rounded-full bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] flex items-center justify-center drop-shadow text-xs font-bold text-[rgb(var(--button-from))] select-none`;
 	element.textContent = text;
 	return element;
 }
 
-/**
-*   Remove every <script> element from a HTML string or template.
-*   @param {string|DocumentFragment} htmlOrFragment
-*   @returns {HTMLTemplateElement} template with scripts stripped
-*/
+export function formatDate(isoString) {
+	const d = new Date(isoString);
+	return d.toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
+}
+
 export function stripScripts(htmlOrFragment) {
 	const tpl = document.createElement('template');
 	if (typeof htmlOrFragment === 'string') {
@@ -118,13 +118,6 @@ function _pickFields(obj, fields) {
 	}, {});
 }
 
-/**
- * Counts the number of entries in a data array that match the given filters.
- *
- * @param {Array<object>} data The array of objects to count.
- * @param {Array<object>} filters An array of filter objects, each with 'field', 'operator', and 'value'.
- * @returns {number} The count of matching entries.
- */
 export function countEntries(data, filters = []) {
 	return data.filter(entry => {
 		return filters.every(filter => {

@@ -1,6 +1,8 @@
+// notifications.js
 import { ROUTES } from '../../js/lib/routes.js';
 import { NotificationsService } from '../../js/services/notifications.service.js';
 import { UsersService } from './../../js/services/users.service.js';
+import { formatDate } from './../../js/lib/index.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
 const { Toast } = await import(ROUTES.components.toast.js);
@@ -10,97 +12,88 @@ const { FormInput } = await import(ROUTES.components.formInput.js);
 const { Cards } = await import(ROUTES.components.cards.js);
 
 export async function init() {
-
     const toast = new Toast();
     await toast.init();
 
-    new Button({
-        host: '#add-notification-btn-container',
-        text: 'Agregar notificación',
-        collapseText: true,
-        buttonType: 1,
-        onClick: () => {
-            const modal = new Modal({
-                size: 'md',
-                content: new Form({
-                    inputs: [
-                        new FormInput({
-                            id: 'title',
-                            label: 'Título',
-                            placeholder: 'Título',
-                            validationMethod: 'simpleText',
-                            required: true,
-                        }),
-                        new FormInput({
-                            id: 'message',
-                            label: 'Mensaje',
-                            placeholder: 'Mensaje',
-                            textarea: true,
-                            rows: 4,
-                            validationMethod: 'normalText',
-                            required: true,
-                        })
-                    ],
-                    onSubmit: async (formData, formInstance) => {
-                        const title = formData.title.trim();
-                        const message = formData.message.trim();
+    const userID = sessionStorage.getItem('userID');
+    if (!userID) {
+        toast.show('Ningún usuario inició sesión 🥺');
+        window.location.href = '/interfaces/login/login.html';
+        return;
+    }
 
-                        if (!isValidTitle(title) || !isValidMessage(message)) {
-                            toast.show('Por favor, complete los campos correctamente');
-                            return;
+    const user = await UsersService.get(userID);
+    if (!user) {
+        toast.show('Usuario no autenticado 😭');
+        return;
+    }
+
+    if (user.rolesName === 'administrador') {
+        new Button({
+            host: '#add-notification-btn-container',
+            text: 'Agregar notificación',
+            collapseText: true,
+            buttonType: 1,
+            onClick: () => {
+                const modal = new Modal({
+                    size: 'md',
+                    content: new Form({
+                        inputs: [
+                            new FormInput({
+                                id: 'title',
+                                label: 'Título',
+                                placeholder: 'Título',
+                                validationMethod: 'simpleText',
+                                required: true,
+                            }),
+                            new FormInput({
+                                id: 'message',
+                                label: 'Mensaje',
+                                placeholder: 'Mensaje',
+                                textarea: true,
+                                rows: 4,
+                                validationMethod: 'normalText',
+                                required: true,
+                            })
+                        ],
+                        onSubmit: async (formData) => {
+                            const title = (formData.title || '').trim();
+                            const message = (formData.message || '').trim();
+
+                            const payload = {
+                                title,
+                                body: message, // matches API
+                                userName: `${user.firstName} ${user.lastName}`,
+                                sentAt: new Date().toISOString()
+                            };
+
+                            try {
+                                await NotificationsService.create(payload);
+                                toast.show('¡Notificación enviada! ✨');
+                                modal.close();
+                                // cards will auto-refresh if NotificationsService dispatches event
+                            } catch (error) {
+                                toast.show('Error al registrar los datos 😔');
+                                console.error(error);
+                            }
                         }
+                    }),
+                    renderMode: 'component',
+                    id: 'add-notification-modal'
+                });
+            }
+        });
+    }
 
-                        const userID = sessionStorage.getItem('userID');
-                        if (!userID) {
-                            toast.show('Ningún usuario inició sesión 🥺');
-                            window.location.href = '/interfaces/login/login.html';
-                            return;
-                        }
-
-                        const user = await UsersService.get(userID);
-                        if (!user) {
-                            toast.show('Usuario no autenticado 😭');
-                            return;
-                        }
-
-                        const data = {
-                            title,
-                            content: message,
-                            sender: `${user.firstName} ${user.lastName}`,
-                            sentAt: new Date().toISOString(),
-                            senderPicture: user.image,
-                        };
-
-                        try {
-                            await NotificationsService.create(data);
-                            toast.show('¡Notificación enviada! ✨');
-                            modal.close();
-                            await loadNotifications();
-                        } catch (error) {
-                            toast.show('Error al registrar los datos 😔');
-                            console.error(error);
-                        }
-                    }
-                }),
-                renderMode: 'component',
-                id: 'add-notification-modal'
-            });
-        }
-    });
-
-    const cards = new Cards({
+    new Cards({
         host: '#notifications-list',
         service: NotificationsService,
+        serviceEventPrefix: 'Notifications',
         templateId: '#notification-tmpl',
         bindings: [
-            { selector: 'img', key: 'senderPicture', mode: 'attr', attr: 'src' },
-            { selector: 'img', key: 'sender', mode: 'attr', attr: 'alt' },
-            { selector: 'p:nth-of-type(1)', key: 'title' },
-            { selector: 'p:nth-of-type(2)', key: 'content' },
-            { selector: 'span', key: 'sentAt' }
+            { selector: '.title', key: 'title', mode: 'text' },
+            { selector: '.body', key: 'body', mode: 'text' },
+            { selector: '.sentAt', key: 'sentAt', mode: 'text', transform: formatDate },
         ]
     });
-
-    await cards.reload();
-
 }

@@ -5,6 +5,7 @@ import { ROUTES } from './../../js/lib/routes.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
 const { Button } = await import(ROUTES.components.button.js);
+const getLabelSpan = (element) => element.querySelector('span:not(.profile-initials)');
 
 export class Navbar {
     constructor(opts = {}) {
@@ -66,7 +67,9 @@ export class Navbar {
             const userID = sessionStorage.getItem('userID');
             if (!userID) throw new Error('No user ID found');
             const user = await UsersService.get(userID);
-            const { firstName, lastName, image: photo } = user || {};
+            const firstName = user.personName;
+            const lastName = user.personLastName;
+            const photo = user.image;
             const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase();
 
             const avatarHost = document.querySelector('#profile-avatar');
@@ -92,17 +95,12 @@ export class Navbar {
         const hash = window.location.hash || '#main';
 
         document.querySelectorAll('#sidebar .nav-btn').forEach(entry => {
-            entry.classList.remove(
-                'bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg'
-            );
+            entry.classList.remove('bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg');
             entry.querySelectorAll('svg').forEach(s => s.classList.remove('text-white'));
-            const sp = entry.querySelector('span');
+            const sp = getLabelSpan(entry);
             sp?.classList.remove('text-white');
             sp?.classList.add('text-[rgb(var(--button-from))]');
-
-            entry.querySelector('ul')?.classList.remove(
-                'bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]'
-            );
+            entry.querySelector('ul')?.classList.remove('bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]');
         });
 
         const activeLink = document.querySelector(`#sidebar a[href="${hash}"]`);
@@ -110,26 +108,25 @@ export class Navbar {
         if (!entry) return;
 
         entry.classList.add('bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg');
-        entry.querySelectorAll('svg').forEach(s => {
-            s.classList.remove('text-[rgb(var(--button-from))]');
-            s.classList.add('text-white');
-        });
+        entry.querySelectorAll('svg').forEach(s => s.classList.add('text-white'));
 
-        const sp = entry.querySelector('span');
+        const sp = getLabelSpan(entry);
         if (sp) {
-            sp.classList.remove('text-[rgb(var(--button-from))]');
             sp.classList.add('text-white');
+            sp.classList.remove('text-[rgb(var(--button-from))]');
+            const isCollapsed = entry.querySelector('ul')?.classList.contains('hidden');
+
             sp.dataset.originalLabel ??= sp.textContent;
 
-            const label = activeLink.textContent.trim();
-            if (label) sp.textContent = label;
+            if (activeLink && isCollapsed) {
+                sp.textContent = activeLink.textContent.trim();
+            } else {
+                sp.textContent = sp.dataset.originalLabel;
+            }
         }
 
-        entry.querySelector('ul')?.classList.add(
-            'bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]'
-        );
+        entry.querySelector('ul')?.classList.add('bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]');
     }
-
 
     attachCollapses() {
         document.querySelectorAll('[data-toggle="collapse"]').forEach(btn => {
@@ -144,19 +141,21 @@ export class Navbar {
                 target.classList.toggle('hidden');
                 btn.querySelector('svg:last-child')?.classList.toggle('rotate-180');
 
-                const span = btn.querySelector('span');
+                const span = getLabelSpan(btn);
                 if (!span) return;
 
                 span.dataset.originalLabel ??= span.textContent;
 
-                if (!targetIsHidden) {
+                if (targetIsHidden) {
+                    span.textContent = span.dataset.originalLabel;
+                } else {
                     const hash = window.location.hash || '#main';
                     const activeLink = target.querySelector(`a[href="${hash}"]`);
                     if (activeLink) {
                         span.textContent = activeLink.textContent.trim();
+                    } else {
+                        span.textContent = span.dataset.originalLabel;
                     }
-                } else {
-                    span.textContent = span.dataset.originalLabel;
                 }
             });
         });
@@ -166,11 +165,9 @@ export class Navbar {
 async function filterByRole(root) {
     try {
         const userID = sessionStorage.getItem('userID');
-        console.log(userID);
         if (!userID) throw new Error('No user ID found');
 
         const role = (await UsersService.get(userID)).rolesName;
-        console.log(role);
 
         const allowedMap = {
             'administrador': ['#system-', '#planification-'],

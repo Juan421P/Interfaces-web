@@ -7,28 +7,48 @@ export const NotificationsService = {
     contract: NotificationsContract,
 
     async list() {
-        const notification = await fetchJSON(`${ENDPOINT}/getNotifications`);
+        const notification = await fetchJSON(
+            `${ENDPOINT}/getNotifications`
+        );
+        const parsed = Array.isArray(notification) ? notification.map(n => NotificationsContract.parse(n, 'table')) : [];
         document.dispatchEvent(new CustomEvent('Notifications:list', {
-            detail: notification
+            detail: parsed
         }));
-        return Array.isArray(notification) ? notification.map(n => NotificationsContract.parse(n, 'table')) : [];
+        return parsed;
     },
 
     async create(data) {
-        const payload = NotificationsContract.parse(data, 'create');
-        const notification = await postJSON(`${ENDPOINT}`, payload);
+        const notification = await postJSON(
+            `${ENDPOINT}/newNotification`,
+            NotificationsContract.parse(data, 'create')
+        );
+        const parsed = NotificationsContract.parse(notification, 'table');
         document.dispatchEvent(new CustomEvent('Notifications:create', {
-            detail: notification
+            detail: parsed
         }));
-        return Array.isArray(notification) ? notification.map(n => NotificationsContract.parse(n, 'table')) : [];
+        return parsed;
     },
 
     async update(data) {
-        const payload = NotificationsContract.parse(data, 'update');
-        const notification = await putJSON(`${ENDPOINT}/${payload.notificationID}`, payload);
-        document.dispatchEvent(new CustomEvent('Notifications:update', {
-            detail: notification
-        }));
-        return Array.isArray(notification) ? notification.map(n => NotificationsContract.parse(n, 'table')) : [];
+        const notification = await putJSON(
+            `${ENDPOINT}/${data.notificationID}`,
+            NotificationsContract.parse(data, 'update')
+        );
+        const parsed = NotificationsContract.parse(notification, 'table');
+        document.dispatchEvent(new CustomEvent('Notifications:update', { detail: parsed }));
+        return parsed;
     },
+
+    async delete(id) {
+        const success = await deleteJSON(
+            `${ENDPOINT}/deleteNotification/${id}`
+        );
+        document.dispatchEvent(new CustomEvent('Notifications:delete', {
+            detail: {
+                id,
+                success
+            }
+        }));
+        return success === true;
+    }
 };

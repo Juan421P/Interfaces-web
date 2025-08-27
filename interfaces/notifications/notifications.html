@@ -1,4 +1,4 @@
-<main class="flex flex-col min-h-screen p-10 md:ml-80">
+<main class="flex flex-col min-h-screen p-10 mb-40 md:ml-80">
     <div class="flex items-center justify-between mb-10">
         <h1
             class="text-2xl font-bold bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text text-transparent drop-shadow select-none py-3">
@@ -40,24 +40,25 @@
             </div>
         </form>
     </template>
-    <div id="notifications-list" class="pb-40 space-y-4">
-        <template id="notification-tmpl">
-            <div class="bg-gradient-to-bl from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] rounded-xl drop-shadow p-8 flex gap-8 w-full relative z-[900]">
-                <div class="flex items-center justify-center">
-                    <img src="{{senderPicture}}" alt="{{sender}}"
-                        class="object-cover w-16 h-16 rounded-full select-none drop-shadow" />
-                </div>
-                <div class="flex-1">
-                    <div class="flex"><p
-                        class="font-semibold bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text text-transparent drop-shadow select-none">
-                        {{title}}</p></div>
-                    <div class="flex"><p
-                        class="text-sm bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text text-transparent drop-shadow select-none">
-                        {{content}}</p></div>
-                    <span
-                        class="text-xs text-transparent select-none bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text drop-shadow">{{sentAt}}</span>
-                </div>
+    <div id="notifications-list" data-cards-grid></div>
+    <template id="notification-tmpl">
+        <div class="bg-gradient-to-bl from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] rounded-xl drop-shadow p-6 flex gap-6 w-full relative z-[900]"
+            data-card>
+            <div
+                class="relative flex items-center justify-center w-16 h-16 overflow-hidden text-xl font-bold bg-gradient-to-tr from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] rounded-full select-none drop-shadow text-[rgb(var(--card-from))]">
+                !
             </div>
-        </template>
-    </div>
+            <div class="flex flex-col flex-1 gap-1">
+                <p
+                    class="title font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))]">
+                </p>
+                <p
+                    class="body text-sm text-transparent bg-clip-text bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))]">
+                </p>
+                <span
+                    class="sentAt text-xs text-transparent bg-clip-text bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))]"></span>
+            </div>
+        </div>
+    </template>
+
 </main>
