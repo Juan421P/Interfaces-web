@@ -1,5 +1,5 @@
 import { ROUTES } from './../../js/lib/routes.js';
-import { UsersService } from './../../js/services/users.service.js';
+import { AuthService } from './../../js/services/auth.service.js';
 
 const { Form } = await import(ROUTES.components.form.js);
 const { FormInput } = await import(ROUTES.components.formInput.js);
@@ -52,7 +52,7 @@ await new Form({
         const emailContent = (values['email-input'] || '').trim();
         const passwordContent = (values['password-input'] || '').trim();
         try {
-            await UsersService.login(emailContent, passwordContent);
+            await AuthService.login(emailContent, passwordContent);
             window.location.href = '/#main';
         } catch (error) {
             toast.show(error.message);

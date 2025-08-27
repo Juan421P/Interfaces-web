@@ -1,4 +1,5 @@
 import { UsersService } from './../../js/services/users.service.js';
+import { AuthService } from './../../js/services/auth.service.js';
 import { buildInitials, stripScripts } from './../../js/lib/index.js';
 import { ROUTES } from './../../js/lib/routes.js';
 
@@ -47,7 +48,7 @@ export class Navbar {
                             buttonType: 2,
                             onClick: (e) => {
                                 e.preventDefault();
-                                UsersService.logout();
+                                AuthService.logout();
                                 logoutModal.close();
                                 window.location.href = '/interfaces/login/login.html';
                             },

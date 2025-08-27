@@ -1,6 +1,6 @@
 import { fetchJSON } from '../lib/network';
 
-const ENDPOINT = '/aMIj5J/users';
+const ENDPOINT = '/Users';
 
 export const UsersService = {
     async list() {
@@ -40,19 +40,6 @@ export const UsersService = {
     async getByEmail(email) {
         const users = await fetchJSON(`${ENDPOINT}?email=${email}`);
         return users.length > 0 ? users[0] : null;
-    },
-
-    async login(email, password) {
-        const user = await UsersService.getByEmail(email);
-        if (!user) throw new Error('Usuario no encontrado 🥺');
-        if (user.password.toString() !== password.toString()) throw new Error('Contraseña incorrecta 🥺');
-        sessionStorage.setItem(
-            'userID', user.id
-        );
-        return user;
-    },
-
-    async logout() {
-        sessionStorage.clear();
     }
+    
 };
