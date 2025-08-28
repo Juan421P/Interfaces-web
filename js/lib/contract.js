@@ -7,6 +7,7 @@ const T = {
 	enum: (values, cfg = {}) => ({ type: 'enum', values, ...cfg }),
 	array: (of, cfg = {}) => ({ type: 'array', of, ...cfg }),
 	object: (shape, cfg = {}) => ({ type: 'object', shape, ...cfg }),
+	char: (cfg = {}) => ({ type: 'char', ...cfg }), 
 };
 
 const coerce = {
@@ -68,6 +69,7 @@ function validateField(spec, value, keyPath, errors, options) {
 			}
 			break;
 		}
+		
 		case 'int': {
 			if (!Number.isInteger(value)) {
 				errors.push({ field: path, msg: 'Not an integer' });
@@ -117,6 +119,16 @@ function validateField(spec, value, keyPath, errors, options) {
 			}
 			break;
 		}
+		case 'char': {
+    		if (typeof value !== 'string') value = String(value ?? '');
+    		if (value.length !== 1) {
+        		errors.push({ field: path, msg: 'Must be a single character' });
+   		 	} else if (!['Y', 'N'].includes(value.toUpperCase())) {
+   	     		errors.push({ field: path, msg: 'Must be Y or N' });
+    		}
+    		break;
+		}
+
 		case 'object': {
 			if (typeof value !== 'object' || value == null || Array.isArray(value)) {
 				errors.push({ field: path, msg: 'Not an object' });
