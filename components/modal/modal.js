@@ -52,15 +52,12 @@ export class Modal {
                 this.contentHost.innerHTML = this.content;
             } else if (this.content instanceof HTMLElement) {
                 this.contentHost.appendChild(this.content);
-            } else {
             }
         } else if (this.renderMode === 'component') {
             if (this.content instanceof HTMLElement) {
                 this.contentHost.appendChild(this.content);
             } else if (this.content && this.content.root instanceof HTMLElement) {
                 this.contentHost.appendChild(this.content.root);
-            } else if (Array.isArray(this.content)) {
-            } else {
             }
         } else {
             console.warn(`[Modal] Unknown renderMode: ${this.renderMode}`);
@@ -123,13 +120,25 @@ export class Modal {
             if (!comp || typeof comp.type !== 'function') continue;
 
             const opts = Object.assign({}, comp.opts || {});
+            let hostEl = null;
 
-            if (typeof opts.host === 'string') {
-                try {
-                    const hostElInside = this.rootQuery(opts.host);
-                    if (hostElInside) opts.host = hostElInside;
-                } catch (err) {
+            if (opts.host && typeof opts.host === 'string' && opts.host.startsWith('#')) {
+                hostEl = this.rootQuery(opts.host);
+                if (!hostEl && this.contentHost) {
+                    hostEl = document.createElement('div');
+                    hostEl.id = opts.host.slice(1);
+                    this.contentHost.appendChild(hostEl);
                 }
+            }
+
+            if (!opts.host) {
+                opts.host = this.contentHost;
+            } else {
+                opts.host = hostEl || this.rootQuery(opts.host) || this.contentHost;
+            }
+
+            if ('templateId' in opts && !opts.templateId) {
+                delete opts.templateId;
             }
 
             try {
@@ -142,6 +151,7 @@ export class Modal {
 
     rootQuery(selector) {
         try {
+            if (!selector) return this.contentHost;
             if (this.contentHost) {
                 const el = this.contentHost.querySelector(selector);
                 if (el) return el;
@@ -166,7 +176,7 @@ export class Modal {
             if (e && e.target !== this.overlay) return;
             this.overlay.removeEventListener('transitionend', done);
 
-            try { this.overlay.remove(); } catch (_) { /* ignore */ }
+            try { this.overlay.remove(); } catch (_) { }
 
             this.overlay = null;
             this.container = null;

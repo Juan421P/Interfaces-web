@@ -1,5 +1,5 @@
 import { ROUTES } from './../../../js/lib/routes.js';
-import { UsersService } from './../../../js/services/users.js';
+import { UsersService } from './../../../js/services/users.service.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
 const { Toast } = await import(ROUTES.components.toast.js);
@@ -14,7 +14,7 @@ await toast.init();
 await new Table({
     host: '#user-table',
     headers: ['ID', 'Nombre', 'Correo'],
-    data: (await UsersService.listMockup()).map(u => [
+    data: (await UsersService.list()).map(u => [
         u.userID,
         `${u.firstName} ${u.lastName}`,
         u.email

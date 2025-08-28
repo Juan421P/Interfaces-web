@@ -1,4 +1,4 @@
-import { fetchJSON, postJSON, putJSON } from './../lib/network.js';
+import { fetchJSON, postJSON, putJSON, deleteJSON } from './../lib/network.js';
 import { NotificationsContract } from './../contracts/notifications.contract.js';
 
 const ENDPOINT = '/Notifications';

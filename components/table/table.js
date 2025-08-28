@@ -1,11 +1,21 @@
 import { ROUTES } from './../../js/lib/routes.js';
 import { stripScripts } from '../../js/lib/index.js';
 
+const { ContextMenu } = await import(ROUTES.components.contextMenu.js);
+const { Toast } = await import(ROUTES.components.toast.js);
+const toast = await new Toast();
+toast.init();
+
 export class Table {
     constructor(opts = {}) {
         this.host = opts.host;
         this.headers = opts.headers || [];
-        this.data = Array.isArray(opts.data) ? opts.data : (opts.data ? [opts.data] : []);
+        this.service = opts.service;
+        this.servicePrefix = opts.servicePrefix || [];
+
+        this.useContextMenu = !!opts.contextMenu;
+        this.contextMenuOpts = opts.contextMenuOpts || null;
+
         this.sortable = !!opts.sortable;
         this.searchable = !!opts.searchable;
         this.paginated = !!opts.paginated;
@@ -13,6 +23,9 @@ export class Table {
         this.searchFields = opts.searchFields ?? null;
         this.url = opts.url || ROUTES.components.table.html;
 
+        if (!this.service || typeof this.service.list !== 'function') {
+            throw new Error('[Table] requires a service with .list()');
+        }
         if (this.paginated && !this.perPage) {
             throw new Error('[Table] paginated tables require perPage.');
         }
@@ -22,18 +35,26 @@ export class Table {
 
         this.page = 1;
         this.sort = { index: -1, dir: 1 };
+        this.contextMenu = new ContextMenu();
 
-        this.root = null;
-        this.$table = null;
-        this.$thead = null;
-        this.$tbody = null;
-        this.$pagination = null;
-        this.$searchHost = null;
-        this.$filtersHost = null;
-
-        this.searchInput = null;
+        this._bindServiceEvents();
 
         this._render();
+    }
+
+    _bindServiceEvents() {
+        const prefix = this.servicePrefix || this.service?.contract?.name || this.service?.name || 'Service';
+
+        const reload = () => {
+            if (this.service?.list) {
+                this.service.list();
+            }
+        };
+
+        // document.addEventListener(`${prefix}:list`, reload);
+        document.addEventListener(`${prefix}:create`, reload);
+        document.addEventListener(`${prefix}:update`, reload);
+        document.addEventListener(`${prefix}:delete`, reload);
     }
 
     async _render() {
@@ -59,13 +80,16 @@ export class Table {
                 this.searchInput = new SearchInput({
                     host: this.$searchHost,
                     placeholder: 'Buscar',
-                    onSearch: (val) => this.__renderBody(val)
+                    onSearch: (val) => this._renderBody(val)
                 });
             }
 
             this._renderHeaders();
             this._bindHeaderEvents();
-            this._renderBody('');
+
+            this.data = await this.service.list();
+            this._renderBody();
+
         } catch (err) {
             console.error('[Table] render failed', err);
         }
@@ -78,15 +102,18 @@ export class Table {
         }
 
         this.$thead.innerHTML = `
-      <tr>
-        ${this.headers.map((h, i) => `
-          <th data-col="${i}" class="px-4 py-3 text-left select-none ${this.sortable ? 'cursor-pointer' : ''}">
-            <div class="flex bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text text-transparent drop-shadow">
-              ${h} ${this.sortable ? '<span class="sort-indicator hidden ml-2">▲</span>' : ''}
-            </div>
-          </th>
-        `).join('')}
-      </tr>`;
+          <tr>
+            ${this.headers.map((h, i) => {
+            const label = typeof h === "object" ? h.label : h;
+            return `
+                  <th data-col="${i}" class="px-4 py-3 text-left select-none ${this.sortable ? 'cursor-pointer' : ''}">
+                    <div class="flex bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text text-transparent drop-shadow">
+                      ${label} ${this.sortable ? '<span class="sort-indicator hidden ml-2">▲</span>' : ''}
+                    </div>
+                  </th>
+                `;
+        }).join('')}
+          </tr>`;
     }
 
     _bindHeaderEvents() {
@@ -97,7 +124,7 @@ export class Table {
                 if (this.sort.index === idx) this.sort.dir *= -1;
                 else this.sort = { index: idx, dir: 1 };
                 const filter = this.searchInput?.getValue?.() || '';
-                this.__renderBody(filter);
+                this._renderBody(filter);
             });
         });
     }
@@ -114,11 +141,18 @@ export class Table {
         if (filterStr) {
             const fields = this.searchFields ?? this.headers.map((_, i) => i);
             data = data.filter(row => {
-                const cells = Array.isArray(row) ? row : this.headers.map((h, i) => row[h] ?? row[i] ?? '');
+                const cells = Array.isArray(row)
+                    ? row
+                    : this.headers.map((h, i) => {
+                        const key = typeof h === "object" ? h.key : h;
+                        return row[key] ?? row[i] ?? '';
+                    });
                 return fields.some(fIdx => {
-                    const idx = (typeof fIdx === 'number') ? fIdx : this.headers.indexOf(String(fIdx));
+                    const idx = (typeof fIdx === 'number')
+                        ? fIdx
+                        : this.headers.findIndex(h => (typeof h === "object" ? h.key : h) === String(fIdx));
                     const val = String(cells[idx] ?? '').toLowerCase();
-                    return val.includes(filterStr);
+                    return val.includes(filterStr.toLowerCase());
                 });
             });
         }
@@ -126,8 +160,9 @@ export class Table {
         if (this.sortable && this.sort.index >= 0) {
             const { index, dir } = this.sort;
             data = data.slice().sort((a, b) => {
-                const av = String(Array.isArray(a) ? a[index] : a[this.headers[index]] ?? '').toLowerCase();
-                const bv = String(Array.isArray(b) ? b[index] : b[this.headers[index]] ?? '').toLowerCase();
+                const key = typeof this.headers[index] === "object" ? this.headers[index].key : this.headers[index];
+                const av = String(Array.isArray(a) ? a[index] : a[key] ?? '').toLowerCase();
+                const bv = String(Array.isArray(b) ? b[index] : b[key] ?? '').toLowerCase();
                 return av === bv ? 0 : (av > bv ? dir : -dir);
             });
         }
@@ -137,14 +172,38 @@ export class Table {
         const pageRows = this._paginate(data);
 
         this.$tbody.innerHTML = pageRows.length ? pageRows.map(row => {
-            const cells = Array.isArray(row) ? row : this.headers.map((h, i) => row[h] ?? row[i] ?? '');
-            return `<tr class="group hover:bg-gradient-to-r hover:from-[rgb(var(--button-from))] hover:to-[rgb(var(--button-to))] transition-colors cursor-pointer duration-150">${cells.map(cell => `
-        <td class="px-4 py-3 whitespace-nowrap text-left">
-          <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow group-hover:text-[rgb(var(--button-text))]">
-            ${cell}
-          </div>
-        </td>`).join('')}</tr>`;
+            const cells = Array.isArray(row)
+                ? row
+                : this.headers.map((h, i) => {
+                    const key = typeof h === "object" ? h.key : h;
+                    return row[key] ?? row[i] ?? '';
+                });
+            return `<tr class="group hover:bg-gradient-to-r hover:from-[rgb(var(--button-from))] hover:to-[rgb(var(--button-to))] transition-colors cursor-pointer duration-150">
+                ${cells.map(cell => `
+                    <td class="px-4 py-3 whitespace-nowrap text-left">
+                        <div class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow group-hover:text-[rgb(var(--button-text))]">
+                            ${cell}
+                        </div>
+                    </td>`).join('')}
+            </tr>`;
         }).join('') : `<tr><td class="px-4 py-3 text-center" colspan="${Math.max(1, this.headers.length)}">Sin datos</td></tr>`;
+
+        if (this.useContextMenu && this.contextMenuOpts) {
+            this.$tbody.querySelectorAll('tr').forEach((tr, idx) => {
+                tr.addEventListener('click', async (e) => {
+                    const rowData = pageRows[idx];
+                    let items = this.contextMenuOpts;
+
+                    if (typeof this.contextMenuOpts === 'function') {
+                        items = this.contextMenuOpts(rowData);
+                    }
+
+                    if (Array.isArray(items) && items.length) {
+                        await this.contextMenu.open(e.clientX, e.clientY, items);
+                    }
+                });
+            });
+        }
 
         if (this.sortable) {
             this.$thead.querySelectorAll('th').forEach(th => {
@@ -157,10 +216,20 @@ export class Table {
             });
         }
 
-        this.__renderPagination(totalPages);
+        this._renderPagination(totalPages);
     }
 
-    __renderPagination(total) {
+    async reload() {
+        try {
+            this.data = await this.service.list();
+            const filter = this.searchInput?.getValue?.() || '';
+            this._renderBody(filter);
+        } catch (err) {
+            console.error('[Table] reload failed', err);
+        }
+    }
+
+    _renderPagination(total) {
         if (!this.paginated) {
             if (this.$pagination) this.$pagination.classList.add('hidden');
             return;
@@ -169,20 +238,20 @@ export class Table {
 
         const btn = (label, page, disabled = false) => (
             `<button ${disabled ? 'disabled' : ''} data-page="${page}"
-         class="px-2 py-1 ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}">${label}</button>`
+         class="px-2 py-1 ${disabled ? 'text-[rgb(var(--button-from))] cursor-not-allowed' : 'cursor-pointer'}">${label}</button>`
         );
 
         this.$pagination.innerHTML = `
-      ${btn('‹', this.page - 1, this.page === 1)}
-      <span class="mx-2 font-medium">${this.page}/${total}</span>
-      ${btn('›', this.page + 1, this.page === total)}
-    `;
+          ${btn('‹', this.page - 1, this.page === 1)}
+          <span class="mx-2 font-medium text-[rgb(var(--button-from))]">${this.page}/${total}</span>
+          ${btn('›', this.page + 1, this.page === total)}
+        `;
 
         this.$pagination.querySelectorAll('button[data-page]').forEach(b => {
             b.addEventListener('click', () => {
                 this.page = Number(b.dataset.page);
                 const filter = this.searchInput?.getValue?.() || '';
-                this.__renderBody(filter);
+                this._renderBody(filter);
             });
         });
     }

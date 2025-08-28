@@ -34,7 +34,9 @@ export const NotificationsContract = makeContract({
 		create: [
 			'userID',
 			'title',
-			'body'
+			'body',
+			'userName',
+			'sentAt',
 		],
 		update: [
 			'notificationID',
@@ -44,6 +46,7 @@ export const NotificationsContract = makeContract({
 		table: [
 			'notificationID',
 			'title',
+			'body',
 			'userName',
 			'sentAt'
 		],

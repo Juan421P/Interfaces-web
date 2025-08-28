@@ -44,7 +44,8 @@ await new Form({
             type: SubmitInput,
             opts: {
                 id: 'submit-button',
-                text: 'Iniciar sesión'
+                text: 'Iniciar sesión',
+                removeIcon: true
             }
         }
     ],
