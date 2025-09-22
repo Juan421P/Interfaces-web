@@ -88,6 +88,10 @@
         user-select: none;
     }
 
+    *:focus {
+        outline: none;
+    }
+
 }
 
 @layer utilities {

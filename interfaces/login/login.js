@@ -1,5 +1,7 @@
 import { ROUTES } from './../../js/lib/routes.js';
 import { AuthService } from './../../js/services/auth.service.js';
+import { ValidationError } from './../../js/errors/validation-error.js';
+import { formatErrors } from './../../js/lib/errors.js';
 
 const { Form } = await import(ROUTES.components.form.js);
 const { FormInput } = await import(ROUTES.components.formInput.js);
@@ -16,7 +18,7 @@ await new Footer();
 const toast = new Toast();
 await toast.init();
 
-await new Form({
+new Form({
     host: '#login-form-host',
     templateId: 'login-form-template',
     components: [
@@ -44,18 +46,19 @@ await new Form({
             type: SubmitInput,
             opts: {
                 id: 'submit-button',
-                text: 'Iniciar sesión',
-                removeIcon: true
+                text: 'Iniciar sesión'
             }
         }
     ],
     onSubmit: async (values) => {
-        const emailContent = (values['email-input'] || '').trim();
-        const passwordContent = (values['password-input'] || '').trim();
         try {
-            await AuthService.login(emailContent, passwordContent);
+            await AuthService.login(
+                ((values['email-input'] || '').trim()),
+                ((values['password-input'] || '').trim())
+            );
+            window.location.hash = '#main';
         } catch (error) {
-            toast.show(error.message);
+            toast.show((formatErrors(error)).join(' | '));
         }
     }
 });

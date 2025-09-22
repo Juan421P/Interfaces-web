@@ -1,28 +1,36 @@
 import { AuthContract } from './../contracts/auth.contract.js';
-import { fetchJSON, postJSON } from './../lib/network.js';
-import { countEntries } from './../lib/common.js'
+import { Network } from './../lib/network.js';
 
-const ENDPOINT = '/Auth';
+const ENDPOINT = '/auth';
+const contract = new AuthContract();
 
 export const AuthService = {
 
     async login(email, password) {
-        try {
-            const user = await postJSON(`${ENDPOINT}/login`, AuthContract.parse({
-                email, password
-            }, 'login'));
-            sessionStorage.setItem(
-                'userID', user.userId
-            );
-            window.location.href = '/#main';
-        } catch (error) {
-            console.error('Login failed :(', error);
-            throw error;
-        }
+        const payload = contract.parse({
+            email,
+            password
+        }, 'login');
+
+        return (await Network.post({
+            path: `${ENDPOINT}/login`,
+            body: payload,
+            includeCredentials: true
+        })) == 'Inicio de sesión exitoso';
+    },
+
+    async me() {
+        return await Network.get({
+            path: `${ENDPOINT}/me`,
+            includeCredentials: true
+        });
     },
 
     async logout() {
-        sessionStorage.clear();
-    },
+        return await Network.post({
+            path: `${ENDPOINT}/logout`,
+            includeCredentials: true
+        });
+    }
 
 };

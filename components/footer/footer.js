@@ -1,5 +1,5 @@
 import { ROUTES } from "./../../js/lib/routes";
-import { stripScripts } from './../../js/lib/index.js';
+import { stripScripts } from './../../js/lib/common.js';
 
 export class Footer {
     constructor(selector = '#footer', url = ROUTES.components.footer.html) {

@@ -1,35 +1,109 @@
 const API_BASE = 'http://localhost:8080/api';
-// const API_BASE = 'https://retoolapi.dev';
 
-async function request(path, method = 'GET', data = null) {
-    const options = {
-        method,
-        headers: {
-            'Content-Type': 'application/json'
+const interceptors = {
+    request: [],
+    response: [],
+    error: []
+};
+
+export class Network {
+
+    static get(config) {
+        return this._request({
+            method: 'GET',
+            ...config
+        });
+    }
+
+    static post(config) {
+        return this._request({
+            method: 'POST',
+            ...config
+        });
+    }
+
+    static put(config) {
+        return this._request({
+            method: 'PUT',
+            ...config
+        });
+    }
+
+    static patch(config) {
+        return this._request({
+            method: 'PATCH',
+            ...config
+        });
+    }
+
+    static delete(config) {
+        return this._request({
+            method: 'DELETE',
+            ...config
+        });
+    }
+
+    static async _request(config) {
+        const {
+            path,
+            method = 'GET',
+            body = null,
+            includeCredentials = false,
+            headers = {}
+        } = config;
+
+        let url = `${API_BASE}${path}`;
+        let options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                ...headers
+            },
+            credentials: includeCredentials ? 'include' : 'omit'
+        };
+
+        if (body) options.body = JSON.stringify(body);
+
+        for (const fn of interceptors.request) {
+            const modified = await fn({ url, options });
+            if (modified) ({ url, options } = modified);
         }
-    };
-    if (data) options.body = JSON.stringify(data);
-    const res = await fetch(`${API_BASE}${path}`, options);
-    if (!res.ok) throw new Error(`Network error ${res.status}`);
-    return res.json();
-}
 
-export function fetchJSON(path) {
-    return request(path);
-}
+        const res = await fetch(url, options);
 
-export function postJSON(path, data) {
-    return request(path, 'POST', data);
-}
+        if (!res.ok) {
+            let error = await this._buildError(res);
+            for (const fn of interceptors.error) {
+                error = (await fn(error)) || error;
+            }
+            throw error;
+        }
 
-export function putJSON(path, data) {
-    return request(path, 'PUT', data);
-}
+        let data = await res.json();
 
-export function patchJSON(path, data) {
-    return request(path, 'PATCH', data);
-}
+        for (const fn of interceptors.response) {
+            data = (await fn(data)) || data;
+        }
 
-export function deleteJSON(path) {
-    return request(path, 'DELETE');
+        return data;
+    }
+
+    static async _buildError(res) {
+        const payload = await res.json().catch(() => ({}));
+
+        return {
+            status: res.status,
+            message: payload.message || res.statusText,
+            details: Array.isArray(payload.errors)
+                ? payload.errors
+                : typeof payload.errors === 'object'
+                    ? Object.values(payload.errors).flat()
+                    : []
+        };
+    }
+
+    static get interceptors() {
+        return interceptors;
+    }
+
 }

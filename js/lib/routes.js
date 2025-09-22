@@ -1,16 +1,5 @@
 export const ROUTES = {
 
-    interfaces: {
-        login: {
-            path: '/interfaces/login/login.html',
-            title: 'Inicio de sesión'
-        },
-        app: {
-            path: '/index.html',
-            title: 'Aplicación'
-        }
-    },
-
     /* ----------------------------- VISTAS ----------------------------- */
     views: {
 
@@ -19,6 +8,12 @@ export const ROUTES = {
             hash: '#main',
             file: '/interfaces/main/main.html',
             title: 'Inicio'
+        },
+        login: {
+            hash: '#login',
+            file: '/interfaces/login/login.html',
+            title: 'Inicio de sesión',
+            hideNavbar: true
         },
         testing: {
             hash: '#testing',

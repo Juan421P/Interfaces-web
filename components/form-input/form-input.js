@@ -1,5 +1,5 @@
 import { ROUTES } from '../../js/lib/routes.js';
-import { stripScripts } from '../../js/lib/index.js';
+import { stripScripts } from '../../js/lib/common.js';
 
 const allowedKeys = [
 	'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End', 'Enter'

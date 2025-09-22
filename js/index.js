@@ -1,21 +1,25 @@
 import { ROUTES } from './lib/routes.js';
 import { THEMES } from './lib/themes.js';
+import { AuthGuard } from './guards/auth.guard.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    const { Body } = await import(ROUTES.components.body.js);
+    await new Body();
+
+    const { Footer } = await import(ROUTES.components.footer.js);
+    await new Footer();
+
+    const { Toast } = await import(ROUTES.components.toast.js);
+    const toast = new Toast();
+    await toast.init();
+
     if (!sessionStorage.getItem('userID')) {
-        window.location.href = '/interfaces/login/login.html';
+        window.location.hash = '#login';
     }
+
+    THEMES.loadTheme();
+    render();
 });
-
-const { Body } = await import(ROUTES.components.body.js);
-await new Body();
-
-const { Footer } = await import(ROUTES.components.footer.js);
-await new Footer();
-
-const { Toast } = await import(ROUTES.components.toast.js);
-const toast = new Toast();
-await toast.init();
 
 function flattenRoutes(obj) {
     const result = [];
@@ -34,7 +38,21 @@ const ALL_VIEWS = flattenRoutes(ROUTES.views);
 async function render(hash = window.location.hash || '#main') {
     const view = ALL_VIEWS.find(v => v.hash === hash);
 
-    if (!view) { window.location.hash = '#not-found'; return; }
+    if (!view) {
+        window.location.hash = '#not-found';
+        return;
+    }
+
+    if (view.hash !== '#login' && view.hash !== '#not-found') {
+        if (!AuthGuard.isAuthenticated()) {
+            window.location.hash = '#login';
+            return;
+        }
+        if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
+            window.location.hash = '#main';
+            return;
+        }
+    }
 
     if (!view.hideNavbar) {
         const { Navbar } = await import(ROUTES.components.navbar.js);
@@ -47,15 +65,26 @@ async function render(hash = window.location.hash || '#main') {
                 wrapper.classList.toggle('-translate-x-full');
             });
         }
-
     } else {
         const host = document.querySelector('#navbar');
         if (host) host.innerHTML = '';
     }
 
-    const html = await (await fetch(view.file)).text();
-    document.querySelector('#main-view').innerHTML = html;
-    document.title = view.title;
+    try {
+        const res = await fetch(view.file);
+        if (!res.ok) {
+            console.error(`Failed to load ${view.file}`, res.status);
+            window.location.hash = '#not-found';
+            return;
+        }
+        const html = await res.text();
+        document.querySelector('#main-view').innerHTML = html;
+        document.title = view.title;
+    } catch (err) {
+        console.error('View fetch error', err);
+        window.location.hash = '#not-found';
+        return;
+    }
 
     try {
         const jsPath = view.file.replace(/\.html$/, '.js');
@@ -73,7 +102,4 @@ window.addEventListener('hashchange', () => {
 
 if (!window.location.hash) {
     window.location.hash = '#main';
-} else {
-    THEMES.loadTheme();
-    render();
 }
