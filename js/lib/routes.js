@@ -246,9 +246,9 @@ export const ROUTES = {
             html: '/components/button/button.html',
             js: '/components/button/button.js'
         },
-        cards: {
-            html: '/components/cards/cards.html',
-            js: '/components/cards/cards.js'
+        cardContainer: {
+            html: '/components/card-container/card-container.html',
+            js: '/components/card-container/card-container.js'
         },
         calendar: {
             html: '/components/calendar/calendar.html',

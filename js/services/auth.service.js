@@ -1,22 +1,24 @@
 import { AuthContract } from './../contracts/auth.contract.js';
 import { Network } from './../lib/network.js';
 
-const ENDPOINT = '/auth';
+const ENDPOINT = '/Auth';
 const contract = new AuthContract();
 
 export const AuthService = {
 
-    async login(email, password) {
+    async login(email, contrasena) {
         const payload = contract.parse({
             email,
-            password
+            contrasena
         }, 'login');
 
-        return (await Network.post({
+        await Network.post({
             path: `${ENDPOINT}/login`,
             body: payload,
             includeCredentials: true
-        })) == 'Inicio de sesión exitoso';
+        });
+
+        return;
     },
 
     async me() {

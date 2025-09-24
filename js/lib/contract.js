@@ -105,7 +105,16 @@ export class Contract {
 		const errors = {};
 
 		for (const [key, rules] of Object.entries(schema)) {
-			const value = data[key];
+			let value = data[key];
+
+			if ((value === undefined || value === null || value === '') && rules.default !== undefined) {
+				value = typeof rules.default === 'function' ? rules.default() : rules.default;
+			}
+
+			if (rules.trim && typeof value === 'string') {
+				value = value.trim();
+			}
+
 			const fieldErrors = this._validateField(key, value, rules);
 
 			if (fieldErrors.length > 0) {

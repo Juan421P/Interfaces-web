@@ -1,15 +1,12 @@
-import { UsersService } from './../../js/services/users.service.js';
-import { buildInitials } from './../../js/lib/index.js';
+import { buildInitials } from './../../js/lib/common.js';
+import { AuthService } from '../../js/services/auth.service.js';
 
 export async function init() {
     try {
-        const userID = sessionStorage.getItem('userID');
-        if (!userID) throw new Error('No user ID found');
-        const user = await UsersService.get(userID);
-        const firstName = user.personName || null;
-        const lastName = user.personLastName || null;
-        const image = user.image || null;
-        const role = user.rolesName || null;
+        const user = (await AuthService.me()).user;
+        const firstName = user.firstName || null;
+        const lastName = user.lastName || null;
+        const role = user.roleID || null;
 
         const welcome = document.getElementById('main-welcome');
         if (welcome) welcome.textContent = `Bienvenido, ${firstName} ${lastName}`;
@@ -20,23 +17,9 @@ export async function init() {
         const avatarHost = document.getElementById('main-avatar');
         if (avatarHost) {
             avatarHost.innerHTML = '';
-            if (image) {
-                const img = document.createElement('img');
-                img.src = image;
-                img.alt = `${firstName} ${lastName}`;
-                img.className = 'object-cover rounded-full h-14 w-14 drop-shadow';
-                img.onerror = () => {
-                    avatarHost.innerHTML = '';
-                    avatarHost.appendChild(
-                        buildInitials(`${firstName[0] ?? ''}${lastName[0] ?? ''}`.toUpperCase() || '?')
-                    );
-                };
-                avatarHost.appendChild(img);
-            } else {
-                avatarHost.appendChild(
-                    buildInitials(`${firstName[0] ?? ''}${lastName[0] ?? ''}`.toUpperCase() || '?')
-                );
-            }
+            avatarHost.appendChild(
+                buildInitials(`${firstName[0] ?? ''}${lastName[0] ?? ''}`.toUpperCase() || '?')
+            );
         }
     } catch (error) {
         console.error('[main] failed to load user data:', error);

@@ -1,6 +1,5 @@
-import { UsersService } from './../../js/services/users.service.js';
 import { AuthService } from './../../js/services/auth.service.js';
-import { buildInitials, stripScripts } from './../../js/lib/index.js';
+import { buildInitials, stripScripts } from './../../js/lib/common.js';
 import { ROUTES } from './../../js/lib/routes.js';
 
 const { Modal } = await import(ROUTES.components.modal.js);
@@ -51,7 +50,7 @@ export class Navbar {
                                 e.preventDefault();
                                 AuthService.logout();
                                 logoutModal.close();
-                                window.location.href = '/interfaces/login/login.html';
+                                window.location.href = '/#login';
                             },
                             showIcon: false,
                             sizeMultiplier: .75
@@ -64,28 +63,14 @@ export class Navbar {
 
     async injectProfilePicture() {
         try {
-            const userID = sessionStorage.getItem('userID');
-            if (!userID) throw new Error('No user ID found');
-            const user = await UsersService.get(userID);
-            const firstName = user.personName;
-            const lastName = user.personLastName;
-            const photo = user.image;
+            const user = (await AuthService.me()).user;
+            const firstName = user.firstName;
+            const lastName = user.lastName;
             const initials = `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.toUpperCase();
-
             const avatarHost = document.querySelector('#profile-avatar');
             if (!avatarHost) return;
-
             avatarHost.innerHTML = '';
-
-            if (photo) {
-                const img = document.createElement('img');
-                img.src = photo;
-                img.className = 'object-cover rounded-full h-14 w-14 drop-shadow';
-                img.onerror = () => avatarHost.appendChild(buildInitials(initials || '?'));
-                avatarHost.appendChild(img);
-            } else {
-                avatarHost.appendChild(buildInitials(initials || '?'));
-            }
+            avatarHost.appendChild(buildInitials(initials || '?'));
         } catch (err) {
             console.error('[Navbar] user fetch failed:', err);
         }
@@ -164,24 +149,22 @@ export class Navbar {
 
 async function filterByRole(root) {
     try {
-        const userID = sessionStorage.getItem('userID');
-        if (!userID) throw new Error('No user ID found');
 
-        const role = (await UsersService.get(userID)).rolesName;
+        const role = ((await AuthService.me()).user).roleID;
 
         const allowedMap = {
-            'administrador': ['#system-', '#planification-'],
-            'recursos': ['#hr-'],
-            'registro': ['#ar-'],
-            'docente': ['#tp-'],
-            'estudiante': ['#sp-']
+            'Administrador': ['#system-', '#planification-'],
+            'Recursos Humanos': ['#hr-'],
+            'Registro Académico': ['#ar-'],
+            'Docente': ['#tp-'],
+            'Estudiante': ['#sp-']
         };
 
         const allowedPrefixes = allowedMap[role] || [];
 
         root.querySelectorAll('a[href]').forEach(link => {
             const hash = link.getAttribute('href');
-            const isGlobal = ['#main', '#notifications', '#not-found', '#profile', '#academic-calendar']
+            const isGlobal = ['#main', '#notifications', '#not-found', '#profile']
                 .includes(hash);
 
             if (!isGlobal && !allowedPrefixes.some(pref => hash.startsWith(pref))) {

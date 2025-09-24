@@ -1,5 +1,5 @@
 import { ROUTES } from './../../js/lib/routes.js';
-import { stripScripts } from '../../js/lib/index.js';
+import { stripScripts } from './../../js/lib/common.js';
 
 const { ContextMenu } = await import(ROUTES.components.contextMenu.js);
 const { Toast } = await import(ROUTES.components.toast.js);

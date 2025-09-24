@@ -1,5 +1,5 @@
-import { UsersService } from './../../js/services/users.service.js';
-import { buildInitials, showImageModal } from './../../js/lib/index.js';
+import { AuthService } from './../../js/services/auth.service.js';
+import { buildInitials, showImageModal } from './../../js/lib/common.js';
 import { ROUTES } from './../../js/lib/routes.js';
 import { THEMES } from './../../js/lib/themes.js';
 
@@ -9,25 +9,22 @@ const toast = new Toast();
 await toast.init();
 
 export async function init() {
-    const userID = sessionStorage.getItem('userID');
-    if (!userID) {
-        throw new Error('No user ID found');
-    }
 
-    const user = await UsersService.get(userID);
+    const user = (await AuthService.me()).user;
     if (!user) {
         console.error('[Profile] No session user :(');
         return;
     }
 
     const person = {
-        firstName: user.personName,
-        lastName: user.personLastName,
-        contactEmail: user.email
+        firstName: user.firstName,
+        lastName: user.lastName,
+        contactEmail: user.email,
+        role: user.roleID
     };
 
     renderAvatar(user, person);
-    renderUserInfo(person, user, { roleName: user.rolesName });
+    renderUserInfo(person, user, person.role);
 
     setInitialThemeMode();
     renderThemeSwatches();
@@ -109,7 +106,7 @@ function renderUserInfo(person, user, role) {
     const emailEl = document.querySelector('#profile-email');
 
     if (nameEl) nameEl.textContent = `${person.firstName} ${person.lastName}`;
-    if (roleEl) roleEl.textContent = role.roleName || 'Rol desconocido';
+    if (roleEl) roleEl.textContent = role || 'Rol desconocido';
     if (emailEl) emailEl.textContent = person.contactEmail || user.email;
 }
 

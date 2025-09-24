@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const toast = new Toast();
     await toast.init();
 
-    if (!sessionStorage.getItem('userID')) {
+    const ok = await AuthGuard.isAuthenticated();
+    if(!ok){
         window.location.hash = '#login';
     }
 
@@ -44,15 +45,18 @@ async function render(hash = window.location.hash || '#main') {
     }
 
     if (view.hash !== '#login' && view.hash !== '#not-found') {
-        if (!AuthGuard.isAuthenticated()) {
+        const ok = await AuthGuard.isAuthenticated();
+        if (!ok) {
             window.location.hash = '#login';
             return;
         }
+
         if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
             window.location.hash = '#main';
             return;
         }
     }
+
 
     if (!view.hideNavbar) {
         const { Navbar } = await import(ROUTES.components.navbar.js);

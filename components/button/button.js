@@ -1,5 +1,5 @@
 import { ROUTES } from './../../js/lib/routes.js';
-import { stripScripts } from '../../js/lib/index.js';
+import { stripScripts } from '../../js/lib/common.js';
 
 export class Button {
     constructor(opts = {}) {

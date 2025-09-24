@@ -1,17 +1,13 @@
 import { ROUTES } from './../../js/lib/routes.js';
 import { AuthService } from './../../js/services/auth.service.js';
 import { ValidationError } from './../../js/errors/validation-error.js';
-import { formatErrors } from './../../js/lib/errors.js';
+import { AuthGuard } from '../../js/guards/auth.guard.js';
 
 const { Form } = await import(ROUTES.components.form.js);
 const { FormInput } = await import(ROUTES.components.formInput.js);
 const { SubmitInput } = await import(ROUTES.components.submitInput.js);
 const { Footer } = await import(ROUTES.components.footer.js);
 const { Toast } = await import(ROUTES.components.toast.js);
-
-// if (sessionStorage.getItem('userID')) {
-//     window.location.href = '/#main';
-// }
 
 await new Footer();
 
@@ -56,9 +52,17 @@ new Form({
                 ((values['email-input'] || '').trim()),
                 ((values['password-input'] || '').trim())
             );
-            window.location.hash = '#main';
+
+            const ok = await AuthGuard.isAuthenticated();
+            console.log(ok);
+            if (ok) {
+                window.location.hash = '#main';
+            } else {
+                toast.show("Sesión no válida");
+            }
         } catch (error) {
-            toast.show((formatErrors(error)).join(' | '));
+            console.error(error);
+            toast.show("Error al iniciar sesión");
         }
     }
 });
