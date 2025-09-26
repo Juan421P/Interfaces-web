@@ -2,12 +2,14 @@ import { AuthService } from "../services/auth.service.js";
 
 export class AuthGuard {
     static async isAuthenticated() {
-        try {
-            const res = await AuthService.me();
-            return res !== null;
-        } catch (err) {
-            console.error('AuthGuard.isAuthenticated error:', err);
-            return false;
+        if (window.location.hash !== '#login' && window.location.hash !== '#not-found') {
+            try {
+                const res = await AuthService.me();
+                return res !== null;
+            } catch (err) {
+                console.error('AuthGuard.isAuthenticated error:', err);
+                return false;
+            }
         }
     }
 

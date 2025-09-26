@@ -16,45 +16,82 @@ await toast.init();
 
 new Form({
     host: '#login-form-host',
-    templateId: 'login-form-template',
-    components: [
+    formClass: 'gap-16 px-6 mx-auto md:mx-0 md:px-0 z-50 w-full',
+    sections: [
         {
-            type: FormInput,
             opts: {
-                id: 'email-input',
-                type: 'text',
-                placeholder: 'Correo electrónico',
-                validationMethod: 'email'
+                gap: 2,
             },
-            validation: ['email']
+            titles: [
+                {
+                    text: 'Inicio de sesión',
+                    relevance: 1,
+                    classes: [
+                        'text-3xl', 'font-bold', 'text-left',
+                        'bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]',
+                        'bg-clip-text', 'text-transparent'
+                    ]
+                },
+                {
+                    text: '¡Bienvenido!',
+                    relevance: 3,
+                    classes: [
+                        'text-lg', 'font-semibold', 'text-left',
+                        'bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]',
+                        'bg-clip-text', 'text-transparent'
+                    ]
+                }
+            ]
         },
         {
-            type: FormInput,
             opts: {
-                id: 'password-input',
-                type: 'password',
-                placeholder: 'Contraseña',
-                validationMethod: 'password'
+                gap: 6
             },
-            validation: ['password']
+            components: [
+                {
+                    type: FormInput,
+                    opts: {
+                        id: 'email-input',
+                        type: 'text',
+                        placeholder: 'Correo electrónico'
+                    },
+                    validation: ['email']
+                },
+                {
+                    type: FormInput,
+                    opts: {
+                        id: 'password-input',
+                        type: 'password',
+                        placeholder: 'Contraseña'
+                    },
+                    validation: ['password']
+                }
+            ]
         },
         {
-            type: SubmitInput,
             opts: {
-                id: 'submit-button',
-                text: 'Iniciar sesión'
-            }
+                gap: 4,
+                px: 10
+            },
+            components: [
+                {
+                    type: SubmitInput,
+                    opts: {
+                        id: 'submit-button',
+                        text: 'Iniciar sesión'
+                    }
+                }
+            ]
         }
     ],
     onSubmit: async (values) => {
         try {
             await AuthService.login(
-                ((values['email-input'] || '').trim()),
-                ((values['password-input'] || '').trim())
+                (values['email-input'] || '').trim(),
+                (values['password-input'] || '').trim()
             );
 
             const ok = await AuthGuard.isAuthenticated();
-            console.log(ok);
             if (ok) {
                 window.location.hash = '#main';
             } else {

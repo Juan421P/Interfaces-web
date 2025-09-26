@@ -3,14 +3,10 @@ export class Form {
         this.host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
         if (!this.host) throw new Error('[Form] host not found');
 
-        this.templateId = opts.templateId;
-        this.template = document.getElementById(this.templateId);
-        if (!this.template) throw new Error(`[Form] Template #${this.templateId} not found`);
-
-        this.components = Array.isArray(opts.components) ? opts.components : [];
+        this.sections = Array.isArray(opts.sections) ? opts.sections : [];
         this.onSubmit = typeof opts.onSubmit === 'function' ? opts.onSubmit : null;
         this.maxWidthClass = opts.maxWidthClass || 'max-w-md';
-        this.formClass = opts.formClass || 'gap-20 px-6 mx-auto md:mx-0 md:px-0';
+        this.formClass = opts.formClass || 'gap-8 px-6 mx-auto md:mx-0 md:px-0 z-50';
         this.fields = {};
         this.validations = {};
 
@@ -28,36 +24,48 @@ export class Form {
     };
 
     _render() {
-        const tpl = this.template.content.cloneNode(true);
-        this.formEl = tpl.querySelector('form');
-        if (!this.formEl) throw new Error('[Form] template must contain a <form> element');
-
+        this.formEl = document.createElement('form');
         this.formEl.classList.add('flex', 'flex-col');
         if (this.maxWidthClass) this.formEl.classList.add(this.maxWidthClass);
         this.formClass.split(/\s+/).filter(Boolean).forEach(c => this.formEl.classList.add(c));
 
-        for (const compDef of this.components) {
-            const { type, opts = {}, validation = [] } = compDef;
-            if (!type || typeof type !== 'function') {
-                console.warn('[Form] invalid component type', compDef);
-                continue;
+        for (const section of this.sections) {
+            const wrapper = document.createElement('section');
+            wrapper.classList.add('flex', 'flex-col');
+
+            if (section.opts?.gap) {
+                wrapper.classList.add(`gap-${section.opts.gap}`);
+            } else {
+                wrapper.classList.add('gap-6');
             }
-            const id = opts.id;
-            if (!id) throw new Error('[Form] each component must have an id in opts');
-
-            const hostEl = this.formEl.querySelector(`#${id}-host`);
-            if (!hostEl) {
-                throw new Error(`[Form] Host element #${id}-host not found in template`);
+            if (section.opts?.px) {
+                wrapper.classList.add(`px-${section.opts.px}`);
+            } else {
+                wrapper.classList.add('px-0');
             }
 
-            const instanceOpts = Object.assign({}, opts, { host: hostEl });
-            const instance = new type(instanceOpts);
+            if (Array.isArray(section.titles)) {
+                for (const t of section.titles) {
+                    const tag = `h${Math.min(Math.max(t.relevance || 1, 1), 6)}`;
+                    const el = document.createElement(tag);
+                    el.textContent = t.text;
 
-            this.fields[id] = instance;
+                    const classes = Array.isArray(t.classes)
+                        ? t.classes
+                        : (t.classes || '').split(/\s+/);
+                    (classes.length ? classes : ['text-[rgb(var(--card-from))]'])
+                        .filter(Boolean)
+                        .forEach(c => el.classList.add(c));
 
-            if (validation.length > 0) {
-                this.validations[id] = validation;
+                    wrapper.appendChild(el);
+                }
             }
+
+            for (const compDef of section.components || []) {
+                this._mountComponent(compDef, wrapper);
+            }
+
+            this.formEl.appendChild(wrapper);
         }
 
         this.formEl.addEventListener('submit', (e) => {
@@ -107,6 +115,29 @@ export class Form {
 
         this.host.innerHTML = '';
         this.host.appendChild(this.formEl);
+    }
+
+    _mountComponent(compDef, container) {
+        const { type, opts = {}, validation = [] } = compDef;
+        if (!type || typeof type !== 'function') {
+            console.warn('[Form] invalid component type', compDef);
+            return;
+        }
+        const id = opts.id;
+        if (!id) throw new Error('[Form] each component must have an id in opts');
+
+        const hostEl = document.createElement('div');
+        hostEl.id = `${id}-host`;
+        container.appendChild(hostEl);
+
+        const instanceOpts = Object.assign({}, opts, { host: hostEl });
+        const instance = new type(instanceOpts);
+
+        this.fields[id] = instance;
+
+        if (validation.length > 0) {
+            this.validations[id] = validation;
+        }
     }
 
     getField(id) {
