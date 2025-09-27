@@ -1,38 +1,21 @@
+import { Service } from './../lib/service.js';
 import { AuthContract } from './../contracts/auth.contract.js';
-import { Network } from './../lib/network.js';
 
-const ENDPOINT = '/Auth';
-const contract = new AuthContract();
-
-export const AuthService = {
-
-    async login(email, contrasena) {
-        const payload = contract.parse({
-            email,
-            contrasena
-        }, 'login');
-
-        await Network.post({
-            path: `${ENDPOINT}/login`,
-            body: payload,
-            includeCredentials: true
-        });
-
-        return;
-    },
-
-    async me() {
-        return await Network.get({
-            path: `${ENDPOINT}/me`,
-            includeCredentials: true
-        });
-    },
-
-    async logout() {
-        return await Network.post({
-            path: `${ENDPOINT}/logout`,
-            includeCredentials: true
-        });
+export class AuthService extends Service {
+    constructor() {
+        super('/Auth', new AuthContract());
     }
 
-};
+    async login(email, contrasena) {
+        const payload = { email, contrasena };
+        await this.create(payload, 'login', 'login');
+    }
+
+    async me() {
+        return await this.get('me', 'me', 'table');
+    }
+
+    async logout() {
+        await this.create({}, 'logout', 'logout');
+    }
+}

@@ -4,6 +4,7 @@ import { PipeManager } from '../lib/pipe-manager.js';
 import { PipeParseError } from '../errors/pipes/pipe-parse-error.js';
 
 export class Contract {
+
 	constructor({ schema = {}, scopes = {}, pipes = {} } = {}) {
 		if (!schema || typeof schema !== 'object') {
 			throw new TypeError('Contract schema must be an object.');
@@ -11,6 +12,16 @@ export class Contract {
 		this.schema = schema;
 		this.scopes = scopes;
 		this.pipes = pipes;
+	}
+
+	getPrimaryKey() {
+		const possibleKeys = ['id', 'ID', `${this.constructor.name.replace('Contract', '').toLowerCase()}ID`];
+
+		for (const key of possibleKeys) {
+			if (this.schema[key]) return key;
+		}
+
+		return Object.keys(this.schema)[0];
 	}
 
 	static _toMs(v) {

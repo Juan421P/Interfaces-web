@@ -1,14 +1,16 @@
-import { ROUTES } from '../../../js/lib/routes.js';
-import { stripScripts } from '../../../js/lib/common.js';
+import { DisplayComponent } from './../../base/display-component.js';
+import { ROUTES } from './../../../js/lib/routes.js';
+import { stripScripts } from './../../../js/lib/common.js';
+import { ComponentRenderError } from './../../../js/errors/components/base/component-render-error.js';
 
-const { ContextMenu } = await import(ROUTES.components.contextMenu.js);
-const { Toast } = await import(ROUTES.components.toast.js);
-const toast = await new Toast();
-toast.init();
-
-export class CardContainer {
+export class CardContainer extends DisplayComponent {
     constructor(opts = {}) {
-        this.host = opts.host;
+        if (!opts.host) throw new Error('[CardContainer] requires a host element');
+        if (!opts.service) throw new Error('[CardContainer] requires a service');
+
+        super(opts);
+
+        this.host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
         this.fields = opts.fields || [];
         this.service = opts.service;
         this.servicePrefix = opts.servicePrefix || [];
@@ -21,21 +23,25 @@ export class CardContainer {
         this.paginated = !!opts.paginated;
         this.perPage = opts.perPage ?? null;
         this.searchFields = opts.searchFields ?? null;
-        this.url = opts.url || ROUTES.components.cardContainer.html;
+        this.url = opts.url || ROUTES.components.display.cardContainer.html;
 
-        if (!this.service || typeof this.service.list !== 'function') {
-            throw new Error('[CardContainer] requires a service with .list()');
-        }
         if (this.paginated && !this.perPage) {
             throw new Error('[CardContainer] paginated containers require perPage.');
         }
 
         this.page = 1;
         this.sort = { index: -1, dir: 1 };
-        this.contextMenu = new ContextMenu();
 
         this._bindServiceEvents();
-        this._render();
+    }
+
+    async _beforeRender() {
+        const { ContextMenu } = await import(ROUTES.components.overlay.contextMenu.js);
+        const { Toast } = await import(ROUTES.components.overlay.toast.js);
+
+        this.contextMenu = new ContextMenu();
+        this.toast = new Toast();
+        await this.toast.init();
     }
 
     _bindServiceEvents() {
@@ -62,10 +68,9 @@ export class CardContainer {
             this.$pagination = this.root.querySelector('[data-pagination]');
             this.$searchHost = this.root.querySelector('[data-search]');
 
-            const hostEl = (typeof this.host === 'string') ? document.querySelector(this.host) : this.host;
-            if (!hostEl) throw new Error('[CardContainer] host element not found');
-            hostEl.innerHTML = '';
-            hostEl.appendChild(this.root);
+            if (!this.host) throw new Error('[CardContainer] host element not found');
+            this.host.innerHTML = '';
+            this.host.appendChild(this.root);
 
             if (this.searchable && this.$searchHost) {
                 const { SearchInput } = await import(ROUTES.components.searchInput.js);
@@ -76,12 +81,18 @@ export class CardContainer {
                 });
             }
 
-            this.data = await this.service.list();
-            this._renderCards();
-
         } catch (err) {
-            console.error('[CardContainer] render failed', err);
+            throw new ComponentRenderError(
+                'CardContainer',
+                'template rendering',
+                err
+            );
         }
+    }
+
+    async _onDataLoaded() {
+        const filter = this.searchInput?.getValue?.() || '';
+        this._renderCards(filter);
     }
 
     _paginate(array) {
@@ -91,6 +102,8 @@ export class CardContainer {
     }
 
     _renderCards(filterStr = '') {
+        if (!this.$list) return;
+
         let data = Array.isArray(this.data) ? this.data.slice() : [];
 
         if (filterStr) {
@@ -149,16 +162,15 @@ export class CardContainer {
         }).join('');
 
         return `
-      <div data-card class="p-4 rounded-xl shadow-md bg-white hover:bg-gradient-to-r hover:from-[rgb(var(--button-from))] hover:to-[rgb(var(--button-to))] transition cursor-pointer">
-        ${content}
-      </div>
-    `;
+            <div data-card class="p-4 rounded-xl shadow-md bg-white hover:bg-gradient-to-r hover:from-[rgb(var(--button-from))] hover:to-[rgb(var(--button-to))] transition cursor-pointer">
+                ${content}
+            </div>
+        `;
     }
 
     async reload() {
         try {
-            this.data = await this.service.list();
-            console.log(this.data);
+            await this.loadData();
             const filter = this.searchInput?.getValue?.() || '';
             this._renderCards(filter);
         } catch (err) {
@@ -167,7 +179,7 @@ export class CardContainer {
     }
 
     _renderPagination(total) {
-        if (!this.paginated) {
+        if (!this.paginated || !this.$pagination) {
             if (this.$pagination) this.$pagination.classList.add('hidden');
             return;
         }
@@ -175,14 +187,14 @@ export class CardContainer {
 
         const btn = (label, page, disabled = false) => (
             `<button ${disabled ? 'disabled' : ''} data-page="${page}"
-         class="px-2 py-1 ${disabled ? 'text-[rgb(var(--button-from))] cursor-not-allowed' : 'cursor-pointer'}">${label}</button>`
+             class="px-2 py-1 ${disabled ? 'text-[rgb(var(--button-from))] cursor-not-allowed' : 'cursor-pointer'}">${label}</button>`
         );
 
         this.$pagination.innerHTML = `
-      ${btn('‹', this.page - 1, this.page === 1)}
-      <span class="mx-2 font-medium text-[rgb(var(--button-from))]">${this.page}/${total}</span>
-      ${btn('›', this.page + 1, this.page === total)}
-    `;
+            ${btn('‹', this.page - 1, this.page === 1)}
+            <span class="mx-2 font-medium text-[rgb(var(--button-from))]">${this.page}/${total}</span>
+            ${btn('›', this.page + 1, this.page === total)}
+        `;
 
         this.$pagination.querySelectorAll('button[data-page]').forEach(b => {
             b.addEventListener('click', () => {

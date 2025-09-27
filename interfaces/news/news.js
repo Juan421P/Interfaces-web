@@ -2,13 +2,13 @@ import { ROUTES } from '../../js/lib/routes.js';
 import { AuthService } from '../../js/services/auth.service.js';
 import { NotificationsService } from '../../js/services/notifications.service.js';
 
-const { Modal } = await import(ROUTES.components.modal.js);
-const { Toast } = await import(ROUTES.components.toast.js);
-const { Button } = await import(ROUTES.components.button.js);
-const { Form } = await import(ROUTES.components.form.js);
-const { FormInput } = await import(ROUTES.components.formInput.js);
-const { SubmitInput } = await import(ROUTES.components.submitInput.js);
-const { CardContainer } = await import(ROUTES.components.cardContainer.js);
+const { Modal } = await import(ROUTES.components.overlay.modal.js);
+const { Toast } = await import(ROUTES.components.overlay.toast.js);
+const { Button } = await import(ROUTES.components.basic.button.js);
+const { Form } = await import(ROUTES.components.container.form.js);
+const { FormInput } = await import(ROUTES.components.form.formInput.js);
+const { SubmitInput } = await import(ROUTES.components.form.submitInput.js);
+const { CardContainer } = await import(ROUTES.components.display.cardContainer.js);
 
 function openNotificationForm({ mode = 'create', data = null } = {}) {
     const modal = new Modal({
@@ -116,14 +116,8 @@ export async function init() {
 
     const cards = new CardContainer({
         host: "#notifications-container",
-        service: NotificationsService,
-        servicePrefix: 'Notifications',
-        fields: [
-            { label: "Título", key: "title" },
-            { label: "Mensaje", key: "body" },
-            { label: "Usuario", key: "userName" },
-            { label: "Enviado", key: "sentAt" }
-        ],
+        service: new NotificationsService(),
+        fields: ["title", "body", "userName", "sentAt"],
         searchable: true,
         paginated: true,
         perPage: 10,
@@ -131,7 +125,7 @@ export async function init() {
         contextMenuOpts: (row) => [
             {
                 label: "Actualizar",
-                onClick: () => openNotificationForm({
+                onClick: async () => openNotificationForm({
                     mode: 'update',
                     data: row
                 })
@@ -140,12 +134,14 @@ export async function init() {
                 label: "Eliminar",
                 className: "text-red-600",
                 onClick: async () => {
-                    await NotificationsService.delete(row.notificationID);
+                    await notificationsService.delete(row.notificationID);
                     toast.show("Notificación eliminada 💔");
                     cards.reload();
                 }
             }
         ]
     });
+
+    await cards.render();
 
 }

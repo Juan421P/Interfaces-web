@@ -1,18 +1,28 @@
-import { ROUTES } from '../../../js/lib/routes.js';
-import { stripScripts } from '../../../js/lib/common.js';
+import { Component } from './../../base/component.js';
+import { ROUTES } from './../../../js/lib/routes.js';
+import { stripScripts } from './../../../js/lib/common.js';
 
-export class ContextMenu {
+export class ContextMenu extends Component {
+
     constructor(opts = {}) {
-        this.url = opts.url || ROUTES.components.contextMenu.html;
+        super({
+            host: document.body,
+            url: opts.url || ROUTES.components.overlay.contextMenu.html,
+            autoRender: false
+        });
+
         this.actions = opts.actions || [];
         this.menu = null;
         this.isOpen = false;
 
         this._handleOutsideClick = this._handleOutsideClick.bind(this);
+
+        this.load();
     }
 
     async load() {
         if (this.menu) return;
+
         const markup = await (await fetch(this.url + '?raw')).text();
         const tpl = stripScripts(markup);
 
@@ -23,27 +33,9 @@ export class ContextMenu {
         document.body.appendChild(cloned);
 
         this.menu = document.querySelector('#context-menu');
+        this.menu.classList.add('hidden');
     }
 
-    /**
-     * Muestra (abre) el context menu en las coordenadas especificadas, con las acciones especificadas
-     * @param {Number} x - Coordenadas en x (posición horizontal) relativa al viewport
-     * @param {Number} y - Lo mismo que el anterior pero coordenadas en y (posición vertical)
-     * @param {Array<>} [actions = []] - Un array que contiene las opciones que ha de contener el context-menu. Puede incluir el estilo de cada acción por separado
-     * @param {'br'|'tr'|'bl'|'tl'} [pos = 'br'] - La posición en la que ha de mostrarse el context-menu en relación a las coordenadas:
-     * - 'br': Abajo a la derecha del punto (x,y) (valor por defecto)
-     * - 'tr': Arriba a la derecha del punto (x,y)
-     * - 'bl': Abajo a la izquierda del punto (x,y)
-     * - 'tl': Arriba a la izquierda del punto (x,y)
-     * 
-     * @example
-     * contextMenu.open(
-     * 300, 400, [
-     *  { label: 'Opción 1', onClick: () => {} },
-     *  { label: 'Opción 2', onClick: () => {} }
-     * ], 'tl')
-     * 
-     */
     async open(x, y, actions = [], pos = 'br') {
         if (pos != 'br' && pos != 'tr' && pos != 'bl' && pos != 'tl') pos = 'br';
 
@@ -131,5 +123,20 @@ export class ContextMenu {
         if (!this.menu.contains(e.target)) {
             this.close();
         }
+    }
+
+    async render() {
+    }
+
+    async _render() {
+    }
+
+    async destroy() {
+        this.close();
+        if (this.menu) {
+            this.menu.remove();
+            this.menu = null;
+        }
+        await super.destroy();
     }
 }

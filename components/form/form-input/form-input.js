@@ -1,5 +1,6 @@
-import { ROUTES } from '../../../js/lib/routes.js';
-import { stripScripts } from '../../../js/lib/common.js';
+import { FormComponent } from './../../base/form-component.js';
+import { ROUTES } from './../../../js/lib/routes.js';
+import { stripScripts } from './../../../js/lib/common.js';
 
 const allowedKeys = [
 	'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End', 'Enter'
@@ -15,21 +16,30 @@ const patterns = {
 	email: /^[A-Za-z0-9@.]$/
 };
 
-export class FormInput {
+export class FormInput extends FormComponent {
 	constructor(opts = {}) {
-		Object.assign(this, {
-			id: opts.id || null,
-			host: typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host || null,
-			url: opts.url || ROUTES.components.formInput.html,
-			type: opts.type || 'text',
-			label: opts.label || null,
-			placeholder: opts.placeholder || '',
+		if (!opts.host) throw new Error('FormInput requires a host element');
+
+		const host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
+
+		if (!host) {
+			throw new Error('FormInput host element not found');
+		}
+
+		super({
+			host: host,
+			url: opts.url || ROUTES.components.form.formInput.html,
 			name: opts.name || opts.id || 'custom-input',
-			onChange: opts.onChange || (() => { }),
-			validationMethod: opts.validationMethod || null,
-			numberInputOpts: opts.numberInputOpts || {},
-			rows: opts.rows || 3
+			label: opts.label || null
 		});
+
+		this.type = opts.type || 'text';
+		this.placeholder = opts.placeholder || '';
+		this.onChange = opts.onChange || (() => { });
+		this.validationMethod = opts.validationMethod || null;
+		this.numberInputOpts = opts.numberInputOpts || {};
+		this.rows = opts.rows || 3;
+		this.id = opts.id || null;
 
 		this._validateNumberOpts();
 		this._render();
@@ -48,65 +58,77 @@ export class FormInput {
 	}
 
 	async _render() {
-		const txt = await (await fetch(this.url + '?raw')).text();
-		const tpl = stripScripts(txt);
+		try {
+			const txt = await (await fetch(this.url + '?raw')).text();
+			const tpl = stripScripts(txt);
 
-		this.root = tpl.content.firstElementChild.cloneNode(true);
-		if (this.id) this.root.id = this.id;
+			this.root = tpl.content.firstElementChild.cloneNode(true);
 
-		this.labelEl = this.root.querySelector('[data-label]');
-		this.field = this.root.querySelector('[data-field]');
-		this.textarea = this.root.querySelector('[data-textarea]');
-		this.pwBtn = this.root.querySelector('[data-password-btn]');
-		this.eyeOpen = this.root.querySelector('[data-eye-open]');
-		this.eyeClosed = this.root.querySelector('[data-eye-closed]');
+			if (this.id) this.root.id = this.id;
 
-		if (this.label) {
-			if (this.labelEl) this.labelEl.textContent = this.label;
-		} else {
-			if (this.labelEl) this.labelEl.classList.add('hidden');
-		}
+			this.labelEl = this.root.querySelector('[data-label]');
+			this.field = this.root.querySelector('[data-field]');
+			this.textarea = this.root.querySelector('[data-textarea]');
+			this.pwBtn = this.root.querySelector('[data-password-btn]');
+			this.eyeOpen = this.root.querySelector('[data-eye-open]');
+			this.eyeClosed = this.root.querySelector('[data-eye-closed]');
 
-		if (this.type === 'textarea') {
-			if (this.field) this.field.classList.add('hidden');
-			if (this.pwBtn) this.pwBtn.classList.add('hidden');
-			if (this.textarea) {
-				this.textarea.classList.remove('hidden');
-				this.textarea.name = this.name;
-				this.textarea.placeholder = this.placeholder;
-				this.textarea.rows = this.rows;
+			if (this.label) {
+				if (this.labelEl) this.labelEl.textContent = this.label;
+			} else {
+				if (this.labelEl) this.labelEl.classList.add('hidden');
 			}
-		} else {
-			if (this.field) {
-				this.field.classList.remove('hidden');
-				this.field.name = this.name;
-				this.field.placeholder = this.placeholder;
-				if (this.id) this.field.id = this.id;
-				if (this.textarea) this.textarea.classList.add('hidden');
 
-				if (this.type === 'password') {
-					this.field.type = 'password';
-					if (this.eyeOpen) this.eyeOpen.classList.add('hidden');
-					if (this.eyeClosed) this.eyeClosed.classList.remove('hidden');
-				} else {
-					this.field.type = this.type === 'number' ? 'number' : 'text';
-					if (this.pwBtn) this.pwBtn.classList.add('hidden');
+			if (this.type === 'textarea') {
+				if (this.field) this.field.classList.add('hidden');
+				if (this.pwBtn) this.pwBtn.classList.add('hidden');
+				if (this.textarea) {
+					this.textarea.classList.remove('hidden');
+					this.textarea.name = this.name;
+					this.textarea.placeholder = this.placeholder;
+					this.textarea.rows = this.rows;
+					if (this.id) this.textarea.id = this.id;
+				}
+			} else {
+				if (this.field) {
+					this.field.classList.remove('hidden');
+					this.field.name = this.name;
+					this.field.placeholder = this.placeholder;
+					if (this.id) this.field.id = this.id;
+					if (this.textarea) this.textarea.classList.add('hidden');
+
+					if (this.type === 'password') {
+						this.field.type = 'password';
+						if (this.eyeOpen) this.eyeOpen.classList.add('hidden');
+						if (this.eyeClosed) this.eyeClosed.classList.remove('hidden');
+					} else {
+						this.field.type = this.type === 'number' ? 'number' : 'text';
+						if (this.pwBtn) this.pwBtn.classList.add('hidden');
+					}
+				}
+
+				if (this.type === 'number' && this.field) {
+					const { min, max, step } = this.numberInputOpts;
+					if (min !== undefined) this.field.min = min;
+					if (max !== undefined) this.field.max = max;
+					if (step !== undefined) this.field.step = step;
 				}
 			}
 
-			if (this.type === 'number' && this.field) {
-				const { min, max, step } = this.numberInputOpts;
-				if (min !== undefined) this.field.min = min;
-				if (max !== undefined) this.field.max = max;
-				if (step !== undefined) this.field.step = step;
-			}
-		}
+			this._attachEvents();
 
-		this._attachEvents();
-
-		if (this.host && this.host instanceof HTMLElement) {
 			this.host.innerHTML = '';
 			this.host.appendChild(this.root);
+
+		} catch (error) {
+			console.error('FormInput render failed:', error);
+			// Fallback to basic input
+			this.host.innerHTML = `
+                <div class="form-input" ${this.id ? `id="${this.id}"` : ''}>
+                    ${this.label ? `<label>${this.label}</label>` : ''}
+                    <input type="${this.type}" name="${this.name}" placeholder="${this.placeholder}" ${this.id ? `id="${this.id}"` : ''} />
+                </div>
+            `;
 		}
 	}
 
