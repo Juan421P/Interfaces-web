@@ -20,10 +20,10 @@ export const ROUTES = {
             file: '/interfaces/testing/testing.html',
             title: 'Zona de pruebas'
         },
-        notifications: {
-            hash: '#notifications',
-            file: '/interfaces/notifications/notifications.html',
-            title: 'Notificaciones'
+        news: {
+            hash: '#news',
+            file: '/interfaces/news/news.html',
+            title: 'Noticias'
         },
         notFound: {
             hash: '#not-found',
@@ -238,73 +238,85 @@ export const ROUTES = {
 
     /* ---------------------------- COMPONENTES ---------------------------- */
     components: {
-        body: {
-            html: '/components/body/body.html',
-            js: '/components/body/body.js'
+        basic: {
+            button: {
+                html: '/components/basic/button/button.html',
+                js: '/components/basic/button/button.js'
+            },
+            calendar: {
+                html: '/components/basic/calendar/calendar.html',
+                js: '/components/basic/calendar/calendar.js'
+            },
+            checkbox: {
+                html: '/components/basic/checkbox/checkbox.html',
+                js: '/components/basic/checkbox/checkbox.js'
+            },
+            tabBar: {
+                html: '/components/basic/tab-bar/tab-bar.html',
+                js: '/components/basic/tab-bar/tab-bar.js'
+            }
         },
-        button: {
-            html: '/components/button/button.html',
-            js: '/components/button/button.js'
+        container: {
+            form: {
+                html: '/components/container/form/form.html',
+                js: '/components/container/form/form.js'
+            },
         },
-        cardContainer: {
-            html: '/components/card-container/card-container.html',
-            js: '/components/card-container/card-container.js'
-        },
-        calendar: {
-            html: '/components/calendar/calendar.html',
-            js: '/components/calendar/calendar.js'
-        },
-        checkbox: {
-            html: '/components/checkbox/checkbox.html',
-            js: '/components/checkbox/checkbox.js'
-        },
-        contextMenu: {
-            html: '/components/context-menu/context-menu.html',
-            js: '/components/context-menu/context-menu.js'
-        },
-        footer: {
-            html: '/components/footer/footer.html',
-            js: '/components/footer/footer.js'
+        display: {
+            cardContainer: {
+                html: '/components/display/card-container/card-container.html',
+                js: '/components/display/card-container/card-container.js'
+            },
+            table: {
+                html: '/components/display/table/table.html',
+                js: '/components/display/table/table.js'
+            },
         },
         form: {
-            html: '/components/form/form.html',
-            js: '/components/form/form.js'
+            formInput: {
+                html: '/components/form/form-input/form-input.html',
+                js: '/components/form/form-input/form-input.js'
+            },
+            searchInput: {
+                html: '/components/form/search-input/search-input.html',
+                js: '/components/form/search-input/search-input.js'
+            },
+            select: {
+                html: '/components/form/select/select.html',
+                js: '/components/form/select/select.js'
+            },
+            submitInput: {
+                html: '/components/form/submit-input/submit-input.html',
+                js: '/components/form/submit-input/submit-input.js'
+            },
         },
-        formInput: {
-            html: '/components/form-input/form-input.html',
-            js: '/components/form-input/form-input.js'
+        layout: {
+            body: {
+                html: '/components/layout/body/body.html',
+                js: '/components/layout/body/body.js'
+            },
+            footer: {
+                html: '/components/layout/footer/footer.html',
+                js: '/components/layout/footer/footer.js'
+            },
+            navbar: {
+                html: '/components/layout/navbar/navbar.html',
+                js: '/components/layout/navbar/navbar.js'
+            },
         },
-        modal: {
-            html: '/components/modal/modal.html',
-            js: '/components/modal/modal.js'
-        },
-        navbar: {
-            html: '/components/navbar/navbar.html',
-            js: '/components/navbar/navbar.js'
-        },
-        searchInput: {
-            html: '/components/search-input/search-input.html',
-            js: '/components/search-input/search-input.js'
-        },
-        select: {
-            html: '/components/select/select.html',
-            js: '/components/select/select.js'
-        },
-        submitInput: {
-            html: '/components/submit-input/submit-input.html',
-            js: '/components/submit-input/submit-input.js'
-        },
-        tabBar: {
-            html: '/components/tab-bar/tab-bar.html',
-            js: '/components/tab-bar/tab-bar.js'
-        },
-        table: {
-            html: '/components/table/table.html',
-            js: '/components/table/table.js'
-        },
-        toast: {
-            html: '/components/toast/toast.html',
-            js: '/components/toast/toast.js'
+        overlay: {
+            contextMenu: {
+                html: '/components/overlay/context-menu/context-menu.html',
+                js: '/components/overlay/context-menu/context-menu.js'
+            },
+            modal: {
+                html: '/components/overlay/modal/modal.html',
+                js: '/components/overlay/modal/modal.js'
+            },
+            toast: {
+                html: '/components/overlay/toast/toast.html',
+                js: '/components/overlay/toast/toast.js'
+            },
         }
     }
 };

@@ -40,7 +40,7 @@ export function extractTemplateContent(html) {
 }
 
 export async function showImageModal(src) {
-	const { Modal } = await import('../../components/modal/modal.js');
+	const { Modal } = await import('../../components/overlay/modal/modal.js');
 	const modal = new Modal({ templateId: 'tmpl-image-preview', size: 'lg', hideCloseButton: true });
 	modal.contentHost.querySelector('#modal-image-preview').src = src;
 }

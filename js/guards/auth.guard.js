@@ -13,6 +13,16 @@ export class AuthGuard {
         }
     }
 
+    static async authLogin() {
+        try {
+            const res = await AuthService.me();
+            return res !== null;
+        } catch (err) {
+            console.error('AuthGuard.authLogin error:', err);
+            return false;
+        }
+    }
+
     static async ensureAuth(redirectTo = '#login') {
         const ok = await AuthGuard.isAuthenticated();
         if (!ok) {

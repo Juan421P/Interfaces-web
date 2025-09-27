@@ -3,13 +3,13 @@ import { THEMES } from './lib/themes.js';
 import { AuthGuard } from './guards/auth.guard.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const { Body } = await import(ROUTES.components.body.js);
+    const { Body } = await import(ROUTES.components.layout.body.js);
     await new Body();
 
-    const { Footer } = await import(ROUTES.components.footer.js);
+    const { Footer } = await import(ROUTES.components.layout.footer.js);
     await new Footer();
 
-    const { Toast } = await import(ROUTES.components.toast.js);
+    const { Toast } = await import(ROUTES.components.overlay.toast.js);
     const toast = new Toast();
     await toast.init();
 
@@ -59,8 +59,8 @@ async function render(hash = window.location.hash || '#main') {
 
 
     if (!view.hideNavbar) {
-        const { Navbar } = await import(ROUTES.components.navbar.js);
-        await new Navbar().load();
+        const { Navbar } = await import(ROUTES.components.layout.navbar.js);
+        await new Navbar();
 
         const burger = document.querySelector('#burger-btn');
         const wrapper = document.querySelector('#sidebar-wrapper');

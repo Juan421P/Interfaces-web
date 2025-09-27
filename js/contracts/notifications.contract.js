@@ -28,7 +28,7 @@ export class NotificationsContract extends Contract {
 					default: '',
 					regex: /^[\w\s.,!?@#&-]+$/
 				}),
-				sentAt: Contract.types.date({
+				sentAt: Contract.types.timestamp({
 					required: true,
 					default: () => new Date().toISOString(),
 				}),

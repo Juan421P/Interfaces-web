@@ -91,7 +91,7 @@ new Form({
                 (values['password-input'] || '').trim()
             );
 
-            const ok = await AuthGuard.isAuthenticated();
+            const ok = await AuthGuard.authLogin();
             if (ok) {
                 window.location.hash = '#main';
             } else {

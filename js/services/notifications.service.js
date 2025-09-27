@@ -57,7 +57,7 @@ export const NotificationsService = {
                 res
             }
         }));
-        return ok;
+        return success;
     },
 
 };
