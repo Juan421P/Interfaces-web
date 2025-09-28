@@ -1,31 +1,14 @@
 {
 	"name": "interfaces-web",
+	"type": "module",
 	"version": "1.0.0",
-	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "npx vite",
-		"build": "npx vite build"
+		"dev": "vite",
+		"build": "node node_modules/vite/bin/vite.js build",
+		"preview": "vite preview"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Juan421P/Interfaces-web.git"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/Juan421P/Interfaces-web/issues"
-	},
-	"homepage": "https://github.com/Juan421P/Interfaces-web#readme",
-	"description": "",
 	"devDependencies": {
-		"autoprefixer": "^10.4.21",
-		"vite": "^7.0.1"
-	},
-	"dependencies": {
-		"@tailwindcss/postcss": "^4.1.11",
-		"@tailwindcss/vite": "^4.1.11",
-		"tailwindcss": "^4.1.11"
+		"vite": "^5.4.0",
+		"@tailwindcss/vite": "^4.1.11"
 	}
 }
