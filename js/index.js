@@ -57,7 +57,6 @@ async function render(hash = window.location.hash || '#main') {
         }
     }
 
-
     if (!view.hideNavbar) {
         const { Navbar } = await import(ROUTES.components.layout.navbar.js);
         await new Navbar();
