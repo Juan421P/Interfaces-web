@@ -3,7 +3,6 @@ import { AuthService } from './../../js/services/auth.service.js';
 import { ValidationError } from './../../js/errors/validation/validation-error.js';
 import { AuthGuard } from '../../js/guards/auth.guard.js';
 
-const service = new AuthService();
 const { Form } = await import(ROUTES.components.container.form.js);
 const { FormInput } = await import(ROUTES.components.form.formInput.js);
 const { SubmitInput } = await import(ROUTES.components.form.submitInput.js);
@@ -84,16 +83,16 @@ new Form({
     ],
     onSubmit: async (values) => {
         try {
-            await service.login(
+            if ((await AuthService.login(
                 (values['email-input'] || '').trim(),
                 (values['password-input'] || '').trim()
-            );
-
-            const ok = await AuthGuard.authLogin();
-            if (ok) {
-                window.location.hash = '#main';
-            } else {
-                toast.show("Sesión no válida");
+            )) == true) {
+                const ok = await AuthGuard.authLogin();
+                if (ok) {
+                    window.location.hash = '#main';
+                } else {
+                    toast.show("Sesión no válida");
+                }
             }
         } catch (error) {
             console.error(error);

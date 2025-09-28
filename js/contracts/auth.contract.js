@@ -22,9 +22,9 @@ export class AuthContract extends Contract {
 					trim: true,
 					default: ""
 				}),
-				roleID: Contract.types.number({
+				roleID: Contract.types.string({
 					required: true,
-					default: 0
+					default: ""
 				}),
 				firstName: Contract.types.string({
 					required: true,

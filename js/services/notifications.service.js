@@ -7,20 +7,20 @@ export class NotificationsService extends Service {
         super('/Notifications', new NotificationsContract());
     }
 
-    async list() {
-        return super.list('getNotifications', 'table');
+    async getAll() {
+        return await this.get('getNotifications', null, 'table');
     }
 
-    async create(data) {
-        return super.create(data, 'newNotification', 'create');
+    async create(notificationData) {
+        return await this.post('newNotification', notificationData, 'create');
     }
 
-    async update(data) {
-        return super.update(data, 'updateNotification/{id}', 'update');
+    async update(notificationData) {
+        return await this.put('updateNotification', notificationData, 'update');
     }
 
     async delete(id) {
-        return super.delete(id, 'deleteNotification/{id}');
+        return await this.delete('deleteNotification', id);
     }
 
 }

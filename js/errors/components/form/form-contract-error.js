@@ -1,4 +1,4 @@
-import { ComponentError } from '../component-error';
+import { ComponentError } from '../base/component-error';
 
 export class FormContractError extends ComponentError {
     constructor(componentName, contractErrors, fieldData) {

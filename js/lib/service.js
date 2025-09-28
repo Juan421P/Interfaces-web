@@ -8,59 +8,43 @@ import { ServiceResponseError } from './../errors/services/service-response-erro
 import { ServiceAuthenticationError } from './../errors/services/service-authentication-error';
 
 export class Service {
-    constructor(baseEndpoint, contract) {
-        if (!baseEndpoint) {
-            throw new ServiceError('Service', 'Service requires a base endpoint');
-        }
-        if (!contract) {
-            throw new ServiceError('Service', 'Service requires a contract');
-        }
-        
-        this.baseEndpoint = baseEndpoint;
-        this.contract = contract;
-        this.name = this.constructor.name.replace('Service', '');
-    }
+    
+    static baseEndpoint = '';
+    static contract = null;
 
-    async list(endpoint = `get${this.name}s`, scope = 'table') {
+    static async get(endpoint = '', data = null, requestScope = null, responseScope = null) {
         try {
-            const fullPath = `${this.baseEndpoint}/${endpoint}`;
-            const data = await Network.get({
+            const fullPath = this._buildPath(endpoint, data?.id);
+            const result = await Network.get({
                 path: fullPath,
                 includeCredentials: true
             });
-            
-            const parsed = Array.isArray(data) ? data.map(item => this.contract.parse(item, scope)) : [];
-            
-            document.dispatchEvent(new CustomEvent(`${this.name}:list`, {
-                detail: parsed
-            }));
-            
+
+            const parsed = this._parseResult(result, responseScope);
+            this._dispatchEvent('get', parsed);
             return parsed;
-            
+
         } catch (error) {
             throw this._wrapError(error, endpoint, 'GET');
         }
     }
 
-    async create(data, endpoint = `new${this.name}`, scope = 'create') {
+    static async post(endpoint = '', data = null, requestScope = null, responseScope = null) {
         try {
-            const fullPath = `${this.baseEndpoint}/${endpoint}`;
-            const validatedData = this.contract.parse(data, scope);
-            
+            const fullPath = this._buildPath(endpoint);
+            const body = this.contract && data ?
+                this.contract.parse(data, requestScope) : data;
+
             const result = await Network.post({
                 path: fullPath,
-                body: validatedData,
+                body: body,
                 includeCredentials: true
             });
-            
-            const parsed = this.contract.parse(result, 'table');
-            
-            document.dispatchEvent(new CustomEvent(`${this.name}:create`, {
-                detail: parsed
-            }));
-            
+
+            const parsed = this._parseResult(result, responseScope);
+            this._dispatchEvent('post', parsed);
             return parsed;
-            
+
         } catch (error) {
             if (error.name === 'ValidationError') {
                 throw new ServiceValidationError(this.name, endpoint, error.details, data);
@@ -69,34 +53,22 @@ export class Service {
         }
     }
 
-    async update(data, endpoint = `update${this.name}`, scope = 'update') {
+    static async put(endpoint = '', data = null, requestScope = null, responseScope = null) {
         try {
-            const id = data[this.contract.getPrimaryKey()];
-            if (!id) {
-                throw new ServiceEndpointError(this.name, endpoint, 'PUT', 'Missing ID in data');
-            }
-            
-            const fullEndpoint = endpoint.includes('{id}') 
-                ? endpoint.replace('{id}', id)
-                : `${endpoint}/${id}`;
-                
-            const fullPath = `${this.baseEndpoint}/${fullEndpoint}`;
-            const validatedData = this.contract.parse(data, scope);
-            
+            const fullPath = this._buildPath(endpoint, data?.id);
+            const body = this.contract && data ?
+                this.contract.parse(data, requestScope) : data;
+
             const result = await Network.put({
                 path: fullPath,
-                body: validatedData,
+                body: body,
                 includeCredentials: true
             });
-            
-            const parsed = this.contract.parse(result, 'table');
-            
-            document.dispatchEvent(new CustomEvent(`${this.name}:update`, {
-                detail: parsed
-            }));
-            
+
+            const parsed = this._parseResult(result, responseScope);
+            this._dispatchEvent('put', parsed);
             return parsed;
-            
+
         } catch (error) {
             if (error.name === 'ValidationError') {
                 throw new ServiceValidationError(this.name, endpoint, error.details, data);
@@ -105,86 +77,153 @@ export class Service {
         }
     }
 
-    async delete(id, endpoint = `delete${this.name}`) {
+    static async delete(endpoint = '', id = null, responseScope = null) {
         try {
-            if (!id) {
-                throw new ServiceEndpointError(this.name, endpoint, 'DELETE', 'Missing ID parameter');
-            }
-            
-            const fullEndpoint = endpoint.includes('{id}') 
-                ? endpoint.replace('{id}', id)
-                : `${endpoint}/${id}`;
-                
-            const fullPath = `${this.baseEndpoint}/${fullEndpoint}`;
-            
+            const fullPath = this._buildPath(endpoint, id);
             const result = await Network.delete({
                 path: fullPath,
                 includeCredentials: true
             });
-            
-            const success = result?.status === 'Proceso completado';
-            
-            document.dispatchEvent(new CustomEvent(`${this.name}:delete`, {
-                detail: {
-                    id,
-                    success,
-                    result
-                }
-            }));
-            
-            return success;
-            
+
+            const parsed = this._parseResult(result, responseScope);
+            this._dispatchEvent('delete', { id, result: parsed });
+            return parsed;
+
         } catch (error) {
             throw this._wrapError(error, endpoint, 'DELETE');
         }
     }
 
-    async get(id, endpoint = `get${this.name}`, scope = 'table') {
+    static async getRaw(endpoint = '', data = null) {
         try {
-            if (!id) {
-                throw new ServiceEndpointError(this.name, endpoint, 'GET', 'Missing ID parameter');
-            }
-            
-            const fullEndpoint = endpoint.includes('{id}') 
-                ? endpoint.replace('{id}', id)
-                : `${endpoint}/${id}`;
-                
-            const fullPath = `${this.baseEndpoint}/${fullEndpoint}`;
-            
-            const data = await Network.get({
+            const fullPath = this._buildPath(endpoint, data?.id);
+            const result = await Network.get({
                 path: fullPath,
                 includeCredentials: true
             });
-            
-            return this.contract.parse(data, scope);
-            
+
+            this._dispatchEvent('get', result);
+            return result;
+
         } catch (error) {
             throw this._wrapError(error, endpoint, 'GET');
         }
     }
 
-    _wrapError(error, endpoint, method) {
+    static async postRaw(endpoint = '', data = null, requestScope = null) {
+        try {
+            const fullPath = this._buildPath(endpoint);
+            const body = this.contract && data ?
+                this.contract.parse(data, requestScope) : data;
+
+            const result = await Network.post({
+                path: fullPath,
+                body: body,
+                includeCredentials: true
+            });
+
+            this._dispatchEvent('post', result);
+            return result;
+
+        } catch (error) {
+            if (error.name === 'ValidationError') {
+                throw new ServiceValidationError(this.name, endpoint, error.details, data);
+            }
+            throw this._wrapError(error, endpoint, 'POST');
+        }
+    }
+
+    static async putRaw(endpoint = '', data = null, requestScope = null) {
+        try {
+            const fullPath = this._buildPath(endpoint, data?.id);
+            const body = this.contract && data ?
+                this.contract.parse(data, requestScope) : data;
+
+            const result = await Network.put({
+                path: fullPath,
+                body: body,
+                includeCredentials: true
+            });
+
+            this._dispatchEvent('put', result);
+            return result;
+
+        } catch (error) {
+            if (error.name === 'ValidationError') {
+                throw new ServiceValidationError(this.name, endpoint, error.details, data);
+            }
+            throw this._wrapError(error, endpoint, 'PUT');
+        }
+    }
+
+    static async deleteRaw(endpoint = '', id = null) {
+        try {
+            const fullPath = this._buildPath(endpoint, id);
+            const result = await Network.delete({
+                path: fullPath,
+                includeCredentials: true
+            });
+
+            this._dispatchEvent('delete', { id, result });
+            return result;
+
+        } catch (error) {
+            throw this._wrapError(error, endpoint, 'DELETE');
+        }
+    }
+
+    static _buildPath(endpoint, id = null) {
+        let path = `${this.baseEndpoint}`;
+        if (endpoint) path += `/${endpoint}`;
+        if (id) path += `/${id}`;
+        return path;
+    }
+
+    static _parseResult(result, scope) {
+        if (!this.contract || !result) {
+            return result;
+        }
+
+        try {
+            if (Array.isArray(result)) {
+                return result.map(item => this.contract.parse(item, scope));
+            }
+            return this.contract.parse(result, scope);
+        } catch (error) {
+            console.warn(`Contract parsing failed for ${this.name}, returning raw data:`, error);
+            return result;
+        }
+    }
+
+    static _dispatchEvent(action, data) {
+        document.dispatchEvent(new CustomEvent(`${this.name}:${action}`, {
+            detail: data
+        }));
+    }
+
+    static _wrapError(error, endpoint, method) {
         if (error instanceof ServiceError) {
             return error;
         }
-        
+
         if (error.status === 401 || error.status === 403) {
             return new ServiceAuthenticationError(this.name, endpoint);
         }
-        
+
         if (error.status) {
             return new ServiceNetworkError(
-                this.name, 
-                endpoint, 
-                error.status, 
+                this.name,
+                endpoint,
+                error.status,
                 error.message || 'Unknown error'
             );
         }
-        
+
         return new ServiceError(
-            this.name, 
+            this.name,
             `Network request failed: ${error.message}`,
             { endpoint, method, originalError: error.message }
         );
     }
+
 }

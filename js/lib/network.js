@@ -44,11 +44,16 @@ export class Network {
     }
 
     static async _request(config) {
+        console.warn('Network request:', {
+            path: config.path,
+            includeCredentials: config.includeCredentials,
+            credentials: config.includeCredentials ? 'include' : 'omit'
+        });
         const {
             path,
             method = 'GET',
             body = null,
-            includeCredentials = false,
+            includeCredentials = true,
             headers = {}
         } = config;
 
