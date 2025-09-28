@@ -83,16 +83,17 @@ new Form({
     ],
     onSubmit: async (values) => {
         try {
-            if ((await AuthService.login(
+            await AuthService.login(
                 (values['email-input'] || '').trim(),
                 (values['password-input'] || '').trim()
-            )) == true) {
-                const ok = await AuthGuard.authLogin();
-                if (ok) {
-                    window.location.hash = '#main';
-                } else {
-                    toast.show("Sesión no válida");
-                }
+            );
+            console.info('[Login] Login API call completed');
+            console.info('[Login] Document cookies: ' + document.cookie);
+            const ok = await AuthGuard.authLogin();
+            if (ok) {
+                window.location.hash = '#main';
+            } else {
+                toast.show("Sesión no válida");
             }
         } catch (error) {
             console.error(error);

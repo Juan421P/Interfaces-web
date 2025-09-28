@@ -44,10 +44,12 @@ export class Network {
     }
 
     static async _request(config) {
-        console.warn('Network request:', {
+        console.info('[Network] Network request:', {
             path: config.path,
+            method: config.method || 'GET',
             includeCredentials: config.includeCredentials,
-            credentials: config.includeCredentials ? 'include' : 'omit'
+            credentials: config.includeCredentials ? 'include' : 'omit',
+            hasBody: !!config.body
         });
         const {
             path,
@@ -58,6 +60,8 @@ export class Network {
         } = config;
 
         let url = `${API_BASE}${path}`;
+        console.info(`[Network] Full URL: ${url}`);
+
         let options = {
             method,
             headers: {
@@ -67,6 +71,12 @@ export class Network {
             credentials: includeCredentials ? 'include' : 'omit'
         };
 
+        console.info(`[Network] Request options:`, {
+            method: options.method,
+            credentials: options.credentials,
+            headers: options.headers
+        });
+
         if (body) options.body = JSON.stringify(body);
 
         for (const fn of interceptors.request) {
@@ -74,7 +84,16 @@ export class Network {
             if (modified) ({ url, options } = modified);
         }
 
+        console.info('[Network] Making fetch request... 🤔');
         const res = await fetch(url, options);
+
+        console.info('[Network] Response status:', res.status, res.statusText);
+        console.info('[Network] Response headers:');
+        res.headers.forEach((value, name) => {
+            console.info(`[Network] ${name}: ${value}`);
+        });
+
+        console.info('[Network] Set-Cookie header:', res.headers.get('Set-Cookie'));
 
         if (!res.ok) {
             let error = await this._buildError(res);
@@ -89,6 +108,8 @@ export class Network {
         for (const fn of interceptors.response) {
             data = (await fn(data)) || data;
         }
+
+        console.info('[Network] Request successful');
 
         return data;
     }

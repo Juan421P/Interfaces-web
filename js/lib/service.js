@@ -8,17 +8,20 @@ import { ServiceResponseError } from './../errors/services/service-response-erro
 import { ServiceAuthenticationError } from './../errors/services/service-authentication-error';
 
 export class Service {
-    
+
     static baseEndpoint = '';
     static contract = null;
 
     static async get(endpoint = '', data = null, requestScope = null, responseScope = null) {
         try {
             const fullPath = this._buildPath(endpoint, data?.id);
+
             const result = await Network.get({
                 path: fullPath,
                 includeCredentials: true
             });
+
+            console.log(result);
 
             const parsed = this._parseResult(result, responseScope);
             this._dispatchEvent('get', parsed);
