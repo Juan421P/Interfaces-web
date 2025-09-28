@@ -6,6 +6,6 @@
             "use": "@vercel/static-build"
         }
     ],
-    "buildCommand": "npm run build",
+    "buildCommand": "npm install --force && npm run build",
     "outputDirectory": "dist"
 }
