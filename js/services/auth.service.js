@@ -12,7 +12,7 @@ export class AuthService extends Service {
     }
 
     async me() {
-        return await this.get('me', 'me', 'table');
+        return await this.get('me', 'me', 'me');
     }
 
     async logout() {

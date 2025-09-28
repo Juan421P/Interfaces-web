@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = 'https://sapientiae-api-bd9a54b3d7a1.herokuapp.com/api';
 
 const interceptors = {
     request: [],

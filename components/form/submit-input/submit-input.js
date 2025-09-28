@@ -1,20 +1,32 @@
+import { FormComponent } from './../../base/form-component.js';
 import { ROUTES } from '../../../js/lib/routes.js';
 import { stripScripts } from '../../../js/lib/common.js';
 
-export class SubmitInput {
+export class SubmitInput extends FormComponent {
 	constructor(opts = {}) {
-		Object.assign(this, {
-			id: opts.id || null,
-			host: typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host || null,
-			text: opts.text ?? 'Enviar',
-			icon: opts.icon ?? '',
-			url: opts.url || ROUTES.components.submitInput.html,
-			fullWidth: opts.fullWidth !== false,
-			removeIcon: !!opts.removeIcon,
-			additionalClasses: opts.additionalClasses || '',
-			onClick: typeof opts.onClick === 'function' ? opts.onClick : null
+		if (!opts.host) {
+			throw new Error('SubmitInput requires a host element');
+		}
+
+		super({
+			host: typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host,
+			url: opts.url || ROUTES.components.form.submitInput.html,
+			name: opts.name || opts.id || 'submit-input',
+			label: opts.label || null,
+			required: false, 
+			disabled: opts.disabled || false
 		});
 
+		
+		this.id = opts.id || null;
+		this.text = opts.text ?? 'Enviar';
+		this.icon = opts.icon ?? '';
+		this.fullWidth = opts.fullWidth !== false;
+		this.removeIcon = !!opts.removeIcon;
+		this.additionalClasses = opts.additionalClasses || '';
+		this.onClick = typeof opts.onClick === 'function' ? opts.onClick : null;
+
+		
 		this._render();
 	}
 
@@ -47,32 +59,33 @@ export class SubmitInput {
 
 			if (this.onClick) this.root.addEventListener('click', this.onClick);
 
-			if (this.host && this.host instanceof HTMLElement) {
-				this.host.innerHTML = '';
-				this.host.appendChild(this.root);
-			} else if (this.host && typeof this.host === 'string') {
-				const hostEl = document.querySelector(this.host);
-				if (hostEl) {
-					hostEl.innerHTML = '';
-					hostEl.appendChild(this.root);
-				}
-			}
+		
+			this.host.innerHTML = '';
+			this.host.appendChild(this.root);
+
+			this.isRendered = true;
+
 		} catch (err) {
 			console.error('[SubmitInput] render failed:', err);
-			if (this.host && this.host instanceof HTMLElement) {
-				this.host.innerHTML = `<button type="submit" class="px-4 py-3 rounded bg-[rgb(var(--text-from))] text-white">${this.text}</button>`;
-			} else {
-				const fallback = document.createElement('div');
-				fallback.innerHTML = `<button type="submit" class="px-4 py-3 rounded bg-[rgb(var(--text-from))] text-white">${this.text}</button>`;
-				document.body.appendChild(fallback);
-				this.root = fallback.firstElementChild;
-			}
+			this.host.innerHTML = `<button type="submit" class="px-4 py-3 rounded bg-[rgb(var(--text-from))] text-white">${this.text}</button>`;
+			this.root = this.host.querySelector('button');
 		}
 	}
 
 	_makeNoIconLayout() {
 		this.root.classList.remove('grid', 'grid-cols-[auto_1fr]', 'items-center');
 		this.root.classList.add('grid', 'grid-cols-1', 'place-items-center');
+	}
+
+	
+	getValue() {
+		return null; 
+	}
+
+	setValue(_) { }
+
+	validate() {
+		return true; 
 	}
 
 	setText(text) {
@@ -89,12 +102,4 @@ export class SubmitInput {
 			this.root.classList.add('grid', 'grid-cols-[auto_1fr]', 'items-center');
 		}
 	}
-
-	getValue() {
-		return null;
-	}
-
-	setValue(_) { }
-	validate() { return true; }
-
 }
