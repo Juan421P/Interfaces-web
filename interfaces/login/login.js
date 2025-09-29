@@ -95,26 +95,63 @@ export default class LoginInterface extends Interface {
                     ]
                 }
             ],
-            onSubmit: async (values) => {
-                try {
-                    await AuthService.login(
-                        (values['email-input'] || '').trim(),
-                        (values['password-input'] || '').trim()
-                    );
 
-                    console.info('[Login] Login API call completed');
-                    const ok = await AuthGuard.authLogin();
+onSubmit: async (values, errors) => {
+  if (errors) {                 // ← falló validación de FRONT (requerido, formato, etc.)
+    paintFormErrors(errors, this.form);
+    this.toast.show("Corrige los campos marcados");
+    return;                     // ← aquí NO se llama al backend
+  }
 
-                    if (ok) {
-                        window.location.hash = '#main';
-                    } else {
-                        this.toast.show("Sesión no válida");
-                    }
-                } catch (error) {
-                    console.error(error);
-                    this.toast.show("Error al iniciar sesión");
-                }
-            }
+  // Si llega aquí, los datos cumplen reglas de front → ahora sí llama al backend
+  try {
+    await AuthService.login(values['email-input'].trim(), values['password-input'].trim());
+    const ok = await AuthGuard.authLogin();
+    if (ok) window.location.hash = '#main';
+    else this.toast.show("Sesión no válida");
+  } catch (err) {
+    // 401 del backend = credenciales malas (sí llamaste al backend aquí)
+    const is401 = (err?.status === 401) || /401|Unauthorized|Authentication failed/i.test(String(err?.message));
+    if (is401) {
+      setFieldErrorByComp(this.form.getField('email-input'), 'Correo o contraseña incorrectos');
+      setFieldErrorByComp(this.form.getField('password-input'), 'Correo o contraseña incorrectos');
+      this.toast.show('Correo o contraseña incorrectos');
+      return;
+    }
+    this.toast.show('Error al iniciar sesión');
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+           // onSubmit: async (values) => {
+             //   try {
+               //     await AuthService.login(
+                 //       (values['email-input'] || '').trim(),
+                   //     (values['password-input'] || '').trim()
+                   // );
+
+ //                   console.info('[Login] Login API call completed');
+   //                 const ok = await AuthGuard.authLogin();
+
+     //               if (ok) {
+       //                 window.location.hash = '#main';
+         //           } else {
+           //             this.toast.show("Sesión no válida");
+             //       }
+            //    } catch (error) {
+              //      console.error(error);
+                //    this.toast.show("Error al iniciar sesión");
+           //     }
+          //  }
         });
     }
 
