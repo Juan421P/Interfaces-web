@@ -118,14 +118,7 @@ export class Router {
 
     async getInterfaceModule(view) {
         const interfaceMap = {
-            '#main': () => import('./interfaces/main/main-interface.js'),
-            '#login': () => import('./interfaces/login/login-interface.js'),
-            '#not-found': () => import('./interfaces/not-found/not-found-interface.js'),
-            '#profile': () => import('./interfaces/profile/profile-interface.js'),
-            '#system-users': () => import('./interfaces/system/users/users-interface.js'),
-            '#system-roles': () => import('./interfaces/system/roles/roles-interface.js'),
-            '#system-codes': () => import('./interfaces/system/codes/codes-interface.js'),
-            '#system-audit': () => import('./interfaces/system/audit/audit-interface.js'),
+            '#login': () => import('./interfaces/login/login.js'),
         };
 
         const importFunction = interfaceMap[view.hash];
