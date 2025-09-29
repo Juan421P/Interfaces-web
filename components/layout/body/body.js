@@ -4,76 +4,41 @@ import { ComponentRenderError } from './../../../js/errors/components/base/compo
 export class Body extends Component {
 	static getTemplate() {
 		return `
-<template id="tmpl-body">
-  <body id="body"
-    class="relative flex justify-center min-h-screen mb-1 md:justify-start bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))]">
-
-    <!-- <div
-        class="fixed bottom-10 left-0 w-[600px] h-[600px] rounded-full z-[-20] pointer-events-none 
-              bg-gradient-to-tr from-indigo-400 to-blue-400 opacity-60 translate-x-[-50%] translate-y-[50%] animate-left-spin-pulse">
-    </div>
-    <div
-        class="fixed top-0 right-0 w-[300px] h-[300px] rounded-full z-[-20] pointer-events-none 
-              bg-gradient-to-tl from-blue-400 to-indigo-400 opacity-40 translate-x-[50%] translate-y-[-50%] animate-right-spin-pulse">
-    </div> -->
-
-    <div
-        class="fixed bottom-10 left-0 w-[600px] h-[600px] z-[50] pointer-events-none animate-left-spin-pulse">
-        <div class="absolute inset-0 border-2 border-[rgb(var(--button-to))] opacity-20"></div>
-        <div class="absolute border-2 border-[rgb(var(--placeholder-to))] inset-1 opacity-5"></div>
-        <div class="absolute inset-0 rotate-45 border-2 border-[rgb(var(--button-from))] opacity-40"></div>
-        <div class="absolute rotate-45 border-2 border-[rgb(var(--placeholder-from))] inset-1 opacity-20"></div>
-    </div>
-    <div
-        class="fixed top-0 right-0 w-[300px] h-[300px] z-[-20] pointer-events-none animate-right-spin-pulse">
-        <div class="absolute inset-0 border-2 border-[rgb(var(--button-to))] opacity-20"></div>
-        <div class="absolute border-2 border-[rgb(var(--placeholder-to))] inset-1 opacity-5"></div>
-        <div class="absolute inset-0 rotate-45 border-2 border-[rgb(var(--button-from))] opacity-40"></div>
-        <div class="absolute rotate-45 border-2 border-[rgb(var(--placeholder-from))] inset-1 opacity-20"></div>
-    </div>
-
-    <div id="navbar"></div>
-    <div id="main-view" class="flex-1 w-full"></div>
-    <footer id="footer"></footer>
-  </body>
-</template>
-    `;
+		<template id="tmpl-body">
+  			<body id="body" class="relative flex justify-center min-h-screen mb-1 md:justify-start bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))]">
+				<!-- <div class="fixed bottom-10 left-0 w-[600px] h-[600px] rounded-full z-[-20] pointer-events-none  bg-gradient-to-tr from-indigo-400 to-blue-400 opacity-60 translate-x-[-50%] translate-y-[50%] animate-left-spin-pulse">
+				</div>
+    			<div class="fixed top-0 right-0 w-[300px] h-[300px] rounded-full z-[-20] pointer-events-none  bg-gradient-to-tl from-blue-400 to-indigo-400 opacity-40 translate-x-[50%] translate-y-[-50%] animate-right-spin-pulse">
+				</div> -->
+				<div class="fixed bottom-10 left-0 w-[600px] h-[600px] z-[50] pointer-events-none animate-left-spin-pulse">
+        			<div class="absolute inset-0 border-2 border-[rgb(var(--button-to))] opacity-20"></div>
+        			<div class="absolute border-2 border-[rgb(var(--placeholder-to))] inset-1 opacity-5"></div>
+        			<div class="absolute inset-0 rotate-45 border-2 border-[rgb(var(--button-from))] opacity-40"></div>
+        			<div class="absolute rotate-45 border-2 border-[rgb(var(--placeholder-from))] inset-1 opacity-20"></div>
+    			</div>
+    			<div class="fixed top-0 right-0 w-[300px] h-[300px] z-[-20] pointer-events-none animate-right-spin-pulse">
+        			<div class="absolute inset-0 border-2 border-[rgb(var(--button-to))] opacity-20"></div>
+        			<div class="absolute border-2 border-[rgb(var(--placeholder-to))] inset-1 opacity-5"></div>
+        			<div class="absolute inset-0 rotate-45 border-2 border-[rgb(var(--button-from))] opacity-40"></div>
+        			<div class="absolute rotate-45 border-2 border-[rgb(var(--placeholder-from))] inset-1 opacity-20"></div>
+    			</div>
+    			<div id="navbar"></div>
+    			<div id="main-view" class="flex-1 w-full"></div>
+    			<footer id="footer"></footer>
+  			</body>
+		</template>
+		`;
 	}
 
 	constructor(opts = {}) {
-		super({ host: document.body, /* url: opts.url || ROUTES.components.layout.body.html, */ autoRender: false });
+		super({
+			host: document.body,
+			autoRender: false
+		});
 		this.content = opts.content || '';
 		this.afterLoad = opts.afterLoad || null;
 		this.mainSelector = opts.mainSelector || '#main-view';
 		this.originalBodyHTML = document.body.innerHTML;
-		this._load();
-	}
-
-	async _load() {
-		try {
-			const t = document.createElement('template');
-			t.innerHTML = Body.getTemplate();
-			const tmpl = t.content.querySelector('#tmpl-body');
-			const bodyEl = tmpl.content.firstElementChild;
-
-			document.body.outerHTML = bodyEl.outerHTML;
-
-			await new Promise(resolve => {
-				if (document.readyState === 'loading') {
-					document.addEventListener('DOMContentLoaded', resolve);
-				} else {
-					setTimeout(resolve, 0);
-				}
-			});
-
-			if (this.content) {
-				const main = document.querySelector(this.mainSelector);
-				if (main) main.innerHTML = this.content;
-			}
-			if (typeof this.afterLoad === 'function') this.afterLoad();
-		} catch (error) {
-			console.error('Body component failed :(', error);
-		}
 	}
 
 	async _beforeRender() { this.originalBodyClasses = document.body.className; }
@@ -84,13 +49,27 @@ export class Body extends Component {
 			t.innerHTML = Body.getTemplate();
 			const tmpl = t.content.querySelector('#tmpl-body');
 			const bodyEl = tmpl.content.firstElementChild;
+
 			if (!bodyEl) throw new ComponentRenderError(this.constructor.name, 'template fetching', new Error('Failed to load body template'));
 
 			document.body.outerHTML = bodyEl.outerHTML;
 			this.host = document.body;
 
-			if (this.originalBodyClasses) document.body.className += ' ' + this.originalBodyClasses;
-			if (this.content) await this._injectContent();
+			await new Promise(resolve => {
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', resolve);
+				} else {
+					setTimeout(resolve, 0);
+				}
+			});
+
+			if (this.originalBodyClasses) {
+				document.body.className += ' ' + this.originalBodyClasses;
+			}
+
+			if (this.content) {
+				await this._injectContent();
+			}
 		} catch (error) {
 			throw new ComponentRenderError(this.constructor.name, 'body replacement', error);
 		}
