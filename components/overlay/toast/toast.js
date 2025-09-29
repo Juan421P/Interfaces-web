@@ -1,6 +1,5 @@
 import { Component } from './../../base/component.js';
 
-
 export class Toast extends Component {
   // ✅ HTML embebido del toast
   static getTemplate() {
