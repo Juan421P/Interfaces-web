@@ -2,10 +2,12 @@ import { ROUTES } from './lib/routes.js';
 import { THEMES } from './lib/themes.js';
 import { AuthGuard } from './guards/auth.guard.js';
 
-import { Body } from './components/layout/body/body.js';
-import { Footer } from './components/layout/footer/footer.js';
-import { Toast } from './components/overlay/toast.js';
-import { Navbar } from './components/layout/navbar/navbar.js';
+import {
+    Body,
+    Footer,
+    Toast,
+    Navbar
+} from './../components/components.js';
 
 export class Router {
     constructor() {
