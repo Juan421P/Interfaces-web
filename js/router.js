@@ -25,10 +25,6 @@ export class Router {
             THEMES.loadTheme();
             this.render();
         });
-
-        if (!window.location.hash) {
-            window.location.hash = '#main';
-        }
     }
 
     async initializeApp() {
