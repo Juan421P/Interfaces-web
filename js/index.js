@@ -2,108 +2,145 @@ import { ROUTES } from './lib/routes.js';
 import { THEMES } from './lib/themes.js';
 import { AuthGuard } from './guards/auth.guard.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const { Body } = await import(ROUTES.components.layout.body.js);
-    await new Body();
+import { Body } from './components/layout/body/body.js';
+import { Footer } from './components/layout/footer/footer.js';
+import { Toast } from './components/overlay/toast.js';
+import { Navbar } from './components/layout/navbar/navbar.js';
 
-    const { Footer } = await import(ROUTES.components.layout.footer.js);
-    await new Footer();
-
-    const { Toast } = await import(ROUTES.components.overlay.toast.js);
-    const toast = new Toast();
-    await toast.init();
-
-    const ok = await AuthGuard.isAuthenticated();
-    if(!ok){
-        window.location.hash = '#login';
+export class Router {
+    constructor() {
+        this.currentView = null;
+        this.ALL_VIEWS = this.flattenRoutes(ROUTES.views);
+        this.init();
     }
 
-    THEMES.loadTheme();
-    render();
-});
+    init() {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await this.initializeApp();
+        });
 
-function flattenRoutes(obj) {
-    const result = [];
-    for (const val of Object.values(obj)) {
-        if (val?.hash) {
-            result.push(val);
-        } else if (typeof val === 'object') {
-            result.push(...flattenRoutes(val));
+        window.addEventListener('hashchange', () => {
+            THEMES.loadTheme();
+            this.render();
+        });
+
+        if (!window.location.hash) {
+            window.location.hash = '#main';
         }
     }
-    return result;
-}
 
-const ALL_VIEWS = flattenRoutes(ROUTES.views);
+    async initializeApp() {
+        await new Body().render();
+        await new Footer().render();
 
-async function render(hash = window.location.hash || '#main') {
-    const view = ALL_VIEWS.find(v => v.hash === hash);
+        this.toast = new Toast();
+        await this.toast.init();
 
-    if (!view) {
-        window.location.hash = '#not-found';
-        return;
-    }
-
-    if (view.hash !== '#login' && view.hash !== '#not-found') {
         const ok = await AuthGuard.isAuthenticated();
         if (!ok) {
             window.location.hash = '#login';
-            return;
         }
 
-        // URGENTE CAMBIARLO
-        if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
-            window.location.hash = '#main';
-            return;
-        }
+        THEMES.loadTheme();
+        this.render();
     }
 
-    if (!view.hideNavbar) {
-        const { Navbar } = await import(ROUTES.components.layout.navbar.js);
-        await new Navbar();
-
-        const burger = document.querySelector('#burger-btn');
-        const wrapper = document.querySelector('#sidebar-wrapper');
-        if (burger && wrapper) {
-            burger.addEventListener('click', () => {
-                wrapper.classList.toggle('-translate-x-full');
-            });
+    flattenRoutes(obj) {
+        const result = [];
+        for (const val of Object.values(obj)) {
+            if (val?.hash) {
+                result.push(val);
+            } else if (typeof val === 'object') {
+                result.push(...this.flattenRoutes(val));
+            }
         }
-    } else {
-        const host = document.querySelector('#navbar');
-        if (host) host.innerHTML = '';
+        return result;
     }
 
-    try {
-        const res = await fetch(view.file);
-        if (!res.ok) {
-            console.error(`Failed to load ${view.file}`, res.status);
+    async render(hash = window.location.hash || '#main') {
+        const view = this.ALL_VIEWS.find(v => v.hash === hash);
+
+        if (!view) {
             window.location.hash = '#not-found';
             return;
         }
-        const html = await res.text();
-        document.querySelector('#main-view').innerHTML = html;
-        document.title = view.title;
-    } catch (err) {
-        console.error('View fetch error', err);
-        window.location.hash = '#not-found';
-        return;
+
+        if (view.hash !== '#login' && view.hash !== '#not-found') {
+            const ok = await AuthGuard.isAuthenticated();
+            if (!ok) {
+                window.location.hash = '#login';
+                return;
+            }
+
+            if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
+                window.location.hash = '#main';
+                return;
+            }
+        }
+
+        await this.handleNavbar(view);
+
+        await this.loadInterface(view);
     }
 
-    try {
-        const jsPath = view.file.replace(/\.html$/, '.js');
-        const mod = await import(new URL(jsPath, import.meta.url).href);
-        if (mod.init) await mod.init();
-    } catch (error) {
-        console.warn('No logic found for', hash, error);
+    async handleNavbar(view) {
+        if (!view.hideNavbar) {
+            await new Navbar().render('#navbar');
+
+            const burger = document.querySelector('#burger-btn');
+            const wrapper = document.querySelector('#sidebar-wrapper');
+            if (burger && wrapper) {
+                burger.addEventListener('click', () => {
+                    wrapper.classList.toggle('-translate-x-full');
+                });
+            }
+        } else {
+            const host = document.querySelector('#navbar');
+            if (host) host.innerHTML = '';
+        }
+    }
+
+    async loadInterface(view) {
+        try {
+            const interfaceModule = await this.getInterfaceModule(view);
+            const interfaceInstance = new interfaceModule.default();
+
+            await interfaceInstance.render('#main-view');
+            document.title = view.title;
+
+        } catch (err) {
+            console.error('Interface load error', err);
+            window.location.hash = '#not-found';
+        }
+    }
+
+    async getInterfaceModule(view) {
+        const interfaceMap = {
+            '#main': () => import('./interfaces/main/main-interface.js'),
+            '#login': () => import('./interfaces/login/login-interface.js'),
+            '#not-found': () => import('./interfaces/not-found/not-found-interface.js'),
+            '#profile': () => import('./interfaces/profile/profile-interface.js'),
+            '#system-users': () => import('./interfaces/system/users/users-interface.js'),
+            '#system-roles': () => import('./interfaces/system/roles/roles-interface.js'),
+            '#system-codes': () => import('./interfaces/system/codes/codes-interface.js'),
+            '#system-audit': () => import('./interfaces/system/audit/audit-interface.js'),
+        };
+
+        const importFunction = interfaceMap[view.hash];
+        if (!importFunction) {
+            throw new Error(`No interface mapping found for hash: ${view.hash}`);
+        }
+
+        return await importFunction();
+    }
+
+    navigate(hash) {
+        window.location.hash = hash;
+    }
+
+    getCurrentView() {
+        return this.ALL_VIEWS.find(v => v.hash === window.location.hash);
     }
 }
 
-window.addEventListener('hashchange', () => {
-    THEMES.loadTheme();
-    render();
-});
-
-if (!window.location.hash) {
-    window.location.hash = '#main';
-}
+new Router();
