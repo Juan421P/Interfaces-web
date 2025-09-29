@@ -1,6 +1,10 @@
 import { Component } from './component.js';
 
 export class FormComponent extends Component {
+    static getTemplate() {
+        return `<div class="form-component">Form Component Template</div>`;
+    }
+
     constructor(opts = {}) {
         super(opts);
 

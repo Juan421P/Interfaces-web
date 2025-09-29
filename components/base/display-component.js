@@ -1,6 +1,10 @@
 import { Component } from './component.js';
 
 export class DisplayComponent extends Component {
+    static getTemplate() {
+        return `<div class="display-component">Display Component Template</div>`;
+    }
+
     constructor(opts = {}) {
         super(opts);
 

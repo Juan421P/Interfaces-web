@@ -1,9 +1,24 @@
 import { Component } from './../../base/component.js';
-import { ROUTES } from './../../../js/lib/routes.js';
-import { stripScripts } from './../../../js/lib/common.js';
 import { ComponentInitializationError } from './../../../js/errors/components/lifecycle/component-initialization-error.js';
 
 export class Button extends Component {
+
+    static getTemplate() {
+        return `
+        <button type="button" class="">
+            <svg id="button-icon" class="w-6 h-6 stroke-current fill-none" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 12h8" />
+                <path d="M12 8v8" />
+            </svg>
+            <div class="flex justify-center w-full">
+                <span id="button-text" class="drop-shadow-sm"></span>
+            </div>
+        </button>
+        `;
+    }
+
     constructor(opts = {}) {
         if (!opts.host) throw new Error('Button requires a host element');
 
@@ -18,8 +33,7 @@ export class Button extends Component {
         }
 
         super({
-            host: host,
-            url: opts.url || ROUTES.components.basic.button.html
+            host: host
         });
 
         this.text = opts.text || '';
@@ -44,9 +58,7 @@ export class Button extends Component {
 
     async _render() {
         try {
-            const response = await fetch(this.url + '?raw');
-            const html = await response.text();
-            const template = stripScripts(html);
+            const template = this._processTemplate();
             this.root = template.content.firstElementChild.cloneNode(true);
 
             switch (this.buttonType) {
@@ -126,4 +138,5 @@ export class Button extends Component {
         const iconEl = this.root?.querySelector('#button-icon');
         if (iconEl && icon) iconEl.outerHTML = icon;
     }
+    
 }

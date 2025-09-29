@@ -51,6 +51,7 @@ async function render(hash = window.location.hash || '#main') {
             return;
         }
 
+        // URGENTE CAMBIARLO
         if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
             window.location.hash = '#main';
             return;

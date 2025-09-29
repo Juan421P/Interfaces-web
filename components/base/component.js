@@ -5,7 +5,7 @@ import { ComponentTemplateError } from '../../js/errors/components/base/componen
 import { ComponentInitializationError } from '../../js/errors/components/lifecycle/component-initialization-error.js';
 
 export class Component {
-    
+
     constructor(opts = {}) {
         try {
             if (!opts.host) {
@@ -24,7 +24,7 @@ export class Component {
 
             this.id = opts.id || `comp-${Math.random().toString(36).substr(2, 9)}`;
             this.classes = opts.classes || [];
-            this.url = opts.url || null;
+            this.template = this.constructor.getTemplate ? this.constructor.getTemplate() : '';
             this.isRendered = false;
 
         } catch (error) {
@@ -35,31 +35,21 @@ export class Component {
         }
     }
 
-    async _fetchTemplate() {
-        if (!this.url) return this._getFallbackTemplate();
+    _processTemplate() {
+        if (!this.template) return this._getFallbackTemplate();
 
         try {
-            const response = await fetch(this.url + '?raw');
-            if (!response.ok) {
+            const processedTemplate = stripScripts(this.template);
+
+            if (!processedTemplate.content.firstElementChild) {
                 throw new ComponentTemplateError(
                     this.constructor.name,
-                    this.url,
-                    `HTTP ${response.status}: ${response.statusText}`
-                );
-            }
-
-            const html = await response.text();
-            const template = stripScripts(html);
-
-            if (!template.content.firstElementChild) {
-                throw new ComponentTemplateError(
-                    this.constructor.name,
-                    this.url,
+                    'inline template',
                     'Template is empty or invalid'
                 );
             }
 
-            return template;
+            return processedTemplate;
 
         } catch (error) {
             if (error instanceof ComponentTemplateError) {
@@ -67,8 +57,8 @@ export class Component {
             }
             throw new ComponentTemplateError(
                 this.constructor.name,
-                this.url,
-                `Failed to load template: ${error.message}`
+                'inline template',
+                `Failed to process template: ${error.message}`
             );
         }
     }
@@ -128,4 +118,5 @@ export class Component {
     static off(event, callback) {
         this.events.removeEventListener(event, callback);
     }
+    
 }
