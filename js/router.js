@@ -188,7 +188,7 @@ export class Router {
             '#tp-courses': () => import('./../interfaces/teacher-portal/courses/courses.js'),
             '#tp-evaluation-plans': () => import('./../interfaces/teacher-portal/evaluation-plans/evaluation-plans.js'),
             '#tp-evaluations': () => import('./../interfaces/teacher-portal/evaluations/evaluations.js'),
-            '#tp-schedules': () => import('./../interfaces/teacher-portal/schedules/schedules.js')
+            //'#tp-schedules': () => import('./../interfaces/teacher-portal/schedules/schedules.js')
         };
 
         const importFunction = interfaceMap[view.hash];
