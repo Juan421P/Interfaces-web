@@ -136,7 +136,59 @@ export class Router {
 
     async getInterfaceModule(view) {
         const interfaceMap = {
+            // Interfaces generales
+            '#main': () => import('./../interfaces/main/main.js'),
             '#login': () => import('./../interfaces/login/login.js'),
+            '#testing': () => import('./../interfaces/testing/testing.js'),
+            '#news': () => import('./../interfaces/news/news.js'),
+            '#not-found': () => import('./../interfaces/not-found/not-found.js'),
+            '#profile': () => import('./../interfaces/profile/profile.js'),
+
+            // Interfaces del módulo de Sistema
+            '#system-users': () => import('./../interfaces/system/users/users.js'),
+            '#system-roles': () => import('./../interfaces/system/roles/roles.js'),
+            '#system-codes': () => import('./../interfaces/system/codes/codes.js'),
+            '#system-audit': () => import('./../interfaces/system/audit/audit.js'),
+
+            // Interfaces del módulo de Planificación
+            '#planification-university': () => import('./../interfaces/planification/university/university.js'),
+            '#planification-localities': () => import('./../interfaces/planification/localities/localities.js'),
+            '#planification-faculties': () => import('./../interfaces/planification/faculties/faculties.js'),
+            '#planification-departments': () => import('./../interfaces/planification/departments/departments.js'),
+            '#planification-careers': () => import('./../interfaces/planification/careers/careers.js'),
+            '#planification-pensums': () => import('./../interfaces/planification/pensums/pensums.js'),
+            '#planification-subjects': () => import('./../interfaces/planification/subjects/subjects.js'),
+            '#planification-cycles': () => import('./../interfaces/planification/cycles/cycles.js'),
+            '#planification-dates': () => import('./../interfaces/planification/academic-dates/academic-dates.js'),
+            '#planification-modalities': () => import('./../interfaces/planification/modalities/modalities.js'),
+            '#planification-degrees': () => import('./../interfaces/planification/degrees/degrees.js'),
+            '#planification-titles': () => import('./../interfaces/planification/titles/titles.js'),
+            '#planification-service': () => import('./../interfaces/planification/social-service/social-service.js'),
+            '#planification-documents': () => import('./../interfaces/planification/documents/documents.js'),
+            '#planification-evaluation-instruments': () => import('./../interfaces/planification/evaluation-instruments/evaluation-instruments.js'),
+
+            // Interfaces del módulo de Recursos Humanos
+            '#hr-employees': () => import('./../interfaces/human-resources/employees/employees.js'),
+
+            // Interfaces del módulo de Registro Académico
+            '#ar-students': () => import('./../interfaces/academic-records/students/students.js'),
+            '#ar-career-enrollments': () => import('./../interfaces/academic-records/career-enrollments/career-enrollments.js'),
+            '#ar-cycle-enrollments': () => import('./../interfaces/academic-records/cycle-enrollments/cycle-enrollments.js'),
+            '#ar-course-enrollments': () => import('./../interfaces/academic-records/course-enrollments/course-enrollments.js'),
+            '#ar-student-performance': () => import('./../interfaces/academic-records/student-performance/student-performance.js'),
+
+            // Interfaces del módulo de Portal de Estudiante
+            '#sp-enrollments-courses': () => import('./../interfaces/student-portal/enrollments/courses/courses.js'),
+            '#sp-enrollments-cycles': () => import('./../interfaces/student-portal/enrollments/cycles/cycles.js'),
+            '#sp-grades': () => import('./../interfaces/student-portal/grades/grades.js'),
+            '#sp-pensum': () => import('./../interfaces/student-portal/pensum/pensum.js'),
+            '#sp-evaluations': () => import('./../interfaces/student-portal/evaluations/evaluations.js'),
+
+            // Interfaces del módulo de Portal de Docente
+            '#tp-courses': () => import('./../interfaces/teacher-portal/courses/courses.js'),
+            '#tp-evaluation-plans': () => import('./../interfaces/teacher-portal/evaluation-plans/evaluation-plans.js'),
+            '#tp-evaluations': () => import('./../interfaces/teacher-portal/evaluations/evaluations.js'),
+            '#tp-schedules': () => import('./../interfaces/teacher-portal/schedules/schedules.js')
         };
 
         const importFunction = interfaceMap[view.hash];

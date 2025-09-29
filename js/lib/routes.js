@@ -36,11 +36,6 @@ export const ROUTES = {
             file: '/interfaces/profile/profile.html',
             title: 'Perfil'
         },
-        academicCalendar: {
-            hash: '#academic-calendar',
-            file: '/interfaces/academic/academic-calendar/academic-calendar.html',
-            title: 'Calendario Académico'
-        },
 
         /* --------------------------- 2. ADMINISTRADOR -------------------------- */
         system: {
