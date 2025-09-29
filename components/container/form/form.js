@@ -1,146 +1,199 @@
-export class Form {
-    constructor(opts = {}) {
-        this.host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
-        if (!this.host) throw new Error('[Form] host not found');
+import { Component } from './../../components.js';
+import { ComponentInitializationError } from './../../../js/errors/components/lifecycle/component-initialization-error.js';
 
-        this.sections = Array.isArray(opts.sections) ? opts.sections : [];
-        this.onSubmit = typeof opts.onSubmit === 'function' ? opts.onSubmit : null;
-        this.maxWidthClass = opts.maxWidthClass || 'max-w-md';
-        this.formClass = opts.formClass || 'gap-8 px-6 mx-auto md:mx-0 md:px-0 z-50';
-        this.fields = {};
-        this.validations = {};
+export class Form extends Component {
 
-        this._render();
+    static getTemplate() {
+        return '';
     }
 
-    static validators = {
-        username: str => /^[A-Za-z0-9]+$/.test(str.trim()),
-        simpleText: str => /^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9\s]+$/.test(str.trim()),
-        normalText: str => /^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9.,\s]+$/.test(str.trim()),
-        password: str => /^[A-Za-z0-9#!@&]+$/.test(str.trim()),
-        number: str => /^\d+$/.test(str.trim()),
-        decimal: str => /^\d+(\.\d{1,3})?$/.test(str.trim()),
-        email: str => /^[A-Za-z0-9.]+@[A-Za-z0-9.]+\.(?:[A-Za-z]{2,}|edu\.sv)$/.test(str.trim())
-    };
+    constructor(opts = {}) {
+        if (!opts.host) throw new Error('Form requires a host element');
 
-    _render() {
-        this.formEl = document.createElement('form');
-        this.formEl.classList.add('flex', 'flex-col');
-        if (this.maxWidthClass) this.formEl.classList.add(this.maxWidthClass);
-        this.formClass.split(/\s+/).filter(Boolean).forEach(c => this.formEl.classList.add(c));
+        const host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
 
-        for (const section of this.sections) {
-            const wrapper = document.createElement('section');
-            wrapper.classList.add('flex', 'flex-col');
-
-            if (section.opts?.gap) {
-                wrapper.classList.add(`gap-${section.opts.gap}`);
-            } else {
-                wrapper.classList.add('gap-6');
-            }
-            if (section.opts?.px) {
-                wrapper.classList.add(`px-${section.opts.px}`);
-            } else {
-                wrapper.classList.add('px-0');
-            }
-
-            if (Array.isArray(section.titles)) {
-                for (const t of section.titles) {
-                    const tag = `h${Math.min(Math.max(t.relevance || 1, 1), 6)}`;
-                    const el = document.createElement(tag);
-                    el.textContent = t.text;
-
-                    const classes = Array.isArray(t.classes)
-                        ? t.classes
-                        : (t.classes || '').split(/\s+/);
-                    (classes.length ? classes : ['text-[rgb(var(--card-from))]'])
-                        .filter(Boolean)
-                        .forEach(c => el.classList.add(c));
-
-                    wrapper.appendChild(el);
-                }
-            }
-
-            for (const compDef of section.components || []) {
-                this._mountComponent(compDef, wrapper);
-            }
-
-            this.formEl.appendChild(wrapper);
+        if (!host) {
+            throw new ComponentInitializationError(
+                'Form',
+                opts.host,
+                new Error('Form host element not found')
+            );
         }
 
-        this.formEl.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!this.onSubmit) return;
-
-            const values = {};
-            const errors = {};
-
-            for (const [id, comp] of Object.entries(this.fields)) {
-                let v = '';
-                if (typeof comp.getValue === 'function') {
-                    v = comp.getValue();
-                } else if (comp.field && comp.field.value !== undefined) {
-                    v = comp.field.value;
-                } else if (comp.textarea && comp.textarea.value !== undefined) {
-                    v = comp.textarea.value;
-                } else if (comp.root) {
-                    const el = comp.root.querySelector('input,textarea,select');
-                    if (el) v = el.value;
-                }
-                values[id] = v;
-
-                if (this.validations[id]) {
-                    for (const rule of this.validations[id]) {
-                        const fn = Form.validators[rule];
-                        if (typeof fn === 'function') {
-                            const ok = fn(v);
-                            if (!ok) {
-                                if (!errors[id]) errors[id] = [];
-                                errors[id].push(rule);
-                            }
-                        } else {
-                            console.warn(`[Form] Unknown validation rule: ${rule}`);
-                        }
-                    }
-                }
-            }
-
-            if (Object.keys(errors).length > 0) {
-                this.onSubmit(values, errors);
-                return;
-            }
-
-            this.onSubmit(values, null);
+        super({
+            host: host
         });
 
-        this.host.innerHTML = '';
-        this.host.appendChild(this.formEl);
+        this.formClass = opts.formClass || '';
+        this.sections = opts.sections || [];
+        this.onSubmit = opts.onSubmit || null;
+        this.formElement = null;
+        this.components = [];
+
+        this.opts = opts;
     }
 
-    _mountComponent(compDef, container) {
-        const { type, opts = {}, validation = [] } = compDef;
-        if (!type || typeof type !== 'function') {
-            console.warn('[Form] invalid component type', compDef);
-            return;
-        }
-        const id = opts.id;
-        if (!id) throw new Error('[Form] each component must have an id in opts');
+    async _render() {
+        try {
+            this._generateFormStructure();
 
-        const hostEl = document.createElement('div');
-        hostEl.id = `${id}-host`;
-        container.appendChild(hostEl);
+            await this._renderSections();
 
-        const instanceOpts = Object.assign({}, opts, { host: hostEl });
-        const instance = new type(instanceOpts);
+            if (this.onSubmit) {
+                this.formElement.addEventListener('submit', this._handleSubmit.bind(this));
+            }
 
-        this.fields[id] = instance;
+            this.host.innerHTML = '';
+            this.host.appendChild(this.formElement);
 
-        if (validation.length > 0) {
-            this.validations[id] = validation;
+        } catch (error) {
+            console.error('Form _render failed:', error);
+            this._renderFallback();
         }
     }
 
-    getField(id) {
-        return this.fields[id];
+    _generateFormStructure() {
+        this.formElement = document.createElement('form');
+        this.formElement.className = this.formClass;
+        this.formElement.setAttribute('novalidate', 'true');
+
+        this.sectionsContainer = document.createElement('div');
+        this.formElement.appendChild(this.sectionsContainer);
+    }
+
+    async _renderSections() {
+        for (const section of this.sections) {
+            await this._renderSection(section);
+        }
+    }
+
+    async _renderSection(section) {
+        const sectionElement = document.createElement('div');
+
+        if (section.opts) {
+            this._applySectionStyles(sectionElement, section.opts);
+        }
+
+        if (section.titles) {
+            this._renderTitles(sectionElement, section.titles);
+        }
+
+        if (section.components) {
+            await this._renderComponents(sectionElement, section.components);
+        }
+
+        this.sectionsContainer.appendChild(sectionElement);
+    }
+
+    _applySectionStyles(sectionElement, opts) {
+        if (opts.gap) {
+            sectionElement.style.gap = `${opts.gap * 0.25}rem`;
+        }
+        if (opts.px) {
+            sectionElement.style.paddingLeft = `${opts.px * 0.25}rem`;
+            sectionElement.style.paddingRight = `${opts.px * 0.25}rem`;
+        }
+        if (opts.py) {
+            sectionElement.style.paddingTop = `${opts.py * 0.25}rem`;
+            sectionElement.style.paddingBottom = `${opts.py * 0.25}rem`;
+        }
+
+        sectionElement.style.display = 'flex';
+        sectionElement.style.flexDirection = 'column';
+    }
+
+    _renderTitles(container, titles) {
+        titles.forEach(title => {
+            const titleElement = document.createElement(title.relevance === 1 ? 'h1' :
+                title.relevance === 2 ? 'h2' : 'h3');
+            titleElement.textContent = title.text;
+            titleElement.className = title.classes?.join(' ') || '';
+            container.appendChild(titleElement);
+        });
+    }
+
+    async _renderComponents(container, components) {
+        for (const compConfig of components) {
+            await this._renderComponent(container, compConfig);
+        }
+    }
+
+    async _renderComponent(container, compConfig) {
+        const componentHost = document.createElement('div');
+        container.appendChild(componentHost);
+
+        try {
+            const component = new compConfig.type({
+                host: componentHost,
+                ...compConfig.opts
+            });
+
+            await component.render();
+            this.components.push(component);
+
+        } catch (error) {
+            console.error(`Failed to render component:`, error);
+            componentHost.innerHTML = `<div class="component-error">Component failed to load</div>`;
+        }
+    }
+
+    _handleSubmit(event) {
+        event.preventDefault();
+
+        if (this.onSubmit) {
+            const values = this._getFormValues();
+            this.onSubmit(values);
+        }
+    }
+
+    _getFormValues() {
+        const values = {};
+
+        const inputs = this.formElement.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            if (input.id) {
+                values[input.id] = input.value;
+            }
+        });
+
+        this.components.forEach(component => {
+            if (component.getValue && component.opts?.id) {
+                values[component.opts.id] = component.getValue();
+            }
+        });
+
+        return values;
+    }
+
+    getValues() {
+        return this._getFormValues();
+    }
+
+    setValues(values) {
+        Object.keys(values).forEach(key => {
+            const input = this.formElement.querySelector(`#${key}`);
+            if (input) {
+                input.value = values[key];
+            }
+        });
+    }
+
+    reset() {
+        this.formElement.reset();
+    }
+
+    validate() {
+        return this.formElement.checkValidity();
+    }
+
+    destroy() {
+        this.components.forEach(component => {
+            if (typeof component.destroy === 'function') {
+                component.destroy();
+            }
+        });
+        this.components = [];
+
+        super.destroy();
     }
 }

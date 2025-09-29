@@ -1,4 +1,4 @@
-import { FormComponent } from './../../base/form-component.js';
+import { FormComponent } from './../../components.js';
 
 export class SubmitInput extends FormComponent {
   // ✅ tu HTML embebido en un <template>

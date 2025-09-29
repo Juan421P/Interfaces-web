@@ -1,3 +1,7 @@
+export { Component } from './base/component.js';
+export { DisplayComponent } from './base/display-component.js';
+export { FormComponent } from './base/form-component.js';
+
 export { Button } from './basic/button/button.js';
 export { Calendar } from './basic/calendar/calendar.js';
 export { Checkbox } from './basic/checkbox/checkbox.js';

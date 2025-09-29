@@ -1,16 +1,15 @@
-import { Component } from './../../base/component.js';
+import { Component, Modal, Button } from './../../components.js';
+
 import { AuthService } from './../../../js/services/auth.service.js';
 import { buildInitials } from './../../../js/lib/common.js';
 import { ComponentRenderError } from './../../../js/errors/components/base/component-render-error.js';
-import { Modal } from '../../overlay/modal/modal.js';
-import { Button } from '../../basic/button/button.js';
 
 const getLabelSpan = (element) => element.querySelector('span:not(.profile-initials)');
 
 export class Navbar extends Component {
-  // ✅ HTML embebido (con comentarios preservados)
-  static getTemplate() {
-    return `
+
+	static getTemplate() {
+		return `
 <template id="tmpl-navbar">
 
 <button id="burger-btn"
@@ -547,214 +546,211 @@ export class Navbar extends Component {
 
 </template>
     `;
-  }
+	}
 
-  constructor(opts = {}) {
-    const host = document.querySelector('#navbar');
+	constructor(opts = {}) {
+		const host = document.querySelector('#navbar');
 
-    if (!host) {
-      console.error('Navbar host (#navbar) not found, will retry...');
-      super({ host: document.createElement('div'), /* url: opts.url || ROUTES.components.layout.navbar.html, */ autoRender: false });
-      this._retryRender();
-      return;
-    }
+		if (!host) {
+			console.error('Navbar host (#navbar) not found, will retry...');
+			super({
+				host: document.createElement('div'),
+				autoRender: false
+			});
+			this._retryRender();
+			return;
+		}
 
-    super({
-      host,
-      /* url: opts.url || ROUTES.components.layout.navbar.html */
-    });
+		super({
+			host,
+		});
 
-    this._render();
-  }
+		this._render();
+	}
 
-  async _retryRender() {
-    await new Promise(r => setTimeout(r, 100));
-    const host = document.querySelector('#navbar');
-    if (host) {
-      this.host = host;
-      await this.render();
-    } else {
-      console.error('Navbar host still not found after retry');
-    }
-  }
+	async _retryRender() {
+		await new Promise(r => setTimeout(r, 100));
+		const host = document.querySelector('#navbar');
+		if (host) {
+			this.host = host;
+			await this.render();
+		} else {
+			console.error('Navbar host still not found after retry');
+		}
+	}
 
-  async _render() {
-    try {
-      // ❌ Antes: fetch + stripScripts
-      // ✅ Ahora: clon desde template embebido
-      const t = document.createElement('template');
-      t.innerHTML = Navbar.getTemplate();
-      const rootTpl = t.content.querySelector('#tmpl-navbar');
-      if (!rootTpl) throw new Error('Navbar template missing');
+	async _render() {
+		try {
+			const t = document.createElement('template');
+			t.innerHTML = Navbar.getTemplate();
+			const rootTpl = t.content.querySelector('#tmpl-navbar');
+			if (!rootTpl) throw new Error('Navbar template missing');
 
-      // Creamos un fragmento editable para filtrar por rol ANTES de inyectar
-      const frag = rootTpl.content.cloneNode(true);
-      await this.filterByRole(frag);
+			const frag = rootTpl.content.cloneNode(true);
+			await this.filterByRole(frag);
 
-      this.host.innerHTML = '';
-      this.host.appendChild(frag);
+			this.host.innerHTML = '';
+			this.host.appendChild(frag);
 
-      await this.injectProfilePicture();
-      this.attachCollapses();
-      this.highlightActive();
-      window.addEventListener('hashchange', () => this.highlightActive());
-      this.attachLogoutHandler();
-    } catch (error) {
-      console.error('Navbar render failed:', error);
-      throw new ComponentRenderError('Navbar', 'rendering', error);
-    }
-  }
+			await this.injectProfilePicture();
+			this.attachCollapses();
+			this.highlightActive();
+			window.addEventListener('hashchange', () => this.highlightActive());
+			this.attachLogoutHandler();
+		} catch (error) {
+			console.error('Navbar render failed:', error);
+			throw new ComponentRenderError('Navbar', 'rendering', error);
+		}
+	}
 
-  async attachLogoutHandler() {
-    const btn = document.querySelector('#logout-btn');
-    if (!btn) {
-      console.warn('Logout button not found');
-      return;
-    }
+	async attachLogoutHandler() {
+		const btn = document.querySelector('#logout-btn');
+		if (!btn) {
+			console.warn('Logout button not found');
+			return;
+		}
 
-    btn.addEventListener('click', async () => {
-      // ❌ Antes: dynamic import con ROUTES
-      // ✅ Ahora: usamos las clases ya importadas
-      const logoutModal = new Modal({
-        templateId: 'tmpl-logout-confirm',
-        size: 'sm',
-        components: [
-          {
-            type: Button,
-            opts: {
-              host: '#logout-confirm',
-              text: 'Confirmar',
-              buttonType: 2,
-              onClick: (e) => {
-                e.preventDefault();
-                AuthService.logout();
-                logoutModal.close();
-                window.location.href = '/#login';
-              },
-              showIcon: false,
-              sizeMultiplier: .75
-            }
-          }
-        ]
-      });
-    });
-  }
+		btn.addEventListener('click', async () => {
+			const logoutModal = new Modal({
+				templateId: 'tmpl-logout-confirm',
+				size: 'sm',
+				components: [
+					{
+						type: Button,
+						opts: {
+							host: '#logout-confirm',
+							text: 'Confirmar',
+							buttonType: 2,
+							onClick: (e) => {
+								e.preventDefault();
+								AuthService.logout();
+								logoutModal.close();
+								window.location.href = '/#login';
+							},
+							showIcon: false,
+							sizeMultiplier: .75
+						}
+					}
+				]
+			});
+		});
+	}
 
-  async injectProfilePicture() {
-    try {
-      const user = (await AuthService.me()).user;
-      const initials = `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase();
-      const avatarHost = document.querySelector('#profile-avatar');
-      if (!avatarHost) {
-        console.warn('Profile avatar host not found');
-        return;
-      }
-      avatarHost.innerHTML = '';
-      avatarHost.appendChild(buildInitials(initials || '?'));
-    } catch (err) {
-      console.error('[Navbar] user fetch failed:', err);
-    }
-  }
+	async injectProfilePicture() {
+		try {
+			const user = (await AuthService.me()).user;
+			const initials = `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase();
+			const avatarHost = document.querySelector('#profile-avatar');
+			if (!avatarHost) {
+				console.warn('Profile avatar host not found');
+				return;
+			}
+			avatarHost.innerHTML = '';
+			avatarHost.appendChild(buildInitials(initials || '?'));
+		} catch (err) {
+			console.error('[Navbar] user fetch failed:', err);
+		}
+	}
 
-  highlightActive() {
-    const hash = window.location.hash || '#main';
+	highlightActive() {
+		const hash = window.location.hash || '#main';
 
-    document.querySelectorAll('#sidebar .nav-btn').forEach(entry => {
-      entry.classList.remove('bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg');
-      entry.querySelectorAll('svg').forEach(s => s.classList.remove('text-white'));
-      const sp = getLabelSpan(entry);
-      sp?.classList.remove('text-white');
-      sp?.classList.add('text-[rgb(var(--button-from))]');
-      entry.querySelector('ul')?.classList.remove('bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]');
-    });
+		document.querySelectorAll('#sidebar .nav-btn').forEach(entry => {
+			entry.classList.remove('bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg');
+			entry.querySelectorAll('svg').forEach(s => s.classList.remove('text-white'));
+			const sp = getLabelSpan(entry);
+			sp?.classList.remove('text-white');
+			sp?.classList.add('text-[rgb(var(--button-from))]');
+			entry.querySelector('ul')?.classList.remove('bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]');
+		});
 
-    const activeLink = document.querySelector(`#sidebar a[href="${hash}"]`);
-    const entry = activeLink?.closest('.nav-btn');
-    if (!entry) return;
+		const activeLink = document.querySelector(`#sidebar a[href="${hash}"]`);
+		const entry = activeLink?.closest('.nav-btn');
+		if (!entry) return;
 
-    entry.classList.add('bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg');
-    entry.querySelectorAll('svg').forEach(s => s.classList.add('text-white'));
+		entry.classList.add('bg-gradient-to-r', 'from-[rgb(var(--button-from))]', 'to-[rgb(var(--button-to))]', 'shadow-lg');
+		entry.querySelectorAll('svg').forEach(s => s.classList.add('text-white'));
 
-    const sp = getLabelSpan(entry);
-    if (sp) {
-      sp.classList.add('text-white');
-      sp.classList.remove('text-[rgb(var(--button-from))]');
-      const isCollapsed = entry.querySelector('ul')?.classList.contains('hidden');
+		const sp = getLabelSpan(entry);
+		if (sp) {
+			sp.classList.add('text-white');
+			sp.classList.remove('text-[rgb(var(--button-from))]');
+			const isCollapsed = entry.querySelector('ul')?.classList.contains('hidden');
 
-      sp.dataset.originalLabel ??= sp.textContent;
+			sp.dataset.originalLabel ??= sp.textContent;
 
-      if (activeLink && isCollapsed) {
-        sp.textContent = activeLink.textContent.trim();
-      } else {
-        sp.textContent = sp.dataset.originalLabel;
-      }
-    }
+			if (activeLink && isCollapsed) {
+				sp.textContent = activeLink.textContent.trim();
+			} else {
+				sp.textContent = sp.dataset.originalLabel;
+			}
+		}
 
-    entry.querySelector('ul')?.classList.add('bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]');
-  }
+		entry.querySelector('ul')?.classList.add('bg-gradient-to-tr', 'from-[rgb(var(--body-from))]', 'to-[rgb(var(--body-to))]');
+	}
 
-  attachCollapses() {
-    document.querySelectorAll('[data-toggle="collapse"]').forEach(btn => {
-      const selector = btn.dataset.target;
-      const target = selector ? document.querySelector(selector) : null;
-      if (!target) {
-        console.warn('[Navbar] collapse target not found:', selector);
-        return;
-      }
-      btn.addEventListener('click', () => {
-        const targetIsHidden = target.classList.contains('hidden');
-        target.classList.toggle('hidden');
-        btn.querySelector('svg:last-child')?.classList.toggle('rotate-180');
+	attachCollapses() {
+		document.querySelectorAll('[data-toggle="collapse"]').forEach(btn => {
+			const selector = btn.dataset.target;
+			const target = selector ? document.querySelector(selector) : null;
+			if (!target) {
+				console.warn('[Navbar] collapse target not found:', selector);
+				return;
+			}
+			btn.addEventListener('click', () => {
+				const targetIsHidden = target.classList.contains('hidden');
+				target.classList.toggle('hidden');
+				btn.querySelector('svg:last-child')?.classList.toggle('rotate-180');
 
-        const span = getLabelSpan(btn);
-        if (!span) return;
+				const span = getLabelSpan(btn);
+				if (!span) return;
 
-        span.dataset.originalLabel ??= span.textContent;
+				span.dataset.originalLabel ??= span.textContent;
 
-        if (targetIsHidden) {
-          span.textContent = span.dataset.originalLabel;
-        } else {
-          const hash = window.location.hash || '#main';
-          const activeLink = target.querySelector(`a[href="${hash}"]`);
-          if (activeLink) {
-            span.textContent = activeLink.textContent.trim();
-          } else {
-            span.textContent = span.dataset.originalLabel;
-          }
-        }
-      });
-    });
-  }
+				if (targetIsHidden) {
+					span.textContent = span.dataset.originalLabel;
+				} else {
+					const hash = window.location.hash || '#main';
+					const activeLink = target.querySelector(`a[href="${hash}"]`);
+					if (activeLink) {
+						span.textContent = activeLink.textContent.trim();
+					} else {
+						span.textContent = span.dataset.originalLabel;
+					}
+				}
+			});
+		});
+	}
 
-  async filterByRole(root) {
-    try {
-      const role = ((await AuthService.me()).user).roleID;
+	async filterByRole(root) {
+		try {
+			const role = ((await AuthService.me()).user).roleID;
 
-      const allowedMap = {
-        'Administrador': ['#system-', '#planification-'],
-        'Recursos Humanos': ['#hr-'],
-        'Registro Académico': ['#ar-'],
-        'Docente': ['#tp-'],
-        'Estudiante': ['#sp-']
-      };
+			const allowedMap = {
+				'Administrador': ['#system-', '#planification-'],
+				'Recursos Humanos': ['#hr-'],
+				'Registro Académico': ['#ar-'],
+				'Docente': ['#tp-'],
+				'Estudiante': ['#sp-']
+			};
 
-      const allowedPrefixes = allowedMap[role] || [];
+			const allowedPrefixes = allowedMap[role] || [];
 
-      root.querySelectorAll('a[href]').forEach(link => {
-        const hash = link.getAttribute('href');
-        const isGlobal = ['#main', '#notifications', '#not-found', '#profile'].includes(hash);
-        if (!isGlobal && !allowedPrefixes.some(pref => hash.startsWith(pref))) {
-          link.closest('li')?.remove();
-        }
-      });
+			root.querySelectorAll('a[href]').forEach(link => {
+				const hash = link.getAttribute('href');
+				const isGlobal = ['#main', '#notifications', '#not-found', '#profile'].includes(hash);
+				if (!isGlobal && !allowedPrefixes.some(pref => hash.startsWith(pref))) {
+					link.closest('li')?.remove();
+				}
+			});
 
-      root.querySelectorAll('ul').forEach(ul => {
-        if (!ul.querySelector('li')) {
-          ul.closest('.nav-btn')?.remove();
-        }
-      });
-    } catch (err) {
-      console.error('[Navbar] role filtering failed:', err);
-    }
-  }
+			root.querySelectorAll('ul').forEach(ul => {
+				if (!ul.querySelector('li')) {
+					ul.closest('.nav-btn')?.remove();
+				}
+			});
+		} catch (err) {
+			console.error('[Navbar] role filtering failed:', err);
+		}
+	}
 }

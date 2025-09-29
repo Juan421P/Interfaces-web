@@ -1,4 +1,4 @@
-import { FormComponent } from './../../base/form-component.js';
+import { FormComponent } from './../../components.js';
 
 const allowedKeys = [
   'Backspace','Delete','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Tab','Home','End','Enter'
@@ -15,7 +15,7 @@ const patterns = {
 };
 
 export class FormInput extends FormComponent {
-  // ✅ HTML embebido (tu snippet tal cual envuelto en <template>)
+
   static getTemplate() {
     return `
 <template id="tmpl-form-input">
