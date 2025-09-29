@@ -3,10 +3,10 @@ import { AuthService } from './../../js/services/auth.service.js';
 import { ValidationError } from './../../js/errors/validation/validation-error.js';
 import { AuthGuard } from '../../js/guards/auth.guard.js';
 
-const { Form } = await import(ROUTES.components.container.form.js);
-const { FormInput } = await import(ROUTES.components.form.formInput.js);
-const { SubmitInput } = await import(ROUTES.components.form.submitInput.js);
-const { Toast } = await import(ROUTES.components.overlay.toast.js);
+// const { Form } = await import(ROUTES.components.container.form.js);
+// const { FormInput } = await import(ROUTES.components.form.formInput.js);
+// const { SubmitInput } = await import(ROUTES.components.form.submitInput.js);
+// const { Toast } = await import(ROUTES.components.overlay.toast.js);
 
 const toast = new Toast();
 await toast.init();
