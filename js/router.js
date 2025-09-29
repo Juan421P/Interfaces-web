@@ -118,7 +118,7 @@ export class Router {
 
     async getInterfaceModule(view) {
         const interfaceMap = {
-            '#login': () => import('./interfaces/login/login.js'),
+            '#login': () => import('./../interfaces/login/login.js'),
         };
 
         const importFunction = interfaceMap[view.hash];
