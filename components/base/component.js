@@ -5,6 +5,7 @@ import { ComponentTemplateError } from '../../js/errors/components/base/componen
 import { ComponentInitializationError } from '../../js/errors/components/lifecycle/component-initialization-error.js';
 
 export class Component {
+    
     constructor(opts = {}) {
         try {
             if (!opts.host) {
