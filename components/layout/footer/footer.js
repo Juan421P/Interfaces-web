@@ -2,9 +2,8 @@ import { Component } from './../../base/component.js';
 
 export class Footer extends Component {
 
-  // ✅ Plantilla embebida (tu HTML tal cual, con comentarios preservados)
-  static getTemplate() {
-    return `
+	static getTemplate() {
+		return `
 <template id="tmpl-footer">
   <footer id="footer"
     class="fixed bottom-0 left-0 w-full bg-gradient-to-tr from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] z-[999] opacity-0 pointer-events-none translate-y-full transition-all duration-700 ease-in-out grid grid-cols-1 md:grid-cols-12 rounded-t-2xl md:rounded-t-none cursor-pointer">
@@ -40,70 +39,72 @@ export class Footer extends Component {
   </footer>
 </template>
     `;
-  }
+	}
 
-  constructor(selector = '#footer', url /* = ROUTES.components.layout.footer.html */) {
-    // host “dummy” como en tu versión original; no renderizamos con super.render()
-    super({ host: document.createElement('div'), /* url, */ autoRender: false });
+	constructor(selector = 'footer',) {
+		super({
+			host: document.createElement('div'),
+			autoRender: false
+		});
 
-    this.selector = selector;
-    this.url = url; // 👈 se conserva por compat, aunque ya no se usa
-    this.footerElement = null;
+		this.selector = selector;
+		this.footerElement = null;
 
-    this.onScroll = this.onScroll.bind(this);
-    this._load();
-  }
+		this.onScroll = this.onScroll.bind(this);
+		this._load();
+	}
 
-  async _load() {
-    try {
-      // ❌ Antes: fetch(this.url) + stripScripts
-      // ✅ Ahora: clonar desde template embebido
-      const t = document.createElement('template');
-      t.innerHTML = Footer.getTemplate();
-      const tmpl = t.content.querySelector('#tmpl-footer');
-      const footerEl = tmpl.content.firstElementChild; // <footer id="footer" …>
+	async _load() {
+		try {
+			let attempts = 0;
+			while (!document.querySelector(this.selector) && attempts < 10) {
+				await new Promise(resolve => setTimeout(resolve, 10));
+				attempts++;
+			}
 
-      const oldFooter = document.querySelector(this.selector);
-      if (!oldFooter) throw new Error(`Element ${this.selector} not found`);
+			const oldFooter = document.querySelector(this.selector);
+			if (!oldFooter) throw new Error(`Element ${this.selector} not found after ${attempts} attempts`);
 
-      // Reemplazo del nodo (igual que antes con outerHTML)
-      oldFooter.outerHTML = footerEl.outerHTML;
+			const t = document.createElement('template');
+			t.innerHTML = Footer.getTemplate();
+			const tmpl = t.content.querySelector('#tmpl-footer');
+			const footerEl = tmpl.content.firstElementChild;
 
-      // Reasignamos referencia al nuevo nodo
-      this.footerElement = document.querySelector(this.selector);
-      if (!this.footerElement) throw new Error(`New ${this.selector} element not found after replacing HTML`);
+			oldFooter.outerHTML = footerEl.outerHTML;
+			this.footerElement = document.querySelector(this.selector);
 
-      this.attachListeners();
-    } catch (error) {
-      console.error('Footer failed to load :(', error);
-    }
-  }
+			if (!this.footerElement) throw new Error(`New ${this.selector} element not found after replacing HTML`);
+			this.attachListeners();
+		} catch (error) {
+			console.error('Footer failed to load :(', error);
+		}
+	}
 
-  attachListeners() {
-    window.addEventListener('scroll', this.onScroll);
-    this.onScroll(); // estado inicial
-    this.footerElement.addEventListener('click', () => {
-      this.footerElement.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
-      this.footerElement.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
-    });
-  }
+	attachListeners() {
+		window.addEventListener('scroll', this.onScroll);
+		this.onScroll(); // estado inicial
+		this.footerElement.addEventListener('click', () => {
+			this.footerElement.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+			this.footerElement.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+		});
+	}
 
-  onScroll() {
-    const scrollY = window.scrollY;
-    const visibleHeight = window.innerHeight;
-    const pageHeight = document.documentElement.scrollHeight;
-    const atBottom = pageHeight - (scrollY + visibleHeight) <= 1;
+	onScroll() {
+		const scrollY = window.scrollY;
+		const visibleHeight = window.innerHeight;
+		const pageHeight = document.documentElement.scrollHeight;
+		const atBottom = pageHeight - (scrollY + visibleHeight) <= 1;
 
-    if (atBottom) {
-      this.footerElement.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
-      this.footerElement.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
-    } else {
-      this.footerElement.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
-      this.footerElement.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
-    }
-  }
+		if (atBottom) {
+			this.footerElement.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-full');
+			this.footerElement.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+		} else {
+			this.footerElement.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+			this.footerElement.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
+		}
+	}
 
-  async render() {
-    // No-op: seguimos el patrón original (se gestiona en _load)
-  }
+	async render() {
+		// No-op: seguimos el patrón original (se gestiona en _load)
+	}
 }
