@@ -116,8 +116,6 @@ export default class LoginInterface extends Interface {
                 }
             }
         });
-
-        await this.form.render();
     }
 
 }
