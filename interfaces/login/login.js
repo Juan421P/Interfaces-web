@@ -32,7 +32,7 @@ export default class LoginInterface extends Interface {
     }
 
     async _setupForm() {
-        this.form = new Form({
+        this.form = await new Form({
             host: '#login-form-host',
             formClass: 'gap-16 px-6 mx-auto md:mx-0 md:px-0 z-50 w-full',
             sections: [
