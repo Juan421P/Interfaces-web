@@ -1,174 +1,142 @@
 import { Component } from './../../base/component.js';
-import { ROUTES } from './../../../js/lib/routes.js';
 import { ComponentRenderError } from './../../../js/errors/components/base/component-render-error.js';
 
 export class Body extends Component {
-    constructor(opts = {}) {
-        super({
-            host: document.body,
-            url: opts.url || ROUTES.components.layout.body.html,
-            autoRender: false
-        });
+  static getTemplate() {
+    return `
+<template id="tmpl-body">
+  <body id="body"
+    class="relative flex justify-center min-h-screen mb-1 md:justify-start bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))]">
 
-        this.content = opts.content || '';
-        this.afterLoad = opts.afterLoad || null;
-        this.mainSelector = opts.mainSelector || '#main';
-        this.originalBodyHTML = document.body.innerHTML;
+    <!-- <div
+        class="fixed bottom-10 left-0 w-[600px] h-[600px] rounded-full z-[-20] pointer-events-none 
+              bg-gradient-to-tr from-indigo-400 to-blue-400 opacity-60 translate-x-[-50%] translate-y-[50%] animate-left-spin-pulse">
+    </div>
+    <div
+        class="fixed top-0 right-0 w-[300px] h-[300px] rounded-full z-[-20] pointer-events-none 
+              bg-gradient-to-tl from-blue-400 to-indigo-400 opacity-40 translate-x-[50%] translate-y-[-50%] animate-right-spin-pulse">
+    </div> -->
 
-        this._load();
+    <div
+        class="fixed bottom-10 left-0 w-[600px] h-[600px] z-[50] pointer-events-none animate-left-spin-pulse">
+        <div class="absolute inset-0 border-2 border-[rgb(var(--button-to))] opacity-20"></div>
+        <div class="absolute border-2 border-[rgb(var(--placeholder-to))] inset-1 opacity-5"></div>
+        <div class="absolute inset-0 rotate-45 border-2 border-[rgb(var(--button-from))] opacity-40"></div>
+        <div class="absolute rotate-45 border-2 border-[rgb(var(--placeholder-from))] inset-1 opacity-20"></div>
+    </div>
+    <div
+        class="fixed top-0 right-0 w-[300px] h-[300px] z-[-20] pointer-events-none animate-right-spin-pulse">
+        <div class="absolute inset-0 border-2 border-[rgb(var(--button-to))] opacity-20"></div>
+        <div class="absolute border-2 border-[rgb(var(--placeholder-to))] inset-1 opacity-5"></div>
+        <div class="absolute inset-0 rotate-45 border-2 border-[rgb(var(--button-from))] opacity-40"></div>
+        <div class="absolute rotate-45 border-2 border-[rgb(var(--placeholder-from))] inset-1 opacity-20"></div>
+    </div>
+
+    <div id="navbar"></div>
+    <div id="main-view" class="flex-1 w-full"></div>
+    <footer id="footer"></footer>
+  </body>
+</template>
+    `;
+  }
+
+  constructor(opts = {}) {
+    super({ host: document.body, /* url: opts.url || ROUTES.components.layout.body.html, */ autoRender: false });
+    this.content = opts.content || '';
+    this.afterLoad = opts.afterLoad || null;
+    this.mainSelector = opts.mainSelector || '#main-view';
+    this.originalBodyHTML = document.body.innerHTML;
+    this._load();
+  }
+
+  async _load() {
+    try {
+      const t = document.createElement('template');
+      t.innerHTML = Body.getTemplate();
+      const tmpl = t.content.querySelector('#tmpl-body');
+      const bodyEl = tmpl.content.firstElementChild;
+      document.body.outerHTML = bodyEl.outerHTML;
+
+      if (this.content) {
+        const main = document.querySelector(this.mainSelector);
+        if (main) main.innerHTML = this.content;
+      }
+      if (typeof this.afterLoad === 'function') this.afterLoad();
+    } catch (error) {
+      console.error('Body component failed :(', error);
     }
+  }
 
-    async _load() {
-        try {
-            const res = await fetch(this.url + '?raw');
-            if (!res.ok) throw new Error(`Cannot fetch ${this.url} :(`);
+  async _beforeRender() { this.originalBodyClasses = document.body.className; }
 
-            document.body.outerHTML = await res.text();
+  async _render() {
+    try {
+      const t = document.createElement('template');
+      t.innerHTML = Body.getTemplate();
+      const tmpl = t.content.querySelector('#tmpl-body');
+      const bodyEl = tmpl.content.firstElementChild;
+      if (!bodyEl) throw new ComponentRenderError(this.constructor.name, 'template fetching', new Error('Failed to load body template'));
 
-            if (this.content) {
-                const main = document.querySelector(this.mainSelector);
-                if (main) main.innerHTML = this.content;
-            }
+      document.body.outerHTML = bodyEl.outerHTML;
+      this.host = document.body;
 
-            if (typeof this.afterLoad === 'function') {
-                this.afterLoad();
-            }
-        } catch (error) {
-            console.error('Body component failed :(', error);
-        }
+      if (this.originalBodyClasses) document.body.className += ' ' + this.originalBodyClasses;
+      if (this.content) await this._injectContent();
+    } catch (error) {
+      throw new ComponentRenderError(this.constructor.name, 'body replacement', error);
     }
+  }
 
-    async _beforeRender() {
-        this.originalBodyClasses = document.body.className;
+  async _afterRender() {
+    if (typeof this.afterLoad === 'function') {
+      try { await this.afterLoad(); } catch (e) { console.error('[Body] afterLoad callback failed:', e); }
     }
+  }
 
-    async _render() {
-        try {
-            const template = await this._fetchTemplate();
+  async _injectContent() {
+    const mainElement = document.querySelector(this.mainSelector);
+    if (mainElement) mainElement.innerHTML = this.content;
+    else console.warn(`[Body] Main content area not found with selector: ${this.mainSelector}`);
+  }
 
-            if (!template) {
-                throw new ComponentRenderError(
-                    this.constructor.name,
-                    'template fetching',
-                    new Error('Failed to load body template')
-                );
-            }
+  async setContent(content, selector = null) {
+    this.content = content;
+    const sel = selector || this.mainSelector;
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML = content;
+    else throw new ComponentRenderError(this.constructor.name, 'content injection', new Error(`Content area not found: ${sel}`));
+  }
 
-            document.body.outerHTML = template.content.firstElementChild.outerHTML;
+  async appendContent(content, selector = null) {
+    const sel = selector || this.mainSelector;
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML += content;
+    else throw new ComponentRenderError(this.constructor.name, 'content appending', new Error(`Content area not found: ${sel}`));
+  }
 
-            this.host = document.body;
+  async clearContent(selector = null) {
+    const sel = selector || this.mainSelector;
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML = '';
+  }
 
-            if (this.originalBodyClasses) {
-                document.body.className += ' ' + this.originalBodyClasses;
-            }
-
-            if (this.content) {
-                await this._injectContent();
-            }
-
-        } catch (error) {
-            throw new ComponentRenderError(
-                this.constructor.name,
-                'body replacement',
-                error
-            );
-        }
+  async restore() {
+    try {
+      document.body.outerHTML = this.originalBodyHTML;
+      this.host = document.body;
+    } catch (error) {
+      throw new ComponentRenderError(this.constructor.name, 'body restoration', error);
     }
+  }
 
-    async _afterRender() {
-        if (typeof this.afterLoad === 'function') {
-            try {
-                await this.afterLoad();
-            } catch (error) {
-                console.error('[Body] afterLoad callback failed:', error);
-            }
-        }
-    }
+  getMainElement() { return document.querySelector(this.mainSelector); }
+  hasMainElement() { return !!document.querySelector(this.mainSelector); }
 
-    async _injectContent() {
-        const mainElement = document.querySelector(this.mainSelector);
-        if (mainElement) {
-            mainElement.innerHTML = this.content;
-        } else {
-            console.warn(`[Body] Main content area not found with selector: ${this.mainSelector}`);
-        }
-    }
+  async destroy() { await this.restore(); await super.destroy(); }
 
-    async setContent(content, selector = null) {
-        this.content = content;
-        const targetSelector = selector || this.mainSelector;
-        const targetElement = document.querySelector(targetSelector);
-
-        if (targetElement) {
-            targetElement.innerHTML = content;
-        } else {
-            throw new ComponentRenderError(
-                this.constructor.name,
-                'content injection',
-                new Error(`Content area not found: ${targetSelector}`)
-            );
-        }
-    }
-
-    async appendContent(content, selector = null) {
-        const targetSelector = selector || this.mainSelector;
-        const targetElement = document.querySelector(targetSelector);
-
-        if (targetElement) {
-            targetElement.innerHTML += content;
-        } else {
-            throw new ComponentRenderError(
-                this.constructor.name,
-                'content appending',
-                new Error(`Content area not found: ${targetSelector}`)
-            );
-        }
-    }
-
-    async clearContent(selector = null) {
-        const targetSelector = selector || this.mainSelector;
-        const targetElement = document.querySelector(targetSelector);
-
-        if (targetElement) {
-            targetElement.innerHTML = '';
-        }
-    }
-
-    async restore() {
-        try {
-            document.body.outerHTML = this.originalBodyHTML;
-            this.host = document.body;
-        } catch (error) {
-            throw new ComponentRenderError(
-                this.constructor.name,
-                'body restoration',
-                error
-            );
-        }
-    }
-
-    getMainElement() {
-        return document.querySelector(this.mainSelector);
-    }
-
-    hasMainElement() {
-        return !!document.querySelector(this.mainSelector);
-    }
-
-    async destroy() {
-        await this.restore();
-        await super.destroy();
-    }
-
-    _getFallbackTemplate() {
-        const template = document.createElement('template');
-        template.innerHTML = `
-            <body>
-                <div id="main" class="min-h-screen bg-gray-100">
-                    ${this.content || 'Body content failed to load'}
-                </div>
-            </body>
-        `;
-        return template;
-    }
+  _getFallbackTemplate() {
+    const template = document.createElement('template');
+    template.innerHTML = Body.getTemplate().replace('<template id="tmpl-body">','').replace('</template>','');
+    return template;
+  }
 }
