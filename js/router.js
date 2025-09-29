@@ -117,10 +117,15 @@ export class Router {
 
     async loadInterface(view) {
         try {
+            console.log(`🚀 [Router] Loading interface for: ${view.hash}`);
+            console.log(`🚀 [Router] View object:`, view);
             const interfaceModule = await this.getInterfaceModule(view);
+            console.log(`🚀 [Router] Interface module loaded:`, interfaceModule);
             const interfaceInstance = new interfaceModule.default();
-
+            console.log(`🚀 [Router] Interface instance created:`, interfaceInstance);
             await interfaceInstance.render('#main-view');
+            console.log(`🚀 [Router] Interface rendered successfully`);
+
             document.title = view.title;
 
         } catch (err) {
