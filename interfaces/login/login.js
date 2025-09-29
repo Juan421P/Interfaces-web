@@ -10,7 +10,7 @@ import {
 import { AuthService } from './../../js/services/auth.service.js';
 import { AuthGuard } from './../../js/guards/auth.guard.js';
 
-export class LoginInterface extends Interface {
+export default class LoginInterface extends Interface {
 
     static getTemplate() {
         return `
