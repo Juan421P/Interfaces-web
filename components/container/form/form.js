@@ -10,7 +10,7 @@ export class Form {
         this.fields = {};
         this.validations = {};
 
-        this._render();
+        this._initialize();
     }
 
     static validators = {
@@ -23,7 +23,11 @@ export class Form {
         email: str => /^[A-Za-z0-9.]+@[A-Za-z0-9.]+\.(?:[A-Za-z]{2,}|edu\.sv)$/.test(str?.trim() || '')
     };
 
-    _render() {
+    async _initialize(){
+        await this._render();
+    }
+
+    async _render() {
         this.formEl = document.createElement('form');
         this.formEl.classList.add('flex', 'flex-col');
 
@@ -69,7 +73,7 @@ export class Form {
             }
 
             for (const compDef of section.components || []) {
-                this._mountComponent(compDef, wrapper);
+                await this._mountComponent(compDef, wrapper);
             }
 
             this.formEl.appendChild(wrapper);

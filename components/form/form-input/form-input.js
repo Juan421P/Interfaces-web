@@ -1,23 +1,23 @@
 import { FormComponent } from './../../components.js';
 
 const allowedKeys = [
-  'Backspace','Delete','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Tab','Home','End','Enter'
+	'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End', 'Enter'
 ];
 
 const patterns = {
-  username: /^[A-Za-z0-9]$/,
-  simpleText: /^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9\s]$/,
-  normalText: /^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9.,\s]$/,
-  password: /^[A-Za-z0-9#!@&]$/,
-  number: /^\d$/,
-  decimal: /^\d*\.?\d{0,3}$/,
-  email: /^[A-Za-z0-9@.]$/
+	username: /^[A-Za-z0-9]$/,
+	simpleText: /^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9\s]$/,
+	normalText: /^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9.,\s]$/,
+	password: /^[A-Za-z0-9#!@&]$/,
+	number: /^\d$/,
+	decimal: /^\d*\.?\d{0,3}$/,
+	email: /^[A-Za-z0-9@.]$/
 };
 
 export class FormInput extends FormComponent {
 
-  static getTemplate() {
-    return `
+	static getTemplate() {
+		return `
 <template id="tmpl-form-input">
   <div class="flex flex-col flex-1" data-input>
     <div>
@@ -50,191 +50,177 @@ export class FormInput extends FormComponent {
   </div>
 </template>
     `;
-  }
+	}
 
-  constructor(opts = {}) {
-    if (!opts.host) throw new Error('FormInput requires a host element');
-    const host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
-    if (!host) throw new Error('FormInput host element not found');
+	constructor(opts = {}) {
+		if (!opts.host) throw new Error('FormInput requires a host element');
+		const host = typeof opts.host === 'string' ? document.querySelector(opts.host) : opts.host;
+		if (!host) throw new Error('FormInput host element not found');
 
-    super({
-      host,
-      // url: opts.url || ROUTES.components.form.formInput.html, // ❌ deprecado (sin fetch)
-      name: opts.name || opts.id || 'custom-input',
-      label: opts.label || null
-    });
+		super({
+			host,
+			name: opts.name || opts.id || 'custom-input',
+			label: opts.label || null
+		});
 
-    this.type = opts.type || 'text';
-    this.placeholder = opts.placeholder || '';
-    this.onChange = opts.onChange || (() => {});
-    this.validationMethod = opts.validationMethod || null;
-    this.numberInputOpts = opts.numberInputOpts || {};
-    this.rows = opts.rows || 3;
-    this.id = opts.id || null;
+		this.type = opts.type || 'text';
+		this.placeholder = opts.placeholder || '';
+		this.onChange = opts.onChange || (() => { });
+		this.validationMethod = opts.validationMethod || null;
+		this.numberInputOpts = opts.numberInputOpts || {};
+		this.rows = opts.rows || 3;
+		this.id = opts.id || null;
 
-    this._validateNumberOpts();
-    this._render();
-  }
+		this._validateNumberOpts();
+		this._render();
+	}
 
-  _validateNumberOpts() {
-    if (this.type !== 'number') return;
-    const { min, max, step, allowsDecimals } = this.numberInputOpts;
-    if (allowsDecimals === false) {
-      [min, max, step].forEach(val => {
-        if (val !== undefined && val % 1 !== 0) {
-          throw new Error('[FormInput]', `NumberInput property ${val} must be integer when allowsDecimals is false`);
-        }
-      });
-    }
-  }
+	_validateNumberOpts() {
+		if (this.type !== 'number') return;
+		const { min, max, step, allowsDecimals } = this.numberInputOpts;
+		if (allowsDecimals === false) {
+			[min, max, step].forEach(val => {
+				if (val !== undefined && val % 1 !== 0) {
+					throw new Error('[FormInput]', `NumberInput property ${val} must be integer when allowsDecimals is false`);
+				}
+			});
+		}
+	}
 
-  async _render() {
-    try {
-      // ❌ Antes: fetch + stripScripts
-      // const txt = await (await fetch(this.url + '?raw')).text();
-      // const tpl = stripScripts(txt);
-      // this.root = tpl.content.firstElementChild.cloneNode(true);
+	async _render() {
+		try {
+			const t = document.createElement('template');
+			t.innerHTML = FormInput.getTemplate();
+			const tmpl = t.content.querySelector('#tmpl-form-input');
+			this.root = tmpl.content.firstElementChild.cloneNode(true);
 
-      // ✅ Ahora: montar desde el template embebido
-      const t = document.createElement('template');
-      t.innerHTML = FormInput.getTemplate();
-      const tmpl = t.content.querySelector('#tmpl-form-input');
-      this.root = tmpl.content.firstElementChild.cloneNode(true);
+			if (this.id) this.root.id = this.id;
 
-      if (this.id) this.root.id = this.id;
+			this.labelEl = this.root.querySelector('[data-label]');
+			this.field = this.root.querySelector('[data-field]');
+			this.textarea = this.root.querySelector('[data-textarea]');
+			this.pwBtn = this.root.querySelector('[data-password-btn]');
+			this.eyeOpen = this.root.querySelector('[data-eye-open]');
+			this.eyeClosed = this.root.querySelector('[data-eye-closed]');
 
-      this.labelEl = this.root.querySelector('[data-label]');
-      this.field = this.root.querySelector('[data-field]');
-      this.textarea = this.root.querySelector('[data-textarea]');
-      this.pwBtn = this.root.querySelector('[data-password-btn]');
-      this.eyeOpen = this.root.querySelector('[data-eye-open]');
-      this.eyeClosed = this.root.querySelector('[data-eye-closed]');
+			// Label
+			if (this.label) {
+				if (this.labelEl) this.labelEl.textContent = this.label;
+			} else {
+				if (this.labelEl) this.labelEl.classList.add('hidden');
+			}
 
-      // Label
-      if (this.label) {
-        if (this.labelEl) this.labelEl.textContent = this.label;
-      } else {
-        if (this.labelEl) this.labelEl.classList.add('hidden');
-      }
+			if (this.type === 'textarea') {
+				this._setupTextarea();
+			} else {
+				this._setupInputField();
+			}
 
-      // Tipo
-      if (this.type === 'textarea') {
-        this._setupTextarea();
-      } else {
-        this._setupInputField();
-      }
+			this._attachEvents();
 
-      this._attachEvents();
+			this.host.innerHTML = '';
+			this.host.appendChild(this.root);
 
-      this.host.innerHTML = '';
-      this.host.appendChild(this.root);
-
-    } catch (error) {
-      console.error('FormInput render failed:', error);
-      // Fallback básico
-      this.host.innerHTML = `
+		} catch (error) {
+			console.error('FormInput render failed:', error);
+			this.host.innerHTML = `
         <div class="form-input" ${this.id ? `id="${this.id}"` : ''}>
           ${this.label ? `<label>${this.label}</label>` : ''}
           <input type="${this.type}" name="${this.name}" placeholder="${this.placeholder}" ${this.id ? `id="${this.id}"` : ''} />
         </div>
       `;
-    }
-  }
+		}
+	}
 
-  _setupTextarea() {
-    if (this.field) this.field.classList.add('hidden');
-    if (this.pwBtn) this.pwBtn.classList.add('hidden');
-    if (this.textarea) {
-      this.textarea.classList.remove('hidden');
-      this.textarea.name = this.name;
-      this.textarea.placeholder = this.placeholder;
-      this.textarea.rows = this.rows;
-      if (this.id) this.textarea.id = this.id;
-    }
-  }
+	_setupTextarea() {
+		if (this.field) this.field.classList.add('hidden');
+		if (this.pwBtn) this.pwBtn.classList.add('hidden');
+		if (this.textarea) {
+			this.textarea.classList.remove('hidden');
+			this.textarea.name = this.name;
+			this.textarea.placeholder = this.placeholder;
+			this.textarea.rows = this.rows;
+			if (this.id) this.textarea.id = this.id;
+		}
+	}
 
-  _setupInputField() {
-    if (this.field) {
-      this.field.classList.remove('hidden');
-      this.field.name = this.name;
-      this.field.placeholder = this.placeholder;
-      if (this.id) this.field.id = this.id;
-      if (this.textarea) this.textarea.classList.add('hidden');
+	_setupInputField() {
+		if (this.field) {
+			this.field.classList.remove('hidden');
+			this.field.name = this.name;
+			this.field.placeholder = this.placeholder;
+			if (this.id) this.field.id = this.id;
+			if (this.textarea) this.textarea.classList.add('hidden');
 
-      if (this.type === 'password') {
-        this.field.type = 'password';
-        if (this.eyeOpen) this.eyeOpen.classList.add('hidden');
-        if (this.eyeClosed) this.eyeClosed.classList.remove('hidden');
-      } else {
-        this.field.type = this.type === 'number' ? 'number' : this.type;
-        if (this.pwBtn) this.pwBtn.classList.add('hidden');
-      }
-    }
+			if (this.type === 'password') {
+				this.field.type = 'password';
+				if (this.eyeOpen) this.eyeOpen.classList.add('hidden');
+				if (this.eyeClosed) this.eyeClosed.classList.remove('hidden');
+			} else {
+				this.field.type = this.type === 'number' ? 'number' : this.type;
+				if (this.pwBtn) this.pwBtn.classList.add('hidden');
+			}
+		}
 
-    // Opciones numéricas
-    if (this.type === 'number' && this.field) {
-      const { min, max, step } = this.numberInputOpts;
-      if (min !== undefined) this.field.min = min;
-      if (max !== undefined) this.field.max = max;
-      if (step !== undefined) this.field.step = step;
-    }
-  }
+		if (this.type === 'number' && this.field) {
+			const { min, max, step } = this.numberInputOpts;
+			if (min !== undefined) this.field.min = min;
+			if (max !== undefined) this.field.max = max;
+			if (step !== undefined) this.field.step = step;
+		}
+	}
 
-  _attachEvents() {
-    const inputEl = this.type === 'textarea' ? this.textarea : this.field;
-    if (!inputEl) return;
+	_attachEvents() {
+		const inputEl = this.type === 'textarea' ? this.textarea : this.field;
+		if (!inputEl) return;
 
-    // Password toggle
-    if (this.type === 'password' && this.pwBtn) {
-      this.pwBtn.addEventListener('click', () => {
-        const hidden = inputEl.type === 'password';
-        inputEl.type = hidden ? 'text' : 'password';
-        if (this.eyeOpen) this.eyeOpen.classList.toggle('hidden', !hidden);
-        if (this.eyeClosed) this.eyeClosed.classList.toggle('hidden', hidden);
-      });
-    }
+		if (this.type === 'password' && this.pwBtn) {
+			this.pwBtn.addEventListener('click', () => {
+				const hidden = inputEl.type === 'password';
+				inputEl.type = hidden ? 'text' : 'password';
+				if (this.eyeOpen) this.eyeOpen.classList.toggle('hidden', !hidden);
+				if (this.eyeClosed) this.eyeClosed.classList.toggle('hidden', hidden);
+			});
+		}
 
-    // Validación por patrón (teclas + bloqueo de paste)
-    if (this.validationMethod && patterns[this.validationMethod]) {
-      inputEl.addEventListener('keydown', e => {
-        if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) return;
-        if (!patterns[this.validationMethod].test(e.key)) e.preventDefault();
-      });
-      inputEl.addEventListener('paste', e => e.preventDefault());
-    }
+		if (this.validationMethod && patterns[this.validationMethod]) {
+			inputEl.addEventListener('keydown', e => {
+				if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) return;
+				if (!patterns[this.validationMethod].test(e.key)) e.preventDefault();
+			});
+			inputEl.addEventListener('paste', e => e.preventDefault());
+		}
 
-    // Evento de cambio/input
-    inputEl.addEventListener('input', () => {
-      this.onChange(inputEl.value);
-    });
-  }
+		inputEl.addEventListener('input', () => {
+			this.onChange(inputEl.value);
+		});
+	}
 
-  // === API pública ===
-  getHTML() {
-    return this.root;
-  }
+	getHTML() {
+		return this.root;
+	}
 
-  getValue() {
-    const el = this.type === 'textarea' ? this.textarea : this.field;
-    return el?.value ?? '';
-  }
+	getValue() {
+		const el = this.type === 'textarea' ? this.textarea : this.field;
+		return el?.value ?? '';
+	}
 
-  setValue(value) {
-    const el = this.type === 'textarea' ? this.textarea : this.field;
-    if (el) el.value = value;
-  }
+	setValue(value) {
+		const el = this.type === 'textarea' ? this.textarea : this.field;
+		if (el) el.value = value;
+	}
 
-  validate(validationType = this.validationMethod) {
-    const val = this.getValue();
-    if (!validationType) return true;
-    if (validationType === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-    if (validationType === 'password') return val.length >= 8 && val.length <= 256;
-    return true;
-  }
+	validate(validationType = this.validationMethod) {
+		const val = this.getValue();
+		if (!validationType) return true;
+		if (validationType === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+		if (validationType === 'password') return val.length >= 8 && val.length <= 256;
+		return true;
+	}
 
-  reset() {
-    const inputEl = this.type === 'textarea' ? this.textarea : this.field;
-    if (inputEl) inputEl.value = '';
-    this.onChange('');
-  }
+	reset() {
+		const inputEl = this.type === 'textarea' ? this.textarea : this.field;
+		if (inputEl) inputEl.value = '';
+		this.onChange('');
+	}
 }
