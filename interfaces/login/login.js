@@ -1,8 +1,12 @@
-import { Interface } from './../../base/interface.js';
-import { Form } from './../../components/container/form.js';
-import { FormInput } from './../../components/form/form-input.js';
-import { SubmitInput } from './../../components/form/submit-input.js';
-import { Toast } from './../../components/overlay/toast.js';
+import { Interface } from './../base/interface.js';
+
+import {
+    Form,
+    FormInput,
+    SubmitInput,
+    Toast
+} from './../../components/components.js';
+
 import { AuthService } from './../../js/services/auth.service.js';
 import { AuthGuard } from './../../js/guards/auth.guard.js';
 
@@ -115,5 +119,5 @@ export class LoginInterface extends Interface {
 
         await this.form.render();
     }
-    
+
 }
