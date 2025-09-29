@@ -96,66 +96,26 @@ export default class LoginInterface extends Interface {
                 }
             ],
 
-onSubmit: async (values, errors) => {
-        // mantener el comportamiento simple: si el Form encontró errores, avisar y parar
-        if (errors) {
-          this.toast.show("Corrige los campos marcados");
-          return;
-        }
+            onSubmit: async (values) => {
+                try {
+                    await AuthService.login(
+                        (values['email-input'] || '').trim(),
+                        (values['password-input'] || '').trim()
+                    );
 
-        try {
-          await AuthService.login(
-            (values['email-input'] || '').trim(),
-            (values['password-input'] || '').trim()
-          );
+                    console.info('[Login] Login API call completed');
+                    const ok = await AuthGuard.authLogin();
 
-          console.info('[Login] Login API call completed');
-
-          // mantener authLogin (como te funcionaba)
-          const ok = await AuthGuard.authLogin();
-
-          if (ok) {
-            window.location.hash = '#main';
-          } else {
-            this.toast.show("Sesión no válida");
-          }
-        } catch (error) {
-          console.error(error);
-          // sin regex, sin pintar campos: solo mensaje simple (como en local)
-          this.toast.show("Error al iniciar sesión");
-        }
-      }
-
-
-
-
-
-
-
-
-
-
-
-           // onSubmit: async (values) => {
-             //   try {
-               //     await AuthService.login(
-                 //       (values['email-input'] || '').trim(),
-                   //     (values['password-input'] || '').trim()
-                   // );
-
- //                   console.info('[Login] Login API call completed');
-   //                 const ok = await AuthGuard.authLogin();
-
-     //               if (ok) {
-       //                 window.location.hash = '#main';
-         //           } else {
-           //             this.toast.show("Sesión no válida");
-             //       }
-            //    } catch (error) {
-              //      console.error(error);
-                //    this.toast.show("Error al iniciar sesión");
-           //     }
-          //  }
+                   if (ok) {
+                        window.location.hash = '#main';
+                    } else {
+                        this.toast.show("Sesión no válida");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    this.toast.show("Error al iniciar sesión");
+                }
+            }
         });
     }
 
