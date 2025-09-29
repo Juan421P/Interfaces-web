@@ -31,7 +31,7 @@ export class Footer extends Component {
 		`;
 	}
 
-	constructor(selector = 'footer',) {
+	constructor(selector = '#footer') {
 		super({
 			host: document.createElement('div'),
 			autoRender: false
@@ -46,6 +46,8 @@ export class Footer extends Component {
 
 	async _load() {
 		try {
+			console.log('🔧 [Footer] Starting load...');
+
 			let attempts = 0;
 			while (!document.querySelector(this.selector) && attempts < 10) {
 				await new Promise(resolve => setTimeout(resolve, 10));
@@ -55,16 +57,27 @@ export class Footer extends Component {
 			const oldFooter = document.querySelector(this.selector);
 			if (!oldFooter) throw new Error(`Element ${this.selector} not found after ${attempts} attempts`);
 
+			console.log('🔧 [Footer] Found existing footer, replacing...');
+
 			const t = document.createElement('template');
 			t.innerHTML = Footer.getTemplate();
-			const tmpl = t.content.querySelector('#tmpl-footer');
-			const footerEl = tmpl.content.firstElementChild;
+
+			const footerEl = t.content.firstElementChild;
+
+			if (!footerEl) {
+				throw new Error('Failed to create footer element from template');
+			}
 
 			oldFooter.outerHTML = footerEl.outerHTML;
 			this.footerElement = document.querySelector(this.selector);
 
-			if (!this.footerElement) throw new Error(`New ${this.selector} element not found after replacing HTML`);
+			if (!this.footerElement) {
+				throw new Error(`New ${this.selector} element not found after replacing HTML`);
+			}
+
+			console.log('🔧 [Footer] Footer replaced successfully');
 			this.attachListeners();
+
 		} catch (error) {
 			console.error('Footer failed to load :(', error);
 		}
@@ -72,7 +85,7 @@ export class Footer extends Component {
 
 	attachListeners() {
 		window.addEventListener('scroll', this.onScroll);
-		this.onScroll(); // estado inicial
+		this.onScroll();
 		this.footerElement.addEventListener('click', () => {
 			this.footerElement.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
 			this.footerElement.classList.add('opacity-0', 'pointer-events-none', 'translate-y-full');
@@ -95,6 +108,5 @@ export class Footer extends Component {
 	}
 
 	async render() {
-		// No-op: seguimos el patrón original (se gestiona en _load)
 	}
 }
