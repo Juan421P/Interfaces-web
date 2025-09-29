@@ -32,8 +32,18 @@ export class Router {
     }
 
     async initializeApp() {
+        console.log('🚀 [Router] initializeApp started');
+        console.log('🚀 [Router] Creating Body...');
         await new Body().render();
+        console.log('🚀 [Router] Body completed');
+        console.log('🚀 [Router] Checking DOM after Body...');
+        console.log('🚀 [Router] #navbar exists:', !!document.querySelector('#navbar'));
+        console.log('🚀 [Router] #main-view exists:', !!document.querySelector('#main-view'));
+        console.log('🚀 [Router] #footer exists:', !!document.querySelector('#footer'));
+        console.log('🚀 [Router] Body children:', Array.from(document.body.children).map(el => el.tagName + (el.id ? `#${el.id}` : '')));
+        console.log('🚀 [Router] Creating Footer...');
         await new Footer().render();
+        console.log('🚀 [Router] Footer completed');
 
         this.toast = new Toast();
         await this.toast.init();
