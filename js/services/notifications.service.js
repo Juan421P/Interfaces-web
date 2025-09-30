@@ -15,9 +15,9 @@ export class NotificationsService extends Service {
         return await this.post('newNotification', notificationData, 'create');
     }
 
-    async update(notificationData) {
-        return await this.put('updateNotification', notificationData, 'update');
-    }
+    //async update(notificationData) {
+    //    return await this.put('updateNotification', notificationData, 'update');
+    //}
 
     async delete(id) {
         return await this.delete('deleteNotification', id);

@@ -45,11 +45,6 @@ export class NotificationsContract extends Contract {
 					'userName',
 					'sentAt',
 				],
-				update: [
-					'notificationID',
-					'title',
-					'body'
-				],
 				table: [
 					'notificationID',
 					'title',
@@ -57,6 +52,9 @@ export class NotificationsContract extends Contract {
 					'userName',
 					'sentAt'
 				],
+				delete: [
+					'notificationID'
+				]
 			}
 		});
 	}

@@ -1,4 +1,5 @@
 export class Interface {
+
     constructor() {
         this.initialized = false;
     }
@@ -33,4 +34,5 @@ export class Interface {
     destroy() {
         this.initialized = false;
     }
+    
 }
