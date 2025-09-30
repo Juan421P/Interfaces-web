@@ -1,6 +1,10 @@
-export const DeliveriesService = {
+import { Service } from './../lib/service.js';
 
-	_deliveries: [
+export class DeliveriesService extends Service {
+
+	static baseEndpoint = '/Deliveries';
+
+	static _deliveries = [
 		{
 			trackingID: 'JP-125',
 			title: 'Paquete de Amazon',
@@ -30,9 +34,9 @@ export const DeliveriesService = {
 				{ stepID: 3, description: 'Entregado al destinatario', timestamp: '2025-11-25T09:30:00Z', isCompleted: true }
 			]
 		}
-	],
+	];
 
-	async find(trackingID) {
+	static async find(trackingID) {
 		return new Promise(resolve => {
 			setTimeout(() => {
 				const delivery = this._deliveries.find(d => d.trackingID === trackingID);
@@ -44,18 +48,18 @@ export const DeliveriesService = {
 				} : null);
 			}, 200);
 		});
-	},
+	}
 
-	async getDetails(trackingID) {
+	static async getDetails(trackingID) {
 		return new Promise(resolve => {
 			setTimeout(() => {
 				const delivery = this._deliveries.find(d => d.trackingID === trackingID);
 				resolve(delivery);
 			}, 800);
 		});
-	},
+	}
 
-	async updateStep(trackingID, stepID, isCompleted) {
+	static async updateStep(trackingID, stepID, isCompleted) {
 		return new Promise(resolve => {
 			setTimeout(() => {
 				const delivery = this._deliveries.find(d => d.trackingID === trackingID);
@@ -72,4 +76,4 @@ export const DeliveriesService = {
 			}, 300);
 		});
 	}
-};
+}
