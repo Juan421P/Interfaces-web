@@ -144,13 +144,16 @@ export class Router {
             '#not-found': () => import('./../interfaces/not-found/not-found.js'),
             '#profile': () => import('./../interfaces/profile/profile.js'),
 
-            // Interfaces del módulo de Sistema
+            // Interfaces del módulo de Sistema; Ivanya
             '#system-users': () => import('./../interfaces/system/users/users.js'),
             '#system-roles': () => import('./../interfaces/system/roles/roles.js'),
             '#system-codes': () => import('./../interfaces/system/codes/codes.js'),
             '#system-audit': () => import('./../interfaces/system/audit/audit.js'),
 
             // Interfaces del módulo de Planificación
+            // Primeras 3; Ivanya
+            // 159-165; Gómez
+            // Últimas 5; Benjamín
             '#planification-university': () => import('./../interfaces/planification/university/university.js'),
             '#planification-localities': () => import('./../interfaces/planification/localities/localities.js'),
             '#planification-faculties': () => import('./../interfaces/planification/faculties/faculties.js'),
@@ -167,24 +170,29 @@ export class Router {
             '#planification-documents': () => import('./../interfaces/planification/documents/documents.js'),
             '#planification-evaluation-instruments': () => import('./../interfaces/planification/evaluation-instruments/evaluation-instruments.js'),
 
-            // Interfaces del módulo de Recursos Humanos
+            // Interfaces del módulo de Recursos Humanos; Benjamín
             '#hr-employees': () => import('./../interfaces/human-resources/employees/employees.js'),
 
             // Interfaces del módulo de Registro Académico
+            // La primera la hace Benjamín
+            // La segunda tiene la funda y me paga para que se lo hunda
+            // La tercera me quita el estrés. Polvos corridos siempre echamos tres
+            // A la cuarta, de una, le bajo la luna... Pero ella quiero con Maluma y conmigo a la vez
+            // Últimas 4; El novio de Gabriela Córdova
             '#ar-students': () => import('./../interfaces/academic-records/students/students.js'),
             '#ar-career-enrollments': () => import('./../interfaces/academic-records/career-enrollments/career-enrollments.js'),
             '#ar-cycle-enrollments': () => import('./../interfaces/academic-records/cycle-enrollments/cycle-enrollments.js'),
             '#ar-course-enrollments': () => import('./../interfaces/academic-records/course-enrollments/course-enrollments.js'),
             '#ar-student-performance': () => import('./../interfaces/academic-records/student-performance/student-performance.js'),
 
-            // Interfaces del módulo de Portal de Estudiante
+            // Interfaces del módulo de Portal de Estudiante; Juan
             '#sp-enrollments-courses': () => import('./../interfaces/student-portal/enrollments/courses/courses.js'),
             '#sp-enrollments-cycles': () => import('./../interfaces/student-portal/enrollments/cycles/cycles.js'),
             '#sp-grades': () => import('./../interfaces/student-portal/grades/grades.js'),
             '#sp-pensum': () => import('./../interfaces/student-portal/pensum/pensum.js'),
             '#sp-evaluations': () => import('./../interfaces/student-portal/evaluations/evaluations.js'),
 
-            // Interfaces del módulo de Portal de Docente
+            // Interfaces del módulo de Portal de Docente; El novio de Gabriela Córdova
             '#tp-courses': () => import('./../interfaces/teacher-portal/courses/courses.js'),
             '#tp-evaluation-plans': () => import('./../interfaces/teacher-portal/evaluation-plans/evaluation-plans.js'),
             '#tp-evaluations': () => import('./../interfaces/teacher-portal/evaluations/evaluations.js'),
