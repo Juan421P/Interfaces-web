@@ -1,91 +1,64 @@
-import { ROUTES } from './../../../js/lib/routes.js';
-import { FacultiesService } from './../../../js/services/faculties.js';
-import { LocalitiesService } from './../../../js/services/localities.js';
+import { Interface } from './../base/interface.js';
+import { FacultiesService } from './../../js/services/faculties.service.js';
+import { buildInitials } from './../../js/lib/common.js';
 
-export async function init() {
-    const { Modal } = await import(ROUTES.components.modal.js);
+export default class FacultiesInterface extends Interface {
 
-    const facultyList = document.querySelector('#faculty-list');
-    const addBtn = document.querySelector('#add-faculty-btn');
-
-    const [faculties, localities] = await Promise.all([
-        FacultiesService.list(),
-        LocalitiesService.list()
-    ]);
-
-    const localitiesMap = localities.reduce((map, loc) => {
-        map[loc.localityID] = loc;
-        return map;
-    }, {});
-
-    function renderFacultyCard(faculty) {
-        const locality = localitiesMap[faculty.localityID] || {};
-
-        const card = document.createElement('div');
-        card.className = 'bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] rounded-lg shadow p-6 w-80 flex flex-col justify-between';
-
-        card.innerHTML = `
-            <h3 class="font-semibold text-indigo-700 mb-1">${faculty.facultyName}</h3>
-            <p class="text-sm text-indigo-500 mb-1">Código: ${faculty.facultyCode || '-'}</p>
-            <p class="text-sm text-indigo-500 mb-1">Teléfono: ${faculty.contactPhone || '-'}</p>
-
-            <div class="mt-4 p-3 bg-indigo-100 rounded-md">
-                <h4 class="font-semibold text-indigo-600 mb-1">Localidad</h4>
-                <p class="text-sm text-indigo-600 mb-0.5">${locality.address || 'N/A'}</p>
-                <p class="text-sm text-indigo-600 mb-0.5">Teléfono: ${locality.phoneNumber || 'N/A'}</p>
-                ${locality.isMainLocality ? `<span class="inline-block mt-1 px-2 py-0.5 text-xs rounded bg-indigo-400 text-white font-semibold select-none">Sede principal</span>` : ''}
-            </div>
+    static getTemplate() {
+        return `
+            <main class="flex flex-col min-h-screen p-10 md:ml-80">
+                <div class="w-full space-y-8">
+                    <div
+                        class="bg-gradient-to-bl from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] shadow-md rounded-xl p-6 flex items-center gap-6">
+                        <div id="faculty-avatar"
+                            class="w-14 h-14 rounded-full bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] flex items-center justify-center drop-shadow flex-shrink-0">
+                        </div>
+                        <div class="flex-shrink-1">
+                            <p id="faculty-title"
+                                class="text-lg font-semibold text-transparent select-none bg-gradient-to-r from-[rgb(var(--button-from))] to-[rgb(var(--button-to))] bg-clip-text drop-shadow">
+                            </p>
+                            <p id="faculty-locality"
+                                class="text-sm text-transparent select-none bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text drop-shadow">
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        class="px-5 py-4 border border-[rgb(var(--off-from))] rounded-lg bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] drop-shadow">
+                        <span
+                            class="bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent select-none drop-shadow">
+                            Aquí puedes administrar las <strong>Facultades</strong> y sus <strong>Localidades</strong>.
+                        </span>
+                    </div>
+                </div>
+            </main>
         `;
-
-        return card;
     }
 
-    facultyList.innerHTML = '';
-    faculties.forEach(fac => {
-        facultyList.appendChild(renderFacultyCard(fac));
-    });
+    async init() {
+        await this._loadFacultyData();
+    }
 
-    addBtn?.addEventListener('click', async () => {
-        const modal = new Modal({ templateId: 'tmpl-add-faculty', size: 'md' });
-        await modal.open();
+    async _loadFacultyData() {
+        try {
+            const faculties = await FacultiesService.getAll();
+            if (faculties.length > 0) {
+                const faculty = faculties[0]; // Ejemplo: mostrar la primera facultad
 
-        const localitySelect = modal.contentHost.querySelector('#faculty-locality');
-        localitySelect.innerHTML = `<option value="" disabled selected>Selecciona la localidad</option>`;
-        localities.forEach(loc => {
-            const option = document.createElement('option');
-            option.value = loc.localityID;
-            option.textContent = `${loc.address} ${loc.isMainLocality ? '(Sede principal)' : ''}`;
-            localitySelect.appendChild(option);
-        });
+                const titleEl = document.getElementById('faculty-title');
+                if (titleEl) titleEl.textContent = faculty.facultyName;
 
-        modal.contentHost.querySelector('#cancel-btn')?.addEventListener('click', () => modal.close());
+                const localityEl = document.getElementById('faculty-locality');
+                if (localityEl) localityEl.textContent = `Localidad: ${faculty.localityID}`;
 
-        modal.contentHost.querySelector('#faculty-form')?.addEventListener('submit', async e => {
-            e.preventDefault();
-
-            const form = e.target;
-            const data = {
-                facultyName: form.name.value.trim(),
-                facultyCode: form.code.value.trim(),
-                contactPhone: form.phone.value.trim(),
-                localityID: form.localityID.value
-            };
-
-            if (!data.facultyName || !data.localityID) {
-                alert('Por favor completa los campos obligatorios');
-                return;
+                const avatarHost = document.getElementById('faculty-avatar');
+                if (avatarHost) {
+                    avatarHost.innerHTML = '';
+                    const initials = `${faculty.facultyName[0] || ''}`.toUpperCase();
+                    avatarHost.appendChild(buildInitials(initials));
+                }
             }
-
-            try {
-                await FacultiesService.create(data);
-                alert('Facultad agregada correctamente');
-                modal.close();
-                const updatedFaculties = await FacultiesService.list();
-                facultyList.innerHTML = '';
-                updatedFaculties.forEach(fac => facultyList.appendChild(renderFacultyCard(fac)));
-            } catch (error) {
-                alert('Error al agregar facultad');
-            }
-        });
-    });
+        } catch (error) {
+            console.error('[FacultiesInterface] Error cargando facultades:', error);
+        }
+    }
 }

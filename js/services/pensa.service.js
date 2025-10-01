@@ -1,44 +1,36 @@
+import { fetchJSON, postJSON, putJSON, deleteJSON } from "../lib/network";
+import { PensaContract } from "../contracts/pensa.contract";
+
+const ENDPOINT = "/Pensum";
+
 export const PensaService = {
+    contract: PensaContract,
+
     async list() {
-        return Promise.resolve([
-            {
-                pensumID: 1,
-                careerName: 'Ingeniería en Sistemas',
-                year: 2023,
-                cycles: [
-                    {
-                        cycle: 'I',
-                        subjects: [
-                            { code: 'MAT101', name: 'Matemática I', uv: 4 },
-                            { code: 'PROG101', name: 'Programación I', uv: 4 }
-                        ]
-                    },
-                    {
-                        cycle: 'II',
-                        subjects: [
-                            { code: 'DBD304', name: 'Bases de Datos I', uv: 4 }
-                        ]
-                    }
-                ]
-            },
-            {
-                pensumID: 2,
-                careerName: 'Licenciatura en Matemática',
-                year: 2024,
-                cycles: [
-                    {
-                        cycle: 'I',
-                        subjects: [
-                            { code: 'CAL101', name: 'Cálculo Diferencial', uv: 5 }
-                        ]
-                    }
-                ]
-            }
-        ]);
+        const pensa = await fetchJSON(`${ENDPOINT}/getPensa`);
+        return Array.isArray(pensa)
+            ? pensa.map(n => PensaContract.parse(n, "table"))
+            : [];
     },
 
     async create(data) {
-        console.log('[Mock Create Pensum]', data);
-        return Promise.resolve({ ...data, pensumID: Math.floor(Math.random() * 1000) });
+        const created = await postJSON(
+            `${ENDPOINT}/newPensum`,
+            PensaContract.parse(data, "create")
+        );
+        return PensaContract.parse(created.data, "table");
+    },
+
+    async update(id, data) {
+        const updated = await putJSON(
+            `${ENDPOINT}/updatePensum/${id}`,
+            PensaContract.parse(data, "update")
+        );
+        return PensaContract.parse(updated, "table");
+    },
+
+    async delete(id) {
+        const success = await deleteJSON(`${ENDPOINT}/deletePensum/${id}`);
+        return success === true;
     }
 };

@@ -1,39 +1,24 @@
-export const FacultiesService = {
-    async list() {
-        return Promise.resolve([
-            {
-                facultyID: 'f1',
-                facultyName: 'Facultad de Ingeniería',
-                facultyCode: 'ING300',
-                contactPhone: '+503 1234 5678',
-                localityID: 'loc1'
-            },
-            {
-                facultyID: 'f2',
-                facultyName: 'Facultad de Ciencias Sociales',
-                facultyCode: 'SOC400',
-                contactPhone: '+503 8765 4321',
-                localityID: 'loc2'
-            },
-            {
-                facultyID: 'f3',
-                facultyName: 'Facultad de Medicina',
-                facultyCode: 'MED500',
-                contactPhone: '+503 1122 3344',
-                localityID: 'loc3'
-            }, 
-            {
-                facultyID: 'f4',
-                facultyName: 'Facultad de Joseo',
-                facultyCode: 'JOS600',
-                contactPhone: '+503 1231 5678',
-                localityID: 'loc1'
-            },
-        ]);
-    },
+import { Service } from './../lib/service.js';
+import { FacultiesContract } from './../contracts/faculties.contract.js';
 
-    async create(faculty) {
-        console.log('Saving faculty', faculty);
-        return Promise.resolve();
+export class FacultiesService extends Service {
+
+    static baseEndpoint = '/Faculties';
+    static contract = new FacultiesContract();
+
+    static async getAll() {
+        return await this.get(null, null, null, 'getAll');
     }
-};
+
+    static async create(data) {
+        return await this.post(null, data, 'create');
+    }
+
+    static async update(id, data) {
+        return await this.put(id, data, 'update');
+    }
+
+    static async delete(id) {
+        return await this.remove(id, null, 'delete');
+    }
+}
