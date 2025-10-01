@@ -1,6 +1,5 @@
-import { Interface } from './../base/interface.js';
-import { ROUTES } from './../../../js/lib/routes.js';
-import { PensaService } from './../../../js/services/pensums.js';
+import { Interface } from './../../base/interface.js';
+import { PensaService } from './../../../js/services/pensa.service.js';
 
 export default class PensumInterface extends Interface {
 
