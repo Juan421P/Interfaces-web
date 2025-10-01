@@ -43,3 +43,5 @@ export class FacultiesContract extends Contract {
 			}
 		});
 	}
+	
+}
