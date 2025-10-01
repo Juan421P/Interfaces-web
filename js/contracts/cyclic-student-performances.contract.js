@@ -1,67 +1,111 @@
-import { makeContract } from './../lib/contract.js';
+import { Contract } from './../lib/contract.js';
 
-const { types: t } = makeContract({ schema: {} });
+const SAFE_TEXT = /^[\w\s.,:/()\-#&@+]+$/i;
 
-export const CyclicStudentPerformanceContract = makeContract({
-	schema: {
-		performanceID: t.string({
-			required: false,
-		}),
-		studentCycleEnrollmentID: t.string({
-			required: true,
-		}),
-		totalValueUnits: t.number({
-			required: true,
-		}),
-		totalMeritUnit: t.number({
-			required: true,
-		}),
-		meritUnitCoefficient: t.number({
-			required: true,
-		}),
-		computedAt: t.date({
-			required: true,
-			coerce: true, // para transformar strings como: "2025-08-27" 
-		}),
-		studentID: t.string({
-			required: false,
-		}),
-		careerID: t.string({
-			required: false,
-		}),
-        studentName: t.string({
-			required: false,
-		}),
-		careerName: t.string({
-			required: false,
-		}),
-		studentCycleEnrollment: t.string({
-			required: false,
-		}),
-	},
-	scopes: {
-		create: [
-			'studentCycleEnrollmentID',
-			'totalValueUnits',
-			'totalMeritUnit',
-			'meritUnitCoefficient',
-			'computedAt',
-		],
-		update: [
-			'performanceID',
-			'totalValueUnits',
-			'totalMeritUnit',
-			'meritUnitCoefficient',
-			'computedAt',
-		],
-		table: [
-			'performanceID',
-			'studentName',
-			'careerName',
-			'totalValueUnits',
-			'totalMeritUnit',
-			'meritUnitCoefficient',
-			'computedAt',
-		],
-	},
-});
+export class CyclicStudentPerformanceContract extends Contract {
+  constructor() {
+    super({
+      schema: {
+        // IDs
+        performanceID: Contract.types.string({
+          required: false,     // requerido SOLO en create (ver scope)
+          trim: true,
+          min: 1,
+          default: '',
+          regex: SAFE_TEXT
+        }),
+
+        studentCycleEnrollmentID: Contract.types.string({
+          required: false,     // requerido en create/update (ver scopes)
+          trim: true,
+          min: 1,
+          default: '',
+          regex: SAFE_TEXT
+        }),
+
+        // Métricas
+        totalValueUnits: Contract.types.number({
+          required: false
+        }),
+        totalMeritUnit: Contract.types.number({
+          required: false
+        }),
+        meritUnitCoefficient: Contract.types.number({
+          required: false
+        }),
+
+        // Fechas (LocalDate en backend => acepta 'YYYY-MM-DD')
+        computedAt: Contract.types.date({
+          required: false
+        }),
+
+        // Derivados (solo lectura)
+        studentID: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+        studentName: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+        careerID: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+        careerName: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+
+        // Campo tal cual viene en el DTO (ojo mayúscula inicial)
+        StudentCycleEnrollment: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        })
+      },
+
+      scopes: {
+        // Lo que ENVÍAS al crear
+        create: [
+          'performanceID',            // el backend valida existencia por ID -> requerido aquí
+          'studentCycleEnrollmentID', // requerido
+          'totalValueUnits',
+          'totalMeritUnit',
+          'meritUnitCoefficient',
+          'computedAt'
+        ],
+
+        // Lo que ENVÍAS al actualizar (id va en la ruta)
+        update: [
+          'studentCycleEnrollmentID', // si lo envías, el backend lo reasigna
+          'totalValueUnits',
+          'totalMeritUnit',
+          'meritUnitCoefficient',
+          'computedAt'
+        ],
+
+        // Lo que USAS para tablas/listas
+        table: [
+          'performanceID',
+          'studentCycleEnrollmentID',
+          'totalValueUnits',
+          'totalMeritUnit',
+          'meritUnitCoefficient',
+          'computedAt',
+          'studentID',
+          'studentName',
+          'careerID',
+          'careerName',
+          'StudentCycleEnrollment'
+        ],
+
+        delete: ['performanceID']
+      }
+    });
+  }
+}

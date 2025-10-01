@@ -1,54 +1,45 @@
-import { fetchJSON, postJSON, putJSON } from './../lib/network.js';
-import { studentCycleEnrollentsContract } from '../contracts/student-cycle-enrollments.contract.js';
+import { Service } from './../lib/service.js';
+import { StudentCycleEnrollmentsContract } from './../contracts/student-cycle-enrollments.contract.js';
 
-const ENDPOINT = '/studentCycleEnrollments';
+export class StudentCycleEnrollmentsService extends Service {
+  // Mantengo el patrón de tus otros servicios (sin /api aquí).
+  static baseEndpoint = '/StudentCycleEnrollments';
+  static contract = new StudentCycleEnrollmentsContract();
 
-export const studentCycleEnrollmentsService ={
-    contract: studentCycleEnrollentsContract,
-    
-    async list(){
-        const studentCycleEnrollents = await fetchJSON(
-            `${ENDPOINT}/getStudentCycleEnrollents`
-        )
-        const parsed = Array.isArray(studentCycleEnrollents) ? studentCycleEnrollents.map(n => studentCycleEnrollents.parse(n, 'table')) : [];
-                document.dispatchEvent(new CustomEvent('studentCycleEnrollents:list', {
-                    detail: parsed
-                }));
-                return parsed;
-    },
+  // ===== MÉTODOS ESTÁTICOS =====
 
-    async create(data){
-         const studentCycleEnrollents = await postJSON(
-                    `${ENDPOINT}/newStudentCycleEnrollment`,
-                    studentCycleEnrollents.parse(data, 'create')
-                );
-                const parsed = studentCycleEnrollents.parse(studentCycleEnrollents, 'table');
-                document.dispatchEvent(new CustomEvent('studentCycleEnrollents:create', {
-                    detail: parsed
-                }));
-                return parsed;
-    },
+  // GET /StudentCycleEnrollments/getStudentCycleEnrollments
+  static async getAll() {
+    return super.get('getStudentCycleEnrollments', null, null, 'table');
+  }
 
-     async update(data) {
-            const studentCycleEnrollents = await putJSON(
-                `${ENDPOINT}/${data.studentCycleEnrollents}`,
-                studentCycleEnrollents.parse(data, 'update')
-            );
-            const parsed = studentCycleEnrollents.parse(s, 'table');
-            document.dispatchEvent(new CustomEvent('studentCycleEnrollents:update', { detail: parsed }));
-            return parsed;
-        },
+  // GET /StudentCycleEnrollments/getStudentCycleEnrollmentsPagination?page=&size=
+  static async getPage(page = 0, size = 10) {
+    const qs = `getStudentCycleEnrollmentsPagination?page=${encodeURIComponent(page)}&size=${encodeURIComponent(size)}`;
+    // devolvemos raw o parsed? Si el backend devuelve Page<DTO>, lo normal es raw.
+    // Si quieres parsear cada item a 'table', haz un map fuera.
+    return super.get(qs);
+  }
 
-        async delete(id) {
-        const success = await deleteJSON(
-            `${ENDPOINT}/deleteStudentCycleEnrollent/${id}`
-        );
-        document.dispatchEvent(new CustomEvent('studentCycleEnrollents:delete', {
-            detail: {
-                id,
-                success
-            }
-        }));
-        return success === true;
-    }
+  // POST /StudentCycleEnrollments/insertStudentCycleEnrollment
+  static async create(payload) {
+    return super.post('insertStudentCycleEnrollment', payload, 'create', 'table');
+  }
+
+  // PUT /StudentCycleEnrollments/updateStudentCycleEnrollment/{id}
+  static async update(id, payload) {
+    const body = { ...(payload || {}), id }; // para consistencia con tu Service base (usa data?.id en _buildPath)
+    return super.put('updateStudentCycleEnrollment', body, 'update', 'table');
+  }
+
+  // DELETE /StudentCycleEnrollments/deleteStudentCycleEnrollment/{id}
+  static async remove(id) {
+    return super.delete('deleteStudentCycleEnrollment', id);
+  }
+
+  // ===== WRAPPERS DE INSTANCIA (para componentes Display/Table) =====
+  async list() { return this.constructor.getAll(); }
+  async create(data) { return this.constructor.create(data); }
+  async update(id, data) { return this.constructor.update(id, data); }
+  async delete(id) { return this.constructor.remove(id); }
 }

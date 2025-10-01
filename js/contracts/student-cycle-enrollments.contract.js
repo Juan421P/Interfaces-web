@@ -1,47 +1,99 @@
-import { makeContract } from './../lib/contract.js';
+import { Contract } from './../lib/contract.js';
 
-const { types: t } = makeContract({ schema: {} });
+const SAFE_TEXT = /^[\w\s.,:/()\-#&@+]+$/i;
 
-export const studentCycleEnrollentsContract = makeContract({
-    schema:{
-        studentCycleEnrollentID: t.string({
-            required: false
+export class StudentCycleEnrollmentsContract extends Contract {
+  constructor() {
+    super({
+      schema: {
+        // IDs
+        id: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
         }),
-        studentCareerEnrollmentID: t.string({
-            required: true
+
+        studentCareerEnrollmentId: Contract.types.string({
+          // requerido para create/update
+          required: true,
+          trim: true,
+          min: 1,
+          default: '',
+          regex: SAFE_TEXT
         }),
-        yearCycleID: t.string({
-            required: true
+
+        yearCycleID: Contract.types.string({
+          // requerido para create/update
+          required: true,
+          trim: true,
+          min: 1,
+          default: '',
+          regex: SAFE_TEXT
         }),
-        status: t.string({
-            required: true
+
+        // Estado
+        status: Contract.types.string({
+          // @NotBlank en backend → requerido aquí
+          required: true,
+          trim: true,
+          min: 1,
+          max: 100,
+          default: '',
+          regex: SAFE_TEXT
         }),
-        registeredAt: t.date({
-            required: true,
-            coerce: true
+
+        // Fechas (LocalDate en backend)
+        registeredAt: Contract.types.date({
+          required: false
         }),
-        completedAt: t.date({
-            required: false,
-            coerce: true
+        completedAt: Contract.types.date({
+          required: false
         }),
-    },
-    scopes:{
-        create:[
-            'studentCareerEnrollmentID',
-            'yearCycleID',
-            'status',
-            'registeredAt',
+
+        // Derivados / lectura
+        studentcareerenrollment: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+        yearcycle: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        })
+      },
+
+      scopes: {
+        // lo que ENVÍAS al crear
+        create: [
+          'studentCareerEnrollmentId',
+          'yearCycleID',
+          'status',
+          'registeredAt',
+          'completedAt'
         ],
-        update:[
-            'studentCycleEnrollmentID',
-            'status',
-            'registeredAt',
-            'completedAt',
+
+        // lo que ENVÍAS al actualizar (id va en la ruta)
+        update: [
+          'studentCareerEnrollmentId',
+          'yearCycleID',
+          'status',
+          'registeredAt',
+          'completedAt'
         ],
-        table:[
-            'studentCycleEnrollmentID',
-            'status',
-            'registeredAt'
-        ]
-    }
-})
+
+        // lo que USAS para tablas/listas
+        table: [
+          'id',
+          'status',
+          'registeredAt',
+          'completedAt',
+          'studentcareerenrollment',
+          'yearcycle'
+        ],
+
+        delete: ['id']
+      }
+    });
+  }
+}

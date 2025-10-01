@@ -1,39 +1,62 @@
- import { makeContract } from "../lib/contract";
- const { types: t } = makeContract({ schema: {} });
- 
- export const CourseOfferingsContract = makeContract({
-   schema: {
-     subjectID: t.string({
-       required: true
-     }),
-     yearCycleID: t.string({
-       required: true
-     }),
-     courseOfferingID: t.string({
-       required: false
-     }),
-     yearcycleName: t.string({
-       required: false, 
-       trim: true,
-     }),
-     subject: t.string({
-       required: false, 
-       trim: true,
-     }),
-   },
-   scopes: {
-     create:[
-            'yearCycleID',
-            'courseOfferingID'
+// contracts/course-offerings.contract.js
+import { Contract } from './../lib/contract.js';
+
+const SAFE_TEXT = /^[\w\s.,:/()\-#&@+]+$/i;
+
+export class CourseOfferingsContract extends Contract {
+  constructor() {
+    super({
+      schema: {
+        courseOfferingID: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+        subjectID: Contract.types.string({
+          required: true,      // @NotBlank en backend
+          trim: true,
+          min: 1,
+          default: '',
+          regex: SAFE_TEXT
+        }),
+        yearCycleID: Contract.types.string({
+          required: true,      // @NotBlank en backend
+          trim: true,
+          min: 1,
+          default: '',
+          regex: SAFE_TEXT
+        }),
+        // Derivados para pintar en UI
+        subject: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+        yearcycleName: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        }),
+      },
+      scopes: {
+        // lo que ENVÍAS al crear
+        create: [
+          'subjectID',
+          'yearCycleID'
         ],
-         update:[
-            'yearCycleID',
-            'courseOfferingID'
+        // lo que ENVÍAS al actualizar (el id va en la ruta)
+        update: [
+          'subjectID',
+          'yearCycleID'
         ],
-         table:[
-            'subject',
-            'yearcycleName',
-        ]
-   },
- });
- 
+        // lo que pintas en tablas/listas
+        table: [
+          'courseOfferingID',
+          'subject',
+          'yearcycleName'
+        ],
+        delete: ['courseOfferingID']
+      }
+    });
+  }
+}

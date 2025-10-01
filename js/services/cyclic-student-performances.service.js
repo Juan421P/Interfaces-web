@@ -1,54 +1,44 @@
-import { fetchJSON, postJSON, putJSON, deleteJSON } from './../lib/network.js';
-import { CyclicStudentPerformanceContract } from './../contracts/cyclic-student-performances.contract.js';
+import { Service } from './../lib/service.js';
+import { CyclicStudentPerformanceContract } from './../contracts/cyclic-student-performance.contract.js';
 
-const ENDPOINT = '/CyclicStudentPerformances';
+export class CyclicStudentPerformanceService extends Service {
+  // Igual que tus otros services: sin /api aquí (tu Network lo agrega).
+  static baseEndpoint = '/CyclicStudentPerformance';
+  static contract = new CyclicStudentPerformanceContract();
 
-export const CyclicStudentPerformanceService = {
-    contract: CyclicStudentPerformanceContract,
+  // ===== estáticos =====
 
-    async list() {
-        const performances = await fetchJSON(
-            `${ENDPOINT}/getAllPerformances`
-        );
-        const parsed = Array.isArray(performances) ? performances.map(p => CyclicStudentPerformanceContract.parse(p, 'table')) : [];
-        document.dispatchEvent(new CustomEvent('CyclicStudentPerformances:list', {
-            detail: parsed
-        }));
-        return parsed;
-    },
+  // GET /CyclicStudentPerformance/getPerformances
+  static async getAll() {
+    return super.get('getPerformances', null, null, 'table');
+  }
 
-    async create(data) {
-        const performance = await postJSON(
-            `${ENDPOINT}/createPerformance`,
-            CyclicStudentPerformanceContract.parse(data, 'create')
-        );
-        const parsed = CyclicStudentPerformanceContract.parse(performance, 'table');
-        document.dispatchEvent(new CustomEvent('CyclicStudentPerformances:create', {
-            detail: parsed
-        }));
-        return parsed;
-    },
+  // GET /CyclicStudentPerformance/getPerformancesPagination?page=&size=
+  static async getPage(page = 0, size = 10) {
+    const qs = `getPerformancesPagination?page=${encodeURIComponent(page)}&size=${encodeURIComponent(size)}`;
+    // Devolvemos la Page cruda (tal como viene). Si luego quieres mapear content[] a 'table', lo hacemos aparte.
+    return super.get(qs);
+  }
 
-    async update(data) {
-        const performance = await putJSON(
-            `${ENDPOINT}/${data.performanceID}`,
-            CyclicStudentPerformanceContract.parse(data, 'update')
-        );
-        const parsed = CyclicStudentPerformanceContract.parse(performance, 'table');
-        document.dispatchEvent(new CustomEvent('CyclicStudentPerformances:update', { detail: parsed }));
-        return parsed;
-    },
+  // POST /CyclicStudentPerformance/insertPerformance
+  static async create(payload) {
+    return super.post('insertPerformance', payload, 'create', 'table');
+  }
 
-    async delete(id) {
-        const success = await deleteJSON(
-            `${ENDPOINT}/deletePerformance/${id}`
-        );
-        document.dispatchEvent(new CustomEvent('CyclicStudentPerformances:delete', {
-            detail: {
-                id,
-                success
-            }
-        }));
-        return success === true;
-    }
-};
+  // PUT /CyclicStudentPerformance/updatePerformance/{id}
+  static async update(id, payload) {
+    const body = { ...(payload || {}), id }; // tu Service.put arma /{id} desde data?.id
+    return super.put('updatePerformance', body, 'update', 'table');
+  }
+
+  // DELETE /CyclicStudentPerformance/deletePerformance/{id}
+  static async remove(id) {
+    return super.delete('deletePerformance', id);
+  }
+
+  // ===== wrappers de instancia (útiles para Display/Table) =====
+  async list() { return this.constructor.getAll(); }
+  async create(data) { return this.constructor.create(data); }
+  async update(id, data) { return this.constructor.update(id, data); }
+  async delete(id) { return this.constructor.remove(id); }
+}
