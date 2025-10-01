@@ -1,4 +1,4 @@
-import { Interface } from './../../interfaces.js'; 
+import { Interface } from './../../base/interface.js'; 
 import { CourseOfferingsService } from './../../../js/services/course-offerings.service.js';
 import { Table } from './../../../components/display/table/table.js';
 

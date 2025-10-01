@@ -1,4 +1,4 @@
-import { Interface } from './../../interfaces.js';
+import { Interface } from './../../base/interface.js';
 import { CyclicStudentPerformanceService } from './../../../js/services/cyclic-student-performances.service.js';
 import { Modal } from '../../../components/components.js'; // mismo import que tu archivo original
 

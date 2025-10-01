@@ -1,5 +1,4 @@
-// interfaces/evaluation-plans.interface.js
-import { Interface } from './../../interfaces.js';
+import { Interface } from './../../base/interface.js';
 import { EvaluationPlansService } from './../../../js/services/evaluation-plans.service.js';
 import { CourseOfferingsService } from './../../../js/services/course-offerings.service.js';
 import { Modal, ContextMenu } from '../../../components/components.js';

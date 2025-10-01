@@ -1,4 +1,4 @@
-import { Interface } from './../../interfaces.js';
+import { Interface } from './../../base/interface.js';
 import { CareersService } from './../../../js/services/careers.service.js';
 import { StudentCareerEnrollmentsService } from './../../../js/services/student-career-enrollments.service.js';
 import { Modal } from './../../../components/overlay/modal/modal.js';
