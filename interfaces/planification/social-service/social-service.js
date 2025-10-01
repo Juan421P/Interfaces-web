@@ -11,7 +11,6 @@ export default class SocialServiceInterface extends Interface {
                     <h1 class="text-2xl font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none">
                         Proyectos de servicio social
                     </h1>
-
                     <div class="block transition-shadow duration-300 bg-transparent group rounded-xl hover:bg-white hover:shadow-lg">
                         <button id="add-service-btn" type="button" class="flex items-center gap-5 px-5 py-4 text-indigo-400 transition-colors duration-300 rounded-lg group-hover:bg-gradient-to-r group-hover:from-indigo-400 group-hover:to-blue-400">
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -27,10 +26,8 @@ export default class SocialServiceInterface extends Interface {
                         </button>
                     </div>
                 </div>
-
                 <section id="service-list" class="flex flex-wrap gap-6"></section>
             </main>
-
             <template id="tmpl-add-service">
                 <form id="service-form" novalidate class="flex flex-col max-w-md px-6 mx-auto gap-14 py-14">
                     <div class="flex flex-col items-center">
@@ -41,16 +38,13 @@ export default class SocialServiceInterface extends Interface {
                             Llena los campos requeridos
                         </span>
                     </div>
-
                     <div class="flex flex-col gap-6">
                         <input id="service-name" name="socialServiceProjectName" type="text" placeholder="Nombre del proyecto"
                             class="w-full bg-gradient-to-r from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"
                             required>
-
                         <textarea id="service-description" name="description" placeholder="Descripción"
                             class="w-full bg-gradient-to-r from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] px-6 py-4 rounded-lg focus:outline-none text-indigo-500 placeholder:text-indigo-300 text-xl placeholder:italic text-shadow shadow-md border-none"></textarea>
                     </div>
-
                     <div class="flex justify-end gap-3">
                         <button type="button" id="cancel-btn"
                             class="p-4 bg-gradient-to-tr from-indigo-100 to-blue-100 text-indigo-400 hover:scale-[1.015] hover:from-indigo-200 hover:to-blue-200 rounded-xl font-medium shadow-md transition-all">
