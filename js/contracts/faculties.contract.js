@@ -1,61 +1,46 @@
 import { Contract } from './../lib/contract.js';
 
 export class FacultiesContract extends Contract {
-    constructor() {
-        super({
-            schema: {
-                facultyID: Contract.types.string({
-                    required: true,
-                    default: ''
-                }),
-                facultyName: Contract.types.string({
-                    required: true,
-                    trim: true,
-                    default: ''
-                }),
-                facultyCode: Contract.types.string({
-                    required: true,
-                    trim: true,
-                    default: ''
-                }),
-                contactPhone: Contract.types.string({
-                    required: true,
-                    trim: true,
-                    regex: /^\+503\s\d{4}-\d{4}$/, // formato +503 1234-5678
-                    default: ''
-                }),
-                correlativeCode: Contract.types.string({
-                    required: true,
-                    trim: true,
-                    default: ''
-                })
-            },
-            scopes: {
-                create: [
-                    'facultyName',
-                    'facultyCode',
-                    'contactPhone',
-                    'correlativeCode'
-                ],
-                update: [
-                    'facultyID',
-                    'facultyName',
-                    'facultyCode',
-                    'contactPhone',
-                    'correlativeCode'
-                ],
-                table: [
-                    'facultyID',
-                    'facultyName',
-                    'facultyCode',
-                    'contactPhone',
-                    'correlativeCode'
-                ],
-                delete:[
-                    'facultyID'
-                ]
-            }
-        });
-    }
+	constructor() {
+		super({
+			schema: {
+				facultyID: Contract.types.string({
+					required: true,
+					trim: true,
+					default: ""
+				}),
+				facultyName: Contract.types.string({
+					required: true,
+					trim: true,
+					regex: /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/,
+					max: 100,
+					default: ""
+				}),
+				localityID: Contract.types.string({
+					required: true,
+					trim: true,
+					default: ""
+				})
+			},
+			scopes: {
+				getAll: [
+					'facultyID',
+					'facultyName',
+					'localityID'
+				],
+				create: [
+					'facultyName',
+					'localityID'
+				],
+				update: [
+					'facultyID',
+					'facultyName',
+					'localityID'
+				],
+				delete: [
+					'facultyID'
+				]
+			}
+		});
+	}
 }
-

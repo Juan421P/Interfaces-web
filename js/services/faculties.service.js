@@ -1,26 +1,24 @@
 import { Service } from './../lib/service.js';
-import { FacultyContract } from '../contracts/faculties.contract.js'
+import { FacultiesContract } from './../contracts/faculties.contract.js';
 
 export class FacultiesService extends Service {
-    
-    constructor() {
-        super('/Faculties', new FacultyContract());
+
+    static baseEndpoint = '/Faculties';
+    static contract = new FacultiesContract();
+
+    static async getAll() {
+        return await this.get(null, null, null, 'getAll');
     }
 
-    async getAll() {
-        return await this.get('getFaculties', null, 'table');
+    static async create(data) {
+        return await this.post(null, data, 'create');
     }
 
-    async create(systemRolData) {
-        return await this.post('newFaculties', systemRolData, 'create');
+    static async update(id, data) {
+        return await this.put(id, data, 'update');
     }
 
-    async update(systemRolData) {
-        return await this.put('updateFaculty', systemRolData, 'update');
+    static async delete(id) {
+        return await this.remove(id, null, 'delete');
     }
-
-    async delete(id) {
-        return await this.delete('deleteFaculty', id);
-    }
-
 }
