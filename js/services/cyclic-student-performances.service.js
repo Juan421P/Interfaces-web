@@ -1,5 +1,5 @@
 import { Service } from './../lib/service.js';
-import { CyclicStudentPerformanceContract } from './../contracts/cyclic-student-performance.contract.js';
+import { CyclicStudentPerformanceContract } from './../contracts/cyclic-student-performances.contract.js';
 
 export class CyclicStudentPerformanceService extends Service {
   // Igual que tus otros services: sin /api aquí (tu Network lo agrega).
