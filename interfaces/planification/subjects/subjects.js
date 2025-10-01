@@ -1,5 +1,5 @@
 import { Interface } from './../../base/interface.js';
-import { SubjectsDefinitionService } from './../../../js/services/subject-definitions.service.js';
+import { SubjectDefinitionsService } from './../../../js/services/subject-definitions.service.js';
 
 export default class SubjectsInterface extends Interface {
 
@@ -43,7 +43,7 @@ export default class SubjectsInterface extends Interface {
     async loadSubjects() {
         this.listContainer.innerHTML = "";
 
-        let subjects = await SubjectsDefinitionService.list();
+        let subjects = await SubjectDefinitionsService.list();
         const filter = this.filterInput.value.toLowerCase();
 
         if (filter) {

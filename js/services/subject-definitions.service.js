@@ -1,10 +1,10 @@
 import { Service } from './../lib/service.js';
-import { SubjectsDefinitionContract } from './../contracts/subjects-definition.contract.js';
+import { SubjectDefinitionsContract } from './../contracts/subject-definitions.contract.js';
 
-export class SubjectsDefinitionService extends Service {
+export class SubjectDefinitionsService extends Service {
 
     static baseEndpoint = '/SubjectsDefinition';
-    static contract = new SubjectsDefinitionContract();
+    static contract = new SubjectDefinitionsContract();
 
     static async list() {
         return await this.get('', null, null, 'default');
