@@ -1,7 +1,7 @@
-import { Interface } from './../base/interface.js';
-import { DepartmentsService } from './../../js/services/departments.js';
-import { FacultiesService } from './../../js/services/faculties.js';
-import { ROUTES } from './../../js/lib/routes.js';
+import { Interface } from './../../base/interface.js';
+import { DepartmentsService } from './../../../js/services/departments.service.js';
+import { FacultiesService } from './../../../js/services/faculties.service.js';
+import { Toast } from './../../../components/components.js';
 
 export default class DepartmentsInterface extends Interface {
 
@@ -75,8 +75,7 @@ export default class DepartmentsInterface extends Interface {
     }
 
     async init() {
-        this.toast = new (await import(ROUTES.components.toast.js)).Toast();
-        await this.toast.init();
+        await (new Toast()).init();
 
         this.section = document.getElementById('department-list');
         this.addBtn = document.getElementById('add-department-btn');
