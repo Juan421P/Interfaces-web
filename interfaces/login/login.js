@@ -95,7 +95,6 @@ export default class LoginInterface extends Interface {
                     ]
                 }
             ],
-
             onSubmit: async (values) => {
                 try {
                     await AuthService.login(
@@ -106,7 +105,7 @@ export default class LoginInterface extends Interface {
                     console.info('[Login] Login API call completed');
                     const ok = await AuthGuard.authLogin();
 
-                   if (ok) {
+                    if (ok) {
                         window.location.hash = '#main';
                     } else {
                         this.toast.show("Sesión no válida");

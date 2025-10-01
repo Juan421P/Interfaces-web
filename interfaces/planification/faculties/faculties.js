@@ -1,4 +1,4 @@
-import { Interface } from './../base/interface.js';
+import { Interface } from './../../base/interface.js';
 import { FacultiesService } from './../../js/services/faculties.service.js';
 import { buildInitials } from './../../js/lib/common.js';
 
@@ -61,5 +61,5 @@ export default class FacultiesInterface extends Interface {
             console.error('[FacultiesInterface] Error cargando facultades:', error);
         }
     }
-    
+
 }
