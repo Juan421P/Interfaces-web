@@ -22,7 +22,7 @@ export async function init() {
 
     new Button({
         host: '#manage-codes-btn-container',
-        text: 'Agregar código',
+        text: 'Agregar código', 
         onClick: async () => {
             new Modal({ templateId: 'tmpl-manage-codes', size: 'sm' });
         }

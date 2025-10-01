@@ -1,39 +1,26 @@
-export const FacultiesService = {
-    async list() {
-        return Promise.resolve([
-            {
-                facultyID: 'f1',
-                facultyName: 'Facultad de Ingeniería',
-                facultyCode: 'ING300',
-                contactPhone: '+503 1234 5678',
-                localityID: 'loc1'
-            },
-            {
-                facultyID: 'f2',
-                facultyName: 'Facultad de Ciencias Sociales',
-                facultyCode: 'SOC400',
-                contactPhone: '+503 8765 4321',
-                localityID: 'loc2'
-            },
-            {
-                facultyID: 'f3',
-                facultyName: 'Facultad de Medicina',
-                facultyCode: 'MED500',
-                contactPhone: '+503 1122 3344',
-                localityID: 'loc3'
-            }, 
-            {
-                facultyID: 'f4',
-                facultyName: 'Facultad de Joseo',
-                facultyCode: 'JOS600',
-                contactPhone: '+503 1231 5678',
-                localityID: 'loc1'
-            },
-        ]);
-    },
+import { Service } from './../lib/service.js';
+import { FacultyContract } from '../contracts/faculties.contract.js'
 
-    async create(faculty) {
-        console.log('Saving faculty', faculty);
-        return Promise.resolve();
+export class FacultiesService extends Service {
+    
+    constructor() {
+        super('/Faculties', new FacultyContract());
     }
-};
+
+    async getAll() {
+        return await this.get('getFaculties', null, 'table');
+    }
+
+    async create(systemRolData) {
+        return await this.post('newFaculties', systemRolData, 'create');
+    }
+
+    async update(systemRolData) {
+        return await this.put('updateFaculty', systemRolData, 'update');
+    }
+
+    async delete(id) {
+        return await this.delete('deleteFaculty', id);
+    }
+
+}

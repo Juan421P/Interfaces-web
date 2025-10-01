@@ -148,7 +148,7 @@ export class Router {
             '#system-users': () => import('./../interfaces/system/users/users.js'),
             '#system-roles': () => import('./../interfaces/system/roles/roles.js'),
             '#system-codes': () => import('./../interfaces/system/codes/codes.js'),
-            '#system-audit': () => import('./../interfaces/system/audit/audit.js'),
+            //'#system-audit': () => import('./../interfaces/system/audit/audit.js'),
 
             // Interfaces del módulo de Planificación
             // Primeras 3; Ivanya

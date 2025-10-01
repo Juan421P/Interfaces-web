@@ -3,7 +3,7 @@ const { types: t } = makeContract({schema: {}});
 
 export const FacultyLocalitiesContract = makeContract({
     schema:{
-        facultyLocalityID: t.string({
+        id: t.string({
             required: false
         }),
         facultyID: t.string({
@@ -12,10 +12,10 @@ export const FacultyLocalitiesContract = makeContract({
         localityID: t.string({
             required: true
         }),
-        facultyName: t.string({
+        faculties: t.string({
             required: false
         }),
-        localityAddress: t.string({
+        localities: t.string({
             required: false
         }),
     },
@@ -24,8 +24,8 @@ export const FacultyLocalitiesContract = makeContract({
             'facultyLocalityID',
             'facultyID',
             'localityID',
-            'facultyName',
-            'localityAddress'
+            'faculties',
+            'localities'
         ],
         create: [
             'facultyID',
@@ -35,5 +35,9 @@ export const FacultyLocalitiesContract = makeContract({
             'facultyID',
             'localityID'
         ],
+        delete:[
+            'facultyLocalityID'
+        ]
+        
     },
 });
