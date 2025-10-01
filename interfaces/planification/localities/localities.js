@@ -1,6 +1,6 @@
 import { Interface } from './../../base/interface.js';
 
-import { LocalitiesService } from './../../../js/services/users.service.js';
+import { LocalitiesService } from './../../../js/services/localities.service.js';
 import {
     Modal,
     Toast,
