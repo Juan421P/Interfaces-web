@@ -1,13 +1,25 @@
-export const InstrumentsService = {
-    async list() {
-        return Promise.resolve([
-            { instrumentID: 1, instrumentName: 'Examen Parcial', type: 'Teórico' },
-            { instrumentID: 2, instrumentName: 'Investigación Final', type: 'Práctica' }
-        ]);
-    },
+import { Service } from "../lib/service.js";
+import { EvaluationInstrumentsContract } from "../contracts/evaluation-instruments.contract.js";
 
-    async create(data) {
-        console.log('[Mock Create Instrument]', data);
-        return Promise.resolve({ ...data, instrumentID: Math.floor(Math.random() * 1000) });
+export class EvaluationInstrumentsService extends Service{
+
+    constructor(){
+        super('/EvaluationInstrument', new EvaluationInstrumentsContract());
     }
-};
+
+    async getAll(){
+        return await this.get('getEvaluationInstruments', null, 'table');
+    }
+
+    async create(evaluationInstrumentData){
+        return await this.post('insertEvaluationInstrument',evaluationInstrumentData,'create');
+    }
+
+    async update(evaluationInstrumentData){
+        return await this.put('updateEvaluationInstrument', evaluationInstrumentData, 'update');
+    }
+
+    async delete(id){
+        return await this.delete('deleteEvaluationInstrument', id);
+    }
+}

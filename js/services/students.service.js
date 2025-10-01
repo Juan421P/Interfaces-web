@@ -1,31 +1,25 @@
-export const StudentsService = {
-    async list() {
-        return [
-            {
-                studentID: 201,
-                personID: 701,
-                studentCode: 'S202301'
-            },
-            {
-                studentID: 202,
-                personID: 702,
-                studentCode: 'S202202'
-            },
-            {
-                studentID: 203,
-                personID: 703,
-                studentCode: 'S202403'
-            },
-            {
-                studentID: 204,
-                personID: 704,
-                studentCode: 'S202104'
-            },
-            {
-                studentID: 205,
-                personID: 705,
-                studentCode: 'S202305'
-            }
-        ];
+import { Service } from "../lib/service.js";
+import { StudentContract } from "../contracts/students.contract.js";
+
+export class StudentService extends Service{
+     
+    constructor(){
+        super('/Students', new StudentContract());
     }
-};
+
+    async getAll(){
+        return await this.get('getStudents', null, 'table');
+    }
+
+    async create(studentData){
+        return await this.post('newStudent', studentData, 'create');
+    }
+
+    async update(studentData){
+        return await this.put('updateStudents', studentData, 'update');
+    }
+
+    async delete(id){
+        return await this.delete('deleteStudents', id)
+    }
+}
