@@ -21,4 +21,3 @@ export class FacultiesService extends Service {
     static async delete(id) {
         return await this.remove(id, null, 'delete');
     }
-}

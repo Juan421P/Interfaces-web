@@ -1,39 +1,48 @@
-import { makeContract } from './../lib/contract.js';
+/*import { Contract } from './../lib/contract.js';
 
-const { types: t } = makeContract({ schema: {} });
-
-export const DegreeTypesContract = makeContract({
-	schema: {
-		id: t.string({
-			required: false
-		}),
-		universityID: t.string({
-			required: true
-		}),
-		degreeTypeName: t.string({
-			required: true,
-			min: 1,
-			max: 120,
-			trim: true
-		}),
-		universityName: t.string({
-			required: false
-		}),
-	},
-	scopes: {
-		create: [
-			'universityID',
-			'degreeTypeName'
-		],
-		update: [
-			'id',
-			'universityID',
-			'degreeTypeName'
-		],
-		table: [
-			'id',
-			'degreeTypeName',
-			'universityName'
-		],
-	},
-});
+export class DegreeTypeContract extends Contract{
+	constructor(){
+		super({
+			schema:{
+				id: Contract.types.string({
+					required: true,
+					default: ''
+				}),
+				universityID: Contract.types.string({
+					required: true,
+					default: ''
+				}),
+				degreeTypeName: Contract.types.string({
+					required: true,
+					default: '',
+					regex: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/
+				}),
+				universityName: Contract.types.string({
+					required: true,
+					default: ''
+				}),
+			},
+			scopes: {
+				create: [
+					'universityID',
+					'degreeTypeName',
+					'universityName'
+				],
+				table: [
+					'id',
+					'universityID',
+					'degreeTypeName',
+					'universityName'
+				],
+				delete: [
+					'id'
+				],
+				update: [
+					'universityID',
+					'degreeTypeName',
+					'universityName'
+				]
+			}
+		})
+	}
+}*/

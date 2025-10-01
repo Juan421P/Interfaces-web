@@ -1,14 +1,25 @@
-export const TitlesService = {
-    async list() {
-        return Promise.resolve([
-            { degreeTypeID: 1, degreeTypeName: 'Licenciatura' },
-            { degreeTypeID: 2, degreeTypeName: 'Ingeniería' },
-            { degreeTypeID: 3, degreeTypeName: 'Doctorado' }
-        ]);
-    },
+import { Service } from "./../lib/service.js";
+import { DegreeTypeContract } from "../contracts/degree-types.contract.js";
 
-    async create(data) {
-        console.log('[Mock Create Title]', data);
-        return Promise.resolve({ ...data, degreeTypeID: Math.floor(Math.random() * 1000) });
+export class DegreeTypeService extends Service {
+
+	constructor() {
+        super('/DegreeTypes', new DegreeTypeContract());
     }
-};
+
+	async getAll() {
+        return await this.get('getAllDegreeTypes', null, 'table');
+    }
+
+	async create(degreeTypeData) {
+        return await this.post('AddDegreeType', degreeTypeData, 'create');
+    }
+
+	async update(degreeTypeData) {
+        return await this.put('UpdateDegreeType', degreeTypeData, 'update');
+    }
+
+	async delete(id) {
+        return await this.delete('DeleteDegreeType', id);
+    }
+}

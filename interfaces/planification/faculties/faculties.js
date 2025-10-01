@@ -61,4 +61,4 @@ export default class FacultiesInterface extends Interface {
             console.error('[FacultiesInterface] Error cargando facultades:', error);
         }
     }
-}
+

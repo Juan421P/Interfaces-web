@@ -1,92 +1,76 @@
-import { ROUTES } from './../../../js/lib/routes.js';
-// import { CoursesService } from './../../../js/services/courses.js'; // for real data
+import { Interface } from './../../interfaces.js'; 
+import { CourseOfferingsService } from './../../../js/services/course-offerings.service.js';
+import { Table } from './../../../components/display/table/table.js';
 
-const { Modal } = await import(ROUTES.components.modal.js);
-const { Table } = await import(ROUTES.components.table.js);
+export default class CourseOfferingsInterface extends Interface {
 
-const HEADERS = ['Materia', 'Grupo', 'Ciclo Académico', 'Estudiantes'];
+  static getTemplate() {
+    return `
+<main class="flex flex-col min-h-screen p-10 space-y-8 md:ml-80 pb-80 md:pb-56">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow select-none py-3">
+      Mis Cursos
+    </h1>
+  </div>
 
-const rawCourses = [
-    {
-        subject: 'Bases de Datos I',
-        group: '01',
-        cycle: 'Ciclo 02/2025',
-        classroom: 'Aula 204',
-        schedule: 'Lunes y Miércoles 10:00 - 11:40',
-        students: ['Juan Portillo', 'María Pérez', 'Luis Rodríguez']
-    },
-    {
-        subject: 'Programación II',
-        group: '03',
-        cycle: 'Ciclo 02/2025',
-        classroom: 'Laboratorio 3',
-        schedule: 'Martes y Jueves 14:00 - 15:40',
-        students: ['Pedro López', 'Ana García']
-    }
-];
+  <div id="courses-teacher-table"></div>
+</main>
 
-const table = new Table({
-    host: '#courses-teacher-table',
-    headers: HEADERS,
-    rows: [],
-    sortable: true,
-    paginated: true,
-    perPage: 8,
-    tableClasses: 'min-w-full text-sm table-fixed',
-    headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow text-md',
-    rowClasses: 'text-indigo-700',
-    columnClasses: ['', 'text-center', 'text-center', 'text-center'],
-    fixedLayout: true
-});
+<template id="tmpl-course-students">
+  <div class="p-6 space-y-4">
+    <h2 class="text-xl font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow">
+      Detalles del Curso
+    </h2>
 
-export async function init() {
-    await table.render();
-    await loadCourses();
-}
+    <div class="grid grid-cols-2 gap-4 text-sm text-indigo-600">
+      <div><span class="font-semibold">Aula:</span> <span id="modal-classroom">-</span></div>
+      <div><span class="font-semibold">Horario:</span> <span id="modal-schedule">-</span></div>
+      <div><span class="font-semibold">Grupo:</span> <span id="modal-group">-</span></div>
+      <div><span class="font-semibold">Ciclo:</span> <span id="modal-cycle">-</span></div>
+    </div>
 
-async function loadCourses() {
-    const rows = rawCourses.map(c => [
-        c.subject,
-        c.group,
-        c.cycle,
-        `<button class="px-3 py-1 rounded bg-indigo-100 text-indigo-600 hover:bg-indigo-200 transition view-students-btn"
-                 data-subject="${c.subject}">
-            Ver (${c.students.length})
-        </button>`
-    ]);
+    <div id="modal-students-table"></div>
+  </div>
+</template>
+`;
+  }
 
-    table.setRows(rows);
-    bindViewButtons();
-}
+  async init() {
+    // 1) service real (usa base Service estático que definiste)
+    this.service = new CourseOfferingsService();
 
-function bindViewButtons() {
-    document.querySelectorAll('.view-students-btn').forEach(btn =>
-        btn.addEventListener('click', async () => {
-            const course = rawCourses.find(c => c.subject === btn.dataset.subject);
-            if (course) await openStudentsModal(course);
-        })
-    );
-}
-
-async function openStudentsModal(course) {
-    const modal = new Modal({ templateId: 'tmpl-course-students', size: 'md' });
-    await modal.open();
-
-    document.querySelector('#modal-classroom').textContent = course.classroom;
-    document.querySelector('#modal-schedule').textContent = course.schedule;
-    document.querySelector('#modal-group').textContent = course.group;
-    document.querySelector('#modal-cycle').textContent = course.cycle;
-
-    const studentsTable = new Table({
-        host: '#modal-students-table',
-        headers: ['#', 'Nombre del Estudiante'],
-        rows: course.students.map((s, i) => [i + 1, s]),
-        tableClasses: 'min-w-full text-sm table-fixed',
-        headerClasses: 'px-4 py-3 font-bold bg-gradient-to-r from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow text-md',
-        rowClasses: 'text-indigo-700',
-        columnClasses: ['text-center', ''],
-        fixedLayout: true
+    // 2) tabla (usa el ciclo de tu DisplayComponent/Table)
+    this.table = new Table({
+      host: '#courses-teacher-table',
+      service: this.service,             // instancia con .list()
+      servicePrefix: 'CourseOfferings',  // para escuchar create/update/delete si lo usas
+      headers: [
+        { label: 'Materia',         key: 'subject' },
+        { label: 'Ciclo Académico', key: 'yearcycleName' },
+      ],
+      searchable: true,
+      sortable: true,
+      paginated: true,
+      perPage: 10
     });
 
-    await studentsTable.render();
+    // 3) render del componente
+    await this.table.render();
+
+    // 4) carga de datos real + pintado (sin inventar nada)
+    try {
+      const data = await this.service.list();      // GET .../getAllCourseOfferings -> scope 'table'
+      this.table.data = Array.isArray(data) ? data : [];
+
+      // Fuerza pintado del body con el filtro actual (si hay SearchInput)
+      const filter = this.table?.searchInput?.getValue?.() || '';
+      this.table._renderBody(filter); // usamos el método interno de tu Table para pintar
+    } catch (err) {
+      console.error('[CourseOfferingsInterface] error cargando cursos:', err);
+      const host = document.querySelector('#courses-teacher-table');
+      if (host) {
+        host.innerHTML = `<p class="text-sm text-red-500">Error al cargar cursos.</p>`;
+      }
+    }
+  }
 }
