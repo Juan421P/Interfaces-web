@@ -1,54 +1,44 @@
-import { fetchJSON, postJSON, putJSON, deleteJSON } from './../lib/network.js';
-import { EvaluationPlansContract } from './../contracts/evaluationPlans.contract.js';
+import { Service } from './../lib/service.js';
+import { EvaluationPlansContract } from './../contracts/evaluation-plans.contract.js';
 
-const ENDPOINT = '/EvaluationPlans';
+export class EvaluationPlansService extends Service {
+  // Igual que el resto: sin /api (lo añade tu Network)
+  static baseEndpoint = '/EvaluationPlans';
+  static contract = new EvaluationPlansContract();
 
-export const EvaluationPlansService = {
-    contract: EvaluationPlansContract,
+  // ===== métodos estáticos =====
 
-    async list() {
-        const response = await fetchJSON(
-            `${ENDPOINT}/getEvaluationPlans`
-        );
-        const parsed = Array.isArray(response) ? response.map(r => EvaluationPlansContract.parse(r, 'table')) : [];
-        document.dispatchEvent(new CustomEvent('EvaluationPlans:list', { 
-            detail: parsed 
-        }));
-        return parsed;
-    },
+  // GET /EvaluationPlans/getEvaluationPlan
+  static async getAll() {
+    return super.get('getEvaluationPlan', null, null, 'table');
+  }
 
-    async create(data) {
-        const response = await postJSON(
-            `${ENDPOINT}/newEvaluationPlan`,
-            EvaluationPlansContract.parse(data, 'create')
-        );
-        const parsed = EvaluationPlansContract.parse(response, 'table');
-        document.dispatchEvent(new CustomEvent('EvaluationPlans:create', { 
-            detail: parsed 
-        }));
-        return parsed;
-    },
+  // GET /EvaluationPlans/getEvaluationPlansPagination?page=&size=
+  static async getPage(page = 0, size = 10) {
+    const qs = `getEvaluationPlansPagination?page=${encodeURIComponent(page)}&size=${encodeURIComponent(size)}`;
+    // devolvemos el Page crudo
+    return super.get(qs);
+  }
 
-    async update(data) {
-        const response = await putJSON(
-            `${ENDPOINT}/${data.evaluationPlanID}`,
-            EvaluationPlansContract.parse(data, 'update')
-        );
-        const parsed = EvaluationPlansContract.parse(response, 'table');
-        document.dispatchEvent(new CustomEvent('EvaluationPlans:update', { detail: parsed }));
-        return parsed;
-    },
+  // POST /EvaluationPlans/insertEvaluationPlan
+  static async create(payload) {
+    return super.post('insertEvaluationPlan', payload, 'create', 'table');
+  }
 
-    async delete(id) {
-        const success = await deleteJSON(
-            `${ENDPOINT}/deleteEvaluationPlan/${id}`
-        );
-        document.dispatchEvent(new CustomEvent('EvaluationPlans:delete', {
-            detail: { 
-                id, 
-                success 
-            }
-        }));
-        return success === true;
-    }
-};
+  // PUT /EvaluationPlans/updateEvaluationPlan/{id}
+  static async update(id, payload) {
+    const body = { ...(payload || {}), id }; // el Service base usa data?.id para /{id}
+    return super.put('updateEvaluationPlan', body, 'update', 'table');
+  }
+
+  // DELETE /EvaluationPlans/deleteEvaluationPlan/{id}
+  static async remove(id) {
+    return super.delete('deleteEvaluationPlan', id);
+  }
+
+  // ===== wrappers de instancia (para componentes) =====
+  async list() { return this.constructor.getAll(); }
+  async create(data) { return this.constructor.create(data); }
+  async update(id, data) { return this.constructor.update(id, data); }
+  async delete(id) { return this.constructor.remove(id); }
+}

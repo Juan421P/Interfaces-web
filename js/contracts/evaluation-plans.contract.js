@@ -1,47 +1,89 @@
-import { makeContract } from './../lib/contract.js';
+// contracts/evaluation-plans.contract.js
+import { Contract } from './../lib/contract.js';
 
-const { types: t } = makeContract({ schema: {} });
+const SAFE_TEXT = /^[\w\s.,:/()\-#&@+]+$/i;
 
-export const EvaluationPlansContract = makeContract({
-    schema: {
-        evaluationPlanID: t.string({
-            required: false
+export class EvaluationPlansContract extends Contract {
+  constructor() {
+    super({
+      schema: {
+        evaluationPlanID: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
         }),
-        rubric: t.string({
-            required: false
+
+        // FKs
+        courseOfferingID: Contract.types.string({
+          // @NotNull/@NotBlank en backend → requerido en create/update
+          required: true,
+          trim: true,
+          min: 1,
+          default: '',
+          regex: SAFE_TEXT
         }),
-        planName: t.string({
-            required: true,
-            min: 1,
-            max: 120,
-            trim: true
+
+        // Datos del plan
+        planName: Contract.types.string({
+          // @NotNull/@NotBlank y @Size(4..80)
+          required: true,
+          trim: true,
+          min: 4,
+          max: 80,
+          default: '',
+          regex: SAFE_TEXT
         }),
-        weightPercentage: t.number({
-            required: true
+
+        description: Contract.types.string({
+          // @Size(max=200)
+          required: false,
+          trim: true,
+          max: 200,
+          default: '',
+          regex: SAFE_TEXT
         }),
-        orderIndex: t.number({
-            required: true
+
+        createdAt: Contract.types.date({
+          required: false
         }),
-    },
-    scopes: {
+
+        // Derivado que viene en DTO (cuando no hay courseOffering asignado)
+        courseoffering: Contract.types.string({
+          required: false,
+          trim: true,
+          default: ''
+        })
+      },
+
+      scopes: {
+        // Lo que ENVÍAS al crear
         create: [
-            'rubric',
-            'planName',
-            'weightPercentage',
-            'orderIndex'
+          'courseOfferingID',
+          'planName',
+          'description',
+          'createdAt'
         ],
+
+        // Lo que ENVÍAS al actualizar (ID va en la ruta)
         update: [
-            'evaluationPlanID',
-            'rubric',
-            'planName',
-            'weightPercentage',
-            'orderIndex'
+          'courseOfferingID',
+          'planName',
+          'description',
+          'createdAt'
         ],
+
+        // Lo que usas para listas/tablas en UI
         table: [
-            'evaluationPlanID',
-            'planName',
-            'weightPercentage',
-            'orderIndex'
+          'evaluationPlanID',
+          'courseOfferingID',
+          'planName',
+          'description',
+          'createdAt',
+          'courseoffering'
         ],
-    },
-});
+
+        delete: ['evaluationPlanID']
+      }
+    });
+  }
+}

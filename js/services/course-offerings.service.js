@@ -1,54 +1,37 @@
-import { fetchJSON, postJSON, putJSON } from './../lib/network.js';
+// services/course-offerings.service.js
+import { Service } from './../lib/service.js';
 import { CourseOfferingsContract } from './../contracts/course-offerings.contract.js';
 
-const ENDPOINT = '/CourseOfferings';
+export class CourseOfferingsService extends Service {
+  // SIN /api (lo agrega tu Network)
+  static baseEndpoint = '/CourseOfferings';
+  static contract = new CourseOfferingsContract();
 
-export const CourseOfferingsService = {
-    contract: CourseOfferingsContract,
+  // ===== estáticos =====
+  // GET /CourseOfferings/getAllCourseOfferings
+  static async getAll() {
+    return super.get('getAllCourseOfferings', null, null, 'table');
+  }
 
-    async list() {
-        const courseOfferings = await fetchJSON(
-            `${ENDPOINT}/getAllCourseOfferings`
-        );
-        const parsed = Array.isArray(courseOfferings) ? courseOfferings.map(n => CourseOfferingsContract.parse(n, 'table')) : [];
-        document.dispatchEvent(new CustomEvent('CourseOfferings:list', {
-            detail: parsed
-        }));
-        return parsed;
-    },
+  // POST /CourseOfferings/insertCourseOffering
+  static async create(payload) {
+    return super.post('insertCourseOffering', payload, 'create', 'table');
+  }
 
-    async create(data) {
-        const courseOfferings = await postJSON(
-            `${ENDPOINT}/insertCourseOffering`,
-            CourseOfferingsContract.parse(data, 'create')
-        );
-        const parsed = CourseOfferingsContract.parse(courseOfferings, 'table');
-        document.dispatchEvent(new CustomEvent('CourseOfferings:create', {
-            detail: parsed
-        }));
-        return parsed;
-    },
+  // PUT /CourseOfferings/updateCourseOffering/{id}
+  static async update(id, payload) {
+    const body = { ...(payload || {}), id }; // Service._buildPath usa data?.id
+    return super.put('updateCourseOffering', body, 'update', 'table');
+  }
 
-    async update(data) {
-        const courseOfferings = await putJSON(
-            `${ENDPOINT}/updateCourseOffering/${data.courseOfferingID}`,
-            CourseOfferingsContract.parse(data, 'update')
-        );
-        const parsed = CourseOfferingsContract.parse(courseOfferings, 'table');
-        document.dispatchEvent(new CustomEvent('CourseOfferings:update', { detail: parsed }));
-        return parsed;
-    },
+  // DELETE /CourseOfferings/deleteCourseOffering/{id}
+  static async remove(id) {
+    return super.delete('deleteCourseOffering', id);
+  }
 
-    async delete(id) {
-        const success = await deleteJSON(
-            `${ENDPOINT}/deleteCourseOffering/${id}`
-        );
-        document.dispatchEvent(new CustomEvent('CourseOfferings:delete', {
-            detail: {
-                id,
-                success
-            }
-        }));
-        return success === true;
-    }
-};
+  // ===== wrappers de instancia (útiles para componentes) =====
+  async list() { return this.constructor.getAll(); }
+  async create(data) { return this.constructor.create(data); }
+  async update(id, data) { return this.constructor.update(id, data); }
+  async delete(id) { return this.constructor.remove(id); }
+}
