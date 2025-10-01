@@ -1,7 +1,7 @@
 import { Service } from './../lib/service.js';
 import { PensaContract } from "../contracts/pensa.contract";
 
-export class PenaService extends Service {
+export class PensaService extends Service {
     
     constructor() {
         super('/Pensum', new PensaContract());
