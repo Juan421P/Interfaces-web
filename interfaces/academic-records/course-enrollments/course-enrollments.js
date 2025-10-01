@@ -1,5 +1,5 @@
 // interfaces/course-enrollments.interface.js
-import { Interface } from './../../interfaces.js';
+import { Interface } from './../../base/interface.js';
 import { CourseEnrollmentService } from './../../../js/services/course-enrollments.service.js';
 import { Modal } from './../../../components/overlay/modal/modal.js';
 
