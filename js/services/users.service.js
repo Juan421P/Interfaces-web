@@ -1,10 +1,10 @@
 import { Service } from './../lib/service.js';
-import { UsersContract } from './../contracts/users.contract.js';
+import { UserContract } from './../contracts/users.contract.js';
 
 export class UsersService extends Service {
     
     constructor() {
-        super('/Users', new UsersContract());
+        super('/Users', new UserContract());
     }
 
     async getAll() {
