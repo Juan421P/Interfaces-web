@@ -1,5 +1,5 @@
 import { Interface } from './../../base/interface.js';
-import { CareersService } from './../../../js/services/careers.js';
+import { CareersService } from './../../../js/services/careers.service.js';
 import { DepartmentsService } from './../../../js/services/departments.service.js';
 import { FacultiesService } from './../../../js/services/faculties.service.js';
 
