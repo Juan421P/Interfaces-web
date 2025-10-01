@@ -1,6 +1,6 @@
 import { Interface } from './../../base/interface.js';
 
-import { UniversitiesService } from './../../../js/services/users.service.js';
+import { UniversitiesService } from './../../../js/services/universities.service.js';
 import {
     Modal,
     Toast
