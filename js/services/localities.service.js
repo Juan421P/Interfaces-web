@@ -1,40 +1,26 @@
-const mockLocalities = [
-  {
-    localityID: 'loc1',
-    universityID: 'uni1',
-    isMainLocality: true,
-    address: 'Calle Principal 123, Ciudad De Paz',
-    phoneNumber: '+503 1234 5678'
-  },
-  {
-    localityID: 'loc2',
-    universityID: 'uni1',
-    isMainLocality: false,
-    address: 'Avenida Secundaria 456, Ciudad Guinea',
-    phoneNumber: '+503 8765 4321'
-  },
-  {
-    localityID: 'loc3',
-    universityID: 'uni1',
-    isMainLocality: false,
-    address: 'Colonia Central 789, Ciudad Escamilla',
-    phoneNumber: '+503 1122 3344'
-  }
-];
+import { Service } from './../lib/service.js';
+import { LocalitiesContract } from '../contracts/localities.contract.js'
 
-export const LocalitiesService = {
-  async list() {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(mockLocalities), 250);
-    });
-  },
+export class LocalitiesService extends Service {
+    
+    constructor() {
+        super('/Locality', new LocalitiesContract());
+    }
 
-  async get(localityID) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        const loc = mockLocalities.find(l => l.localityID === localityID);
-        resolve(loc || null);
-      }, 200);
-    });
-  }
-};
+    async getAll() {
+        return await this.get('getLocalitiesPagination', null, 'table');
+    }
+
+    async create(LocalityData) {
+        return await this.post('newLocality', LocalityData, 'create');
+    }
+
+    async update(LocalityData) {
+        return await this.put('updateLocality', LocalityData, 'update');
+    }
+
+    async delete(id) {
+        return await this.delete('deleteLocation', id);
+    }
+
+}

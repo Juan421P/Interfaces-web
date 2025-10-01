@@ -31,7 +31,6 @@ export const LocalitiesContract = makeContract({
     scopes: {
         table: [
             'localityID',
-            'universityID',
             'universityName',
             'isMainLocality',
             'address',
@@ -44,9 +43,10 @@ export const LocalitiesContract = makeContract({
             'phoneNumber'
         ],
         update: [
-            'universityID',
-            'isMainLocality',
-            'address',
+            'localityID', 
+            'universityID', 
+            'isMainLocality', 
+            'address', 
             'phoneNumber'
         ],
     },
