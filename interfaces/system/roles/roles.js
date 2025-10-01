@@ -1,6 +1,6 @@
 import { Interface } from './../../base/interface.js';
 
-import { RolesService } from './../../../js/services/system-roles.service.js';
+import { systemRolesService } from './../../../js/services/system-roles.service.js';
 import {
     Modal,
     Button,
@@ -68,7 +68,7 @@ export default class RolesInterface extends Interface {
 
     async _renderRoles() {
         try {
-            const roles = await RolesService.list();
+            const roles = await systemRolesService.list();
             const list = document.querySelector('#role-list');
             list.innerHTML = '';
 
