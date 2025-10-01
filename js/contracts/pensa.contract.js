@@ -1,45 +1,44 @@
 import { makeContract } from "../lib/contract";
-const { types:t } = makeContract({ schema: {}});
+const { types: t } = makeContract({ schema: {} });
 
 export const PensaContract = makeContract({
-    schema:{
-        pensumID: t.string({
+    schema: {
+        PensumID: t.string({
             required: false
         }),
-        careerID: t.string({
+        CareerID: t.string({
             required: true
         }),
-        version: t.string({
+        Version: t.string({
             required: true,
             min: 1,
             max: 20
         }),
-        effectiveYear: t.number({
+        EffectiveYear: t.string({
             required: true,
-            min: 4,
-            max: 4
+            regex: /^(19|20)\d{2}$/
         }),
-        careerName: t.string({
+        career: t.string({
             required: false
         }),
     },
     scopes: {
         table: [
-            'pensumID',
-            'careerID',
-            'version',
-            'effectiveYear',
-            'careerName'
+            'PensumID',
+            'CareerID',
+            'Version',
+            'EffectiveYear',
+            'career'
         ],
         create: [
-            'careerID',
-            'version',
-            'effectiveYear'
+            'CareerID',
+            'Version',
+            'EffectiveYear'
         ],
         update: [
-            'careerID',
-            'version',
-            'effectiveYear'
+            'CareerID',
+            'Version',
+            'EffectiveYear'
         ]
     }
 });
