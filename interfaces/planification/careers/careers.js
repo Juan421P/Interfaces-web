@@ -1,8 +1,7 @@
-import { Interface } from './../base/interface.js';
-import { CareersService } from './../../js/services/careers.js';
-import { DepartmentsService } from './../../js/services/departments.js';
-import { FacultiesService } from './../../js/services/faculties.js';
-import { ROUTES } from './../../js/lib/routes.js';
+import { Interface } from './../../base/interface.js';
+import { CareersService } from './../../../js/services/careers.js';
+import { DepartmentsService } from './../../../js/services/departments.service.js';
+import { FacultiesService } from './../../../js/services/faculties.service.js';
 
 export default class CareersInterface extends Interface {
 
@@ -83,8 +82,7 @@ export default class CareersInterface extends Interface {
     }
 
     async init() {
-        this.toast = new (await import(ROUTES.components.toast.js)).Toast();
-        await this.toast.init();
+        await (new Toast()).init();
 
         this.section = document.getElementById('career-list');
         this.addBtn = document.getElementById('add-career-btn');
