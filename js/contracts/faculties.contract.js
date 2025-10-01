@@ -16,26 +16,41 @@ export class FacultiesContract extends Contract {
 					max: 100,
 					default: ""
 				}),
-				localityID: Contract.types.string({
+				facultyCode: Contract.types.string({
 					required: true,
 					trim: true,
-					default: ""
+					max: 20,
+				}),
+				contactPhone: Contract.types.string({
+					required: true,
+					trim: true,
+					regex: /^\+503\s\d{4}-\d{4}$/,
+				}),
+				correlativeCode: Contract.types.string({
+					required: true
 				})
+				
 			},
 			scopes: {
 				getAll: [
 					'facultyID',
 					'facultyName',
-					'localityID'
+					'facultyCode',
+					'contactPhone',
+					'correlativeCode'
 				],
 				create: [
 					'facultyName',
-					'localityID'
+					'facultyCode',
+					'contactPhone',
+					'correlativeCode'
 				],
 				update: [
 					'facultyID',
 					'facultyName',
-					'localityID'
+					'facultyCode',
+					'contactPhone',
+					'correlativeCode'
 				],
 				delete: [
 					'facultyID'

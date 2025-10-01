@@ -4,7 +4,7 @@ export class CareersContract extends Contract {
   constructor() {
     super({
       schema: {
-        careerID: Contract.types.string({
+        id: Contract.types.string({
           required: true,
           trim: true,
           default: ""
@@ -73,17 +73,22 @@ export class CareersContract extends Contract {
           default: 1
         }),
         academicLevelName: Contract.types.string({
-          required: false,
+          required: true,
           trim: true,
           default: ""
         }),
         modalityName: Contract.types.string({
-          required: false,
+          required: true,
           trim: true,
           default: ""
         }),
         degreeTypeName: Contract.types.string({
-          required: false,
+          required: true,
+          trim: true,
+          default: ""
+        }),
+        departmentName: Contract.types.string({
+          required: true,
           trim: true,
           default: ""
         })
@@ -116,12 +121,12 @@ export class CareersContract extends Contract {
           "compulsorySubjects",
           "totalValueUnits"
         ],
-        list: [
+        table: [
           "careerID",
-          "academicLevelId",
-          "degreeTypeId",
-          "modalityId",
-          "departmentId",
+          "academicLevelName",
+          "degreeTypeName",
+          "modalityName",
+          "departmentName",
           "name",
           "careerCode",
           "description",
@@ -132,6 +137,9 @@ export class CareersContract extends Contract {
           "academicLevelName",
           "modalityName",
           "degreeTypeName"
+        ],
+        delete: [
+          "careerID"
         ]
       }
     });

@@ -1,5 +1,5 @@
 import { Service } from './../lib/service.js';
-import { CourseEnrollmentContract } from './../contracts/course-enrollment.contract.js';
+import { CourseEnrollmentContract } from './../contracts/course-enrollments.contract.js';
 
 export class CourseEnrollmentService extends Service {
   // Igual que tus otros services: baseEndpoint SIN /api (lo agrega Network)

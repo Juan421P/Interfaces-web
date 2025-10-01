@@ -9,7 +9,12 @@ export class DepartmentsContract extends Contract {
                     trim: true,
                     default: ""
                 }),
-                name: Contract.types.string({
+                facultyID: Contract.types.string({
+                    required: true,
+                    trim: true,
+                    default: ""
+                }),
+                departmentName: Contract.types.string({
                     required: true,
                     trim: true,
                     min: 3,
@@ -17,7 +22,7 @@ export class DepartmentsContract extends Contract {
                     regex: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, // solo letras y espacios
                     default: ""
                 }),
-                code: Contract.types.string({
+                departmentType: Contract.types.string({
                     required: true,
                     trim: true,
                     min: 2,
@@ -25,38 +30,37 @@ export class DepartmentsContract extends Contract {
                     regex: /^[A-Z0-9]+$/, // mayúsculas y números
                     default: ""
                 }),
-                description: Contract.types.string({
-                    required: false,
+                faculty: Contract.types.string({
+                    required: true,
                     trim: true,
                     max: 500,
                     default: ""
                 }),
-                facultyID: Contract.types.string({
-                    required: true,
-                    trim: true,
-                    default: ""
-                })
+                
             },
             scopes: {
                 create: [
-                    "name",
-                    "code",
-                    "description",
-                    "facultyID"
+                    'facultyID',
+                    'departmentName',
+                    'departmentType',
+                    'faculty',
+                    
                 ],
                 update: [
-                    "departmentID",
-                    "name",
-                    "code",
-                    "description",
-                    "facultyID"
+                    'departmentID',
+                    'facultyID',
+                    'departmentName',
+                    'departmentType',
+                    'faculty',
                 ],
-                list: [
-                    "departmentID",
-                    "name",
-                    "code",
-                    "description",
-                    "facultyID"
+                table: [
+                    'departmentID',
+                    'departmentName',
+                    'departmentType',
+                    'faculty',
+                ],
+                delete:[
+                    'departmentID'
                 ]
             }
         });

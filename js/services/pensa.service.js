@@ -1,36 +1,26 @@
-import { fetchJSON, postJSON, putJSON, deleteJSON } from "../lib/network";
+import { Service } from './../lib/service.js';
 import { PensaContract } from "../contracts/pensa.contract";
 
-const ENDPOINT = "/Pensum";
+export class PenaService extends Service {
+    
+    constructor() {
+        super('/Pensum', new PensaContract());
+    }
 
-export const PensaService = {
-    contract: PensaContract,
+    async getAll() {
+        return await this.get('getPensumPagination', null, 'table');
+    }
 
-    async list() {
-        const pensa = await fetchJSON(`${ENDPOINT}/getPensa`);
-        return Array.isArray(pensa)
-            ? pensa.map(n => PensaContract.parse(n, "table"))
-            : [];
-    },
+    async create(Data) {
+        return await this.post('newPensum', Data, 'create');
+    }
 
-    async create(data) {
-        const created = await postJSON(
-            `${ENDPOINT}/newPensum`,
-            PensaContract.parse(data, "create")
-        );
-        return PensaContract.parse(created.data, "table");
-    },
-
-    async update(id, data) {
-        const updated = await putJSON(
-            `${ENDPOINT}/updatePensum/${id}`,
-            PensaContract.parse(data, "update")
-        );
-        return PensaContract.parse(updated, "table");
-    },
+    async update(Data) {
+        return await this.put('updatePensum', Data, 'update');
+    }
 
     async delete(id) {
-        const success = await deleteJSON(`${ENDPOINT}/deletePensum/${id}`);
-        return success === true;
+        return await this.delete('deletePensum', id);
     }
-};
+
+}

@@ -186,11 +186,11 @@ export class Router {
             '#ar-student-performance': () => import('./../interfaces/academic-records/student-performance/student-performance.js'),
 
             // Interfaces del módulo de Portal de Estudiante; Juan
-            '#sp-enrollments-courses': () => import('./../interfaces/student-portal/enrollments/courses/courses.js'),
-            '#sp-enrollments-cycles': () => import('./../interfaces/student-portal/enrollments/cycles/cycles.js'),
-            '#sp-grades': () => import('./../interfaces/student-portal/grades/grades.js'),
-            '#sp-pensum': () => import('./../interfaces/student-portal/pensum/pensum.js'),
-            '#sp-evaluations': () => import('./../interfaces/student-portal/evaluations/evaluations.js'),
+            //'#sp-enrollments-courses': () => import('./../interfaces/student-portal/enrollments/courses/courses.js'),
+            //'#sp-enrollments-cycles': () => import('./../interfaces/student-portal/enrollments/cycles/cycles.js'),
+            //'#sp-grades': () => import('./../interfaces/student-portal/grades/grades.js'),
+            //'#sp-pensum': () => import('./../interfaces/student-portal/pensum/pensum.js'),
+            //'#sp-evaluations': () => import('./../interfaces/student-portal/evaluations/evaluations.js'),
 
             // Interfaces del módulo de Portal de Docente; El novio de Gabriela Córdova
             '#tp-courses': () => import('./../interfaces/teacher-portal/courses/courses.js'),
