@@ -1,6 +1,6 @@
 import { Interface } from './../../base/interface.js';
-import { FacultiesService } from './../../js/services/faculties.service.js';
-import { buildInitials } from './../../js/lib/common.js';
+import { FacultiesService } from './../../../js/services/faculties.service.js';
+import { buildInitials } from './../../../js/lib/common.js';
 
 export default class FacultiesInterface extends Interface {
 
