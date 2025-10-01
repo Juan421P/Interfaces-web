@@ -156,7 +156,7 @@ export default class UniversitiesInterface extends Interface {
                     webPage: form.querySelector('#university-web-mdl').value,
                     imageUrlUniversities: form.querySelector('#university-logo-mdl').value
                 };
-                await UniversitiesService.update(updated);
+                await UniversitiesService.update(updated); //aca
                 this.toast.show('Cambios guardados', 3000);
                 modal.close();
                 this._loadUniversity();
@@ -175,7 +175,7 @@ export default class UniversitiesInterface extends Interface {
 
     async _loadUniversity() {
         try {
-            const universities = await UniversitiesService.getAll();
+            const universities = await UniversitiesService.getAll();//aca
             const data = universities[0]; // mock: solo mostramos la primera
             if (!data) return;
 
