@@ -1,6 +1,6 @@
 // js/services/users.service.js
 import { Service } from './../lib/service.js';
-import { UserContract } from './../contracts/user.contract.js';
+import { UserContract } from './../contracts/users.contract.js';
 
 export class UsersService extends Service {
 
