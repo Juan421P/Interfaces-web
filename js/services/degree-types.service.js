@@ -1,4 +1,4 @@
-/*import { Service } from "./../lib/service.js";
+import { Service } from "./../lib/service.js";
 import { DegreeTypeContract } from "../contracts/degree-types.contract.js";
 
 export class DegreeTypeService extends Service {

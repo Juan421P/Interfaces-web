@@ -1,4 +1,5 @@
 import { Interface } from './../../base/interface.js';
+import { Modal } from '../../../components/components.js';
 import { StudentService } from './../../../js/services/students.service.js';
 
 export default class StudentsInterface extends Interface {

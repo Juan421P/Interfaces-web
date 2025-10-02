@@ -37,6 +37,7 @@ export class EvaluationInstrumentsContract extends Contract{
                     'instrumentID'
                 ],
                 update: [
+                    'instrumentID',
                     'instrumentTypeID',
                     'description',
                     'usesRubric'

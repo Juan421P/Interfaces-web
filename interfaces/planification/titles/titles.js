@@ -1,9 +1,9 @@
 import { Interface } from './../../base/interface.js';
-import { DegreeTypeService } from '../../../js/services/titles.service.js';
+import { DegreeTypeService } from '../../../js/services/degree-types.service.js'; 
 import { Toast } from '../../../components/components.js';
 import { Modal } from '../../../components/components.js';
 
-export default class DegreeTypeInterface extends Interface {
+export default class TitlesInterface extends Interface {
 
     static getTemplate() {
         return `

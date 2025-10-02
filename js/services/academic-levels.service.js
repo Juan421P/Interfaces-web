@@ -1,4 +1,29 @@
-import { fetchJSON, postJSON, putJSON } from './../lib/network.js';
+import { Service } from "../lib/service.js";
+import { AcademicLevelsContract } from "../contracts/academic-levels.contract.js";
+
+export class AcademicLevelService extends Service{
+
+    constructor(){
+        super('/AcademicLevels', new AcademicLevelsContract());
+    }
+
+    async getAll(){
+        return await this.get('getAcademicLevels', null, 'table');
+    }
+
+    async create(academicLevelData){
+        return await this.post('insertAcademicLevel', academicLevelData, 'create');
+    }
+
+    async update(academicLevelData){
+        return await this.put('updateAcademicLevel', academicLevelData, 'update')
+    }
+
+    async delete(id){
+        return await this.delete('deleteAcademicLevel', id)
+    }
+}
+/*import { fetchJSON, postJSON, putJSON } from './../lib/network.js';
 import { AcademicLevelsContract } from './../contracts/academic-levels.contract.js';
 
 const ENDPOINT = '/AcademicLevels';
@@ -51,4 +76,4 @@ export const AcademicLevelsService = {
         }));
         return success === true;
     }
-};
+};*/
