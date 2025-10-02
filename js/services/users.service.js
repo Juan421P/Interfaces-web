@@ -1,11 +1,11 @@
 // js/services/users.service.js
 import { Service } from './../lib/service.js';
-import { UserContract } from './../contracts/users.contract.js';
+import { UsersContract } from './../contracts/users.contract.js';
 
 export class UsersService extends Service {
 
   static baseEndpoint = '/Users';
-  static contract = new UserContract();
+  static contract = new UsersContract();
 
   // ——— estilo parecido a NotificationsService ———
   static async list() {
