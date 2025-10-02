@@ -22,8 +22,12 @@ export default class LoginInterface extends Interface {
     }
 
     async init() {
-        await this._setupToast();
-        await this._setupForm();
+        if (await AuthGuard.isAuthenticated()) {
+            window.location.hash = '#main';
+        } else {
+            await this._setupToast();
+            await this._setupForm();
+        }
     }
 
     async _setupToast() {

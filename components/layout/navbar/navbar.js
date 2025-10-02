@@ -11,7 +11,6 @@ export class Navbar extends Component {
 	static getTemplate() {
 		return `
 <template id="tmpl-navbar">
-
 <button id="burger-btn"
     class="fixed z-50 p-2 text-[rgb(var(--text-from))] dark:text-[rgb(var(--card-from))] bg-[rgb(var(--body-from))] dark:bg-[rgb(var(--button-from))] shadow-md top-4 left-4 rounded-xl md:hidden backdrop-blur drop-shadow">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -19,7 +18,6 @@ export class Navbar extends Component {
         <path d="M4 6h16M4 12h16M4 18h16" />
     </svg>
 </button>
-
 <div id="sidebar-wrapper"
     class="fixed inset-y-0 left-0 z-40 transition-transform duration-300 transform -translate-x-full w-80 md:translate-x-0 scrollbar-width-none">
     <aside id="sidebar"
@@ -57,44 +55,33 @@ export class Navbar extends Component {
                 </a>
             </div>
         </header>
-
         <nav class="flex-1">
             <ul class="space-y-2">
-
                 <!-- PÁGINA PRINCIPAL -->
                 <li>
                     <a href="#main"
                         class="block transition-shadow duration-300 bg-transparent group rounded-xl hover:shadow-lg nav-btn"
                         data-hash="#main">
-
                         <div
                             class="flex items-center gap-5 px-5 py-4 transition-colors duration-300 inner rounded-xl group-hover:bg-gradient-to-r group-hover:from-[rgb(var(--button-from))] group-hover:to-[rgb(var(--button-to))]">
-
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
                                 class="flex-shrink-0 w-5 h-5 text-[rgb(var(--button-from))] transition-colors duration-300 group-hover:text-white drop-shadow">
                                 <path d="M3 9.5l9-7 9 7V19a2 2 0 0 1-2 2h-5v-5H10v5H5a2 2 0 0 1-2-2Z" />
                             </svg>
-
                             <span
                                 class="flex-1 font-medium text-[rgb(var(--button-from))] transition-all duration-300 select-none group-hover:bg-gradient-to-r group-hover:font-medium drop-shadow group-hover:text-white">
                                 Página Principal
                             </span>
-
                         </div>
-
                     </a>
-
                 </li>
-
                 <!-- MÓDULO DE SISTEMA -->
                 <li>
                     <div
                         class="group block rounded-xl hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] hover:shadow-lg transition-shadow duration-300 nav-btn">
-
                         <button type="button" data-toggle="collapse" data-target="#mod-system"
                             class="flex items-center justify-between w-full px-5 py-4 text-[rgb(var(--button-from))] transition-colors duration-300 cursor-pointer rounded-xl group-hover:bg-gradient-to-r group-hover:from-[rgb(var(--button-from))] group-hover:to-[rgb(var(--button-to))]">
-
                             <div class="flex items-center gap-5">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
@@ -106,14 +93,12 @@ export class Navbar extends Component {
                                     Sistema
                                 </span>
                             </div>
-
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
                                 class="w-4 h-4 text-[rgb(var(--button-from))] transition-transform duration-300 group-hover:text-white drop-shadow">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </button>
-
                         <ul id="mod-system"
                             class="rounded-b-lg pl-9 py-6 space-y-1 hidden hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] group-hover:bg-gradient-to-tr group-hover:from-[rgb(var(--body-from))] group-hover:to-[rgb(var(--body-to))]">
                             <li><a href="#system-users"
@@ -131,8 +116,6 @@ export class Navbar extends Component {
                         </ul>
                     </div>
                 </li>
-
-
                 <!-- MÓDULO DE PLANIFICACIÓN -->
                 <li>
                     <div
@@ -158,7 +141,6 @@ export class Navbar extends Component {
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </button>
-
                         <ul id="mod-planification"
                             class="rounded-b-lg pl-9 py-6 space-y-1 hidden hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] group-hover:bg-gradient-to-tr group-hover:from-[rgb(var(--body-from))] group-hover:to-[rgb(var(--body-to))]">
                             <li>
@@ -226,7 +208,6 @@ export class Navbar extends Component {
                         </ul>
                     </div>
                 </li>
-
                 <!-- MÓDULO DE RECURSOS HUMANOS -->
                 <li>
                     <div
@@ -249,12 +230,10 @@ export class Navbar extends Component {
                         </a>
                     </div>
                 </li>
-
                 <!-- MÓDULO DE REGISTRO ACADÉMICO -->
                 <li>
                     <div
                         class="group block rounded-xl hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] hover:shadow-lg transition-shadow duration-300 nav-btn">
-
                         <button type="button" data-toggle="collapse" data-target="#mod-ar"
                             class="flex items-center justify-between w-full px-5 py-4 text-[rgb(var(--button-from))] transition-colors duration-300 cursor-pointer rounded-xl group-hover:bg-gradient-to-r group-hover:from-[rgb(var(--button-from))] group-hover:to-[rgb(var(--button-to))]">
                             <div class="flex items-center gap-5">
@@ -275,7 +254,6 @@ export class Navbar extends Component {
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </button>
-
                         <ul id="mod-ar"
                             class="rounded-b-lg pl-9 py-6 space-y-1 hidden hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] group-hover:bg-gradient-to-tr group-hover:from-[rgb(var(--body-from))] group-hover:to-[rgb(var(--body-to))]">
                             <li><a href="#ar-students"
@@ -296,8 +274,6 @@ export class Navbar extends Component {
                         </ul>
                     </div>
                 </li>
-
-
                 <!-- MÓDULO DE PORTAL DE DOCENTE -->
                 <li>
                     <a href="#tp-courses"
@@ -317,7 +293,6 @@ export class Navbar extends Component {
                         </div>
                     </a>
                 </li>
-
                 <li>
                     <a href="#tp-evaluation-plans"
                         class="group block rounded-xl hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] hover:shadow-lg transition-shadow duration-300 nav-btn cursor-pointer">
@@ -336,7 +311,6 @@ export class Navbar extends Component {
                         </div>
                     </a>
                 </li>
-
                 <li>
                     <a href="#tp-evaluations"
                         class="group block rounded-xl hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] hover:shadow-lg transition-shadow duration-300 nav-btn cursor-pointer">
@@ -355,8 +329,6 @@ export class Navbar extends Component {
                         </div>
                     </a>
                 </li>
-
-
                 <!-- MÓDULO DE PORTAL DE ESTUDIANTE -->
                 <li>
                     <a href="#sp-evaluations"
@@ -376,14 +348,11 @@ export class Navbar extends Component {
                         </div>
                     </a>
                 </li>
-
                 <li>
                     <div
                         class="group block rounded-xl hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] hover:shadow-lg transition-shadow duration-300 nav-btn">
-
                         <button type="button" data-toggle="collapse" data-target="#mod-sp-enrollments"
                             class="flex items-center justify-between w-full px-5 py-4 text-[rgb(var(--button-from))] transition-colors duration-300 cursor-pointer rounded-xl group-hover:bg-gradient-to-r group-hover:from-[rgb(var(--button-from))] group-hover:to-[rgb(var(--button-to))]">
-
                             <div class="flex items-center gap-5">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
@@ -397,14 +366,12 @@ export class Navbar extends Component {
                                     Inscripciones
                                 </span>
                             </div>
-
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
                                 class="w-4 h-4 text-[rgb(var(--button-from))] transition-transform duration-300 group-hover:text-white drop-shadow">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </button>
-
                         <ul id="mod-sp-enrollments"
                             class="rounded-b-lg pl-9 py-6 space-y-1 hidden hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] group-hover:bg-gradient-to-tr group-hover:from-[rgb(var(--body-from))] group-hover:to-[rgb(var(--body-to))]">
                             <li><a href="#sp-enrollments-cycles"
@@ -418,7 +385,6 @@ export class Navbar extends Component {
                         </ul>
                     </div>
                 </li>
-
                 <li>
                     <a href="#sp-pensum"
                         class="group block rounded-xl hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] hover:shadow-lg transition-shadow duration-300 nav-btn cursor-pointer">
@@ -437,7 +403,6 @@ export class Navbar extends Component {
                         </div>
                     </a>
                 </li>
-
                 <li>
                     <a href="#sp-grades"
                         class="group block rounded-xl hover:bg-gradient-to-tr hover:from-[rgb(var(--body-from))] hover:to-[rgb(var(--body-to))] hover:shadow-lg transition-shadow duration-300 nav-btn cursor-pointer">
@@ -457,75 +422,47 @@ export class Navbar extends Component {
                         </div>
                     </a>
                 </li>
-
                 <!-- PERFIL -->
                 <li>
                     <a href="#profile"
                         class="block transition-shadow duration-300 bg-transparent group rounded-xl hover:shadow-lg nav-btn"
                         data-hash="#profile">
-
                         <div class="flex items-center gap-5 px-5 py-4 transition-colors duration-300 inner rounded-xl group-hover:bg-gradient-to-r group-hover:from-[rgb(var(--button-from))] group-hover:to-[rgb(var(--button-to))]"
                             id="nav-profile">
-
-
                             <div class="flex items-center justify-center h-14 w-14 profile-avatar" id="profile-avatar">
                             </div>
-
                             <span
                                 class="flex-1 font-medium text-[rgb(var(--button-from))] transition-all duration-300 select-none group-hover:bg-clip-text group-hover:text-white group-hover:font-medium drop-shadow">Mi
                                 Perfil</span>
                         </div>
-
                     </a>
-
                 </li>
-
                 <!-- CERRAR SESIÓN -->
                 <li>
-
                     <div class="block transition-shadow duration-300 bg-transparent group rounded-xl hover:shadow-lg nav-btn"
                         id="logout-btn">
-
                         <button type="button"
                             class="flex items-center justify-between w-full px-5 py-4 text-[rgb(var(--button-from))] transition-colors duration-300 cursor-pointer rounded-xl group-hover:bg-gradient-to-r group-hover:from-[rgb(var(--button-from))] group-hover:to-[rgb(var(--button-to))]">
-
                             <div class="flex items-center gap-5">
-
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
                                     class="flex-shrink-0 w-5 h-5 text-[rgb(var(--button-from))] transition-colors duration-300 group-hover:text-white drop-shadow">
-
                                     <path d="m16 17 5-5-5-5" />
-
                                     <path d="M21 12H9" />
-
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-
                                 </svg>
-
                                 <span
                                     class="font-medium transition-all duration-300 select-none group-hover:text-white drop-shadow">
-
                                     Cerrar Sesión
-
                                 </span>
-
                             </div>
-
                         </button>
-
                     </div>
-
                 </li>
-
             </ul>
-
         </nav>
-
     </aside>
-
 </div>
-
 <template id="tmpl-logout-confirm">
     <div class="flex flex-col gap-10 p-10 mx-auto">
         <div class="text-left">
@@ -543,7 +480,6 @@ export class Navbar extends Component {
         </div>
     </div>
 </template>
-
 </template>
     `;
 	}
@@ -564,8 +500,6 @@ export class Navbar extends Component {
 		super({
 			host,
 		});
-
-		this._render();
 	}
 
 	async _retryRender() {
