@@ -28,6 +28,18 @@ export class Router {
         });
     }
 
+    flattenRoutes(obj) {
+        const result = [];
+        for (const val of Object.values(obj)) {
+            if (val?.hash) {
+                result.push(val);
+            } else if (typeof val === 'object') {
+                result.push(...this.flattenRoutes(val));
+            }
+        }
+        return result;
+    }
+
     async initializeApp() {
         console.log('🚀 [Router] initializeApp started');
 
