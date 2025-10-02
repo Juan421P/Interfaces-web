@@ -1,31 +1,76 @@
-// auth.service.js
-import { Service } from './../lib/service.js';
-import { AuthContract } from './../contracts/auth.contract.js';
-import { AuthGuard } from './../guards/auth.guard.js';
+import { AuthService } from "../services/auth.service.js";
 
-export class AuthService extends Service {
-    static baseEndpoint = '/Auth';
-    static contract = new AuthContract();
+export class AuthGuard {
+    static _user = null;
 
-    static async login(email, password) {
-        await this.postRaw('login', { email, contrasena: password }, 'login');
-        // después del login pedimos el user
-        const user = await this.me();
-        AuthGuard._user = user;
-        localStorage.setItem("user", JSON.stringify(user)); // 👈 opcional persistencia
+    // Verifica si hay sesión activa
+    static async isAuthenticated() {
+        if (window.location.hash === '#login' || window.location.hash === '#not-found') {
+            return false; // 🔑 devolvemos explícito
+        }
+        try {
+            const res = await AuthService.me();
+            if (res) {
+                AuthGuard._user = res;
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error('AuthGuard.isAuthenticated error:', err);
+            return false;
+        }
+    }
+
+    // Forzar validación de login
+    static async authLogin() {
+        try {
+            const res = await AuthService.me();
+            if (res) {
+                AuthGuard._user = res;
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error('AuthGuard.authLogin error:', err);
+            return false;
+        }
+    }
+
+    // Si no está autenticado -> redirigir
+    static async ensureAuth(redirectTo = '#login') {
+        const ok = await AuthGuard.isAuthenticated();
+        if (!ok) {
+            window.location.hash = redirectTo;
+            return false;
+        }
         return true;
     }
 
-    static async me() {
-        const res = await this.get('me', null, null, 'me');
-        return res;
+    // Limpiar usuario al cerrar sesión
+    static clearUser() {
+        AuthGuard._user = null;
     }
 
-    static async logout() {
-        await this.postRaw('logout');
-        AuthGuard.clearUser();
-        localStorage.removeItem("user");
-        sessionStorage.clear();
-        return true;
+    // =====================
+    // 📌 Roles por nombre
+    // =====================
+    static isAdmin() {
+        return AuthGuard._user?.roleName === "Administrador";
+    }
+
+    static isRA() {
+        return AuthGuard._user?.roleName === "Registro Académico";
+    }
+
+    static isRH() {
+        return AuthGuard._user?.roleName === "Recursos Humanos";
+    }
+
+    static isTeacher() {
+        return AuthGuard._user?.roleName === "Docente";
+    }
+
+    static isStudent() {
+        return AuthGuard._user?.roleName === "Estudiante";
     }
 }
