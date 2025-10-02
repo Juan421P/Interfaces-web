@@ -1,5 +1,5 @@
 import { Interface } from './../../base/interface.js';
-import { InstrumentsService } from './../../../js/services/evaluation-instruments.service.js';
+import { EvaluationInstrumentsService } from './../../../js/services/evaluation-instruments.service.js';
 import { Modal, Toast } from './../../../components/components.js';
 
 export default class EvaluationInstrumentsInterface extends Interface {
@@ -90,7 +90,7 @@ export default class EvaluationInstrumentsInterface extends Interface {
 
     async _renderInstruments() {
         try {
-            const instruments = await InstrumentsService.list();
+            const instruments = await EvaluationInstrumentsService.list();
             const list = document.querySelector('#instruments-list');
             list.innerHTML = '';
 
@@ -122,7 +122,7 @@ export default class EvaluationInstrumentsInterface extends Interface {
             }
 
             try {
-                await InstrumentsService.create({
+                await EvaluationInstrumentsService.create({
                     instrumentName: name,
                     type
                 });
