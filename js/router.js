@@ -46,7 +46,14 @@ export class Router {
         this.isAuthenticated = await AuthGuard.isAuthenticated();
         console.log('🚀 [Router] Initial auth check:', this.isAuthenticated);
 
+        console.log('🚀 [Router] Creating Body...');
         await new Body().render();
+        console.log('🚀 [Router] Body completed');
+
+        console.log('🚀 [Router] Creating Footer...');
+        await new Footer().render(); // ADDED BACK THE FOOTER
+        console.log('🚀 [Router] Footer completed');
+
         this.toast = new Toast();
         await this.toast.init();
         THEMES.loadTheme();
@@ -148,9 +155,6 @@ export class Router {
             //'#system-audit': () => import('./../interfaces/system/audit/audit.js'),
 
             // Interfaces del módulo de Planificación
-            // Primeras 3; Ivanya
-            // 159-165; Gómez
-            // Últimas 5; Benjamín
             '#planification-university': () => import('./../interfaces/planification/university/university.js'),
             '#planification-localities': () => import('./../interfaces/planification/localities/localities.js'),
             '#planification-faculties': () => import('./../interfaces/planification/faculties/faculties.js'),
@@ -159,7 +163,6 @@ export class Router {
             '#planification-pensums': () => import('./../interfaces/planification/pensums/pensums.js'),
             '#planification-subjects': () => import('./../interfaces/planification/subjects/subjects.js'),
             '#planification-cycles': () => import('./../interfaces/planification/cycles/cycles.js'),
-            //'#planification-dates': () => import('./../interfaces/planification/academic-dates/academic-dates.js'), ya no sirve mi w
             '#planification-modalities': () => import('./../interfaces/planification/modalities/modalities.js'),
             '#planification-degrees': () => import('./../interfaces/planification/degrees/degrees.js'),
             '#planification-titles': () => import('./../interfaces/planification/titles/titles.js'),
@@ -171,29 +174,16 @@ export class Router {
             '#hr-employees': () => import('./../interfaces/human-resources/employees/employees.js'),
 
             // Interfaces del módulo de Registro Académico
-            // La primera la hace Benjamín
-            // La segunda tiene la funda y me paga para que se lo hunda
-            // La tercera me quita el estrés. Polvos corridos siempre echamos tres
-            // A la cuarta, de una, le bajo la luna... Pero ella quiero con Maluma y conmigo a la vez
-            // Últimas 4; El novio de Gabriela Córdova
             '#ar-students': () => import('./../interfaces/academic-records/students/students.js'),
             '#ar-career-enrollments': () => import('./../interfaces/academic-records/career-enrollments/career-enrollments.js'),
             '#ar-cycle-enrollments': () => import('./../interfaces/academic-records/cycle-enrollments/cycle-enrollments.js'),
             '#ar-course-enrollments': () => import('./../interfaces/academic-records/course-enrollments/course-enrollments.js'),
             '#ar-student-performance': () => import('./../interfaces/academic-records/student-performance/student-performance.js'),
 
-            // Interfaces del módulo de Portal de Estudiante; Juan
-            //'#sp-enrollments-courses': () => import('./../interfaces/student-portal/enrollments/courses/courses.js'),
-            //'#sp-enrollments-cycles': () => import('./../interfaces/student-portal/enrollments/cycles/cycles.js'),
-            //'#sp-grades': () => import('./../interfaces/student-portal/grades/grades.js'),
-            //'#sp-pensum': () => import('./../interfaces/student-portal/pensum/pensum.js'),
-            //'#sp-evaluations': () => import('./../interfaces/student-portal/evaluations/evaluations.js'),
-
             // Interfaces del módulo de Portal de Docente; El novio de Gabriela Córdova
             '#tp-courses': () => import('./../interfaces/teacher-portal/courses/courses.js'),
             '#tp-evaluation-plans': () => import('./../interfaces/teacher-portal/evaluation-plans/evaluation-plans.js'),
             '#tp-evaluations': () => import('./../interfaces/teacher-portal/evaluations/evaluations.js'),
-            //'#tp-schedules': () => import('./../interfaces/teacher-portal/schedules/schedules.js')
         };
 
         const importFunction = interfaceMap[view.hash];
@@ -210,6 +200,28 @@ export class Router {
 
     getCurrentView() {
         return this.ALL_VIEWS.find(v => v.hash === window.location.hash);
+    }
+
+    // ADD METHOD TO HANDLE LOGOUT
+    async handleLogout() {
+        try {
+            // Clear AuthGuard cache
+            AuthGuard.clearCache();
+            
+            // Update router state
+            this.isAuthenticated = false;
+            
+            // Clear any session data
+            sessionStorage.clear();
+            localStorage.clear();
+            
+            // Redirect to login
+            window.location.hash = '#login';
+            
+        } catch (error) {
+            console.error('Logout error:', error);
+            window.location.hash = '#login'; // Force redirect anyway
+        }
     }
 }
 
