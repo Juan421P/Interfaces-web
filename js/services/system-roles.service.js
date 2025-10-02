@@ -1,7 +1,7 @@
 import { Service } from './../lib/service.js';
-import { systemRolesContract } from '../contracts/system-roles.contract.js'
+import { SystemRolesContract } from '../contracts/system-roles.contract.js'
 
-export class systemRolesService extends Service {
+export class SystemRolesService extends Service {
     
     static baseEndpoint = '/SystemRol';
     static contract = new SystemRolesContract();
