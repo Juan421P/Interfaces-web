@@ -6,15 +6,24 @@ export class AuthGuard {
     static CACHE_DURATION = 30000;
 
     static async isAuthenticated(forceRefresh = false) {
-        if (!forceRefresh && this._cachedUser && Date.now() - this._lastCheck < this.CACHE_DURATION) {
+        if (forceRefresh || Date.now() - this._lastCheck > this.CACHE_DURATION) {
+            this._cachedUser = null;
+        }
+
+        if (this._cachedUser !== null) {
             return true;
         }
 
         try {
             const res = await AuthService.me();
-            this._cachedUser = res;
-            this._lastCheck = Date.now();
-            return res !== null;
+            if (res && res.user) {
+                this._cachedUser = res.user;
+                this._lastCheck = Date.now();
+                return true;
+            } else {
+                this._cachedUser = null;
+                return false;
+            }
         } catch (err) {
             console.error('AuthGuard.isAuthenticated error:', err);
             this._cachedUser = null;
@@ -23,16 +32,12 @@ export class AuthGuard {
     }
 
     static async authLogin() {
-        try {
-            const res = await AuthService.me();
-            this._cachedUser = res;
-            this._lastCheck = Date.now();
-            return res !== null;
-        } catch (err) {
-            console.error('AuthGuard.authLogin error:', err);
-            this._cachedUser = null;
-            return false;
-        }
+        this._cachedUser = null;
+        return await this.isAuthenticated(true);
+    }
+
+    static get user() {
+        return this._cachedUser;
     }
 
     static clearCache() {
@@ -40,36 +45,23 @@ export class AuthGuard {
         this._lastCheck = 0;
     }
 
-    static get user() {
-        return this._cachedUser;
-    }
-
-    static async ensureAuth(redirectTo = '#login') {
-        const ok = await AuthGuard.isAuthenticated();
-        if (!ok) {
-            window.location.hash = redirectTo;
-            return false;
-        }
-        return true;
-    }
-
     static isAdmin() {
-        return AuthGuard._user?.roleName === 'Administrador';
+        return this._cachedUser?.roleID === 'Administrador';
     }
 
     static isStudent() {
-        return AuthGuard._user?.roleName === 'Estudiante';
+        return this._cachedUser?.roleID === 'Estudiante';
     }
 
     static isTeacher() {
-        return AuthGuard._user?.roleName === 'Docente';
+        return this._cachedUser?.roleID === 'Docente';
     }
 
     static isRA() {
-        return AuthGuard._user?.roleName === 'Registro Académico';
+        return this._cachedUser?.roleID === 'Registro Académico';
     }
 
     static isRH() {
-        return AuthGuard._user?.roleName === 'Recursos Humanos';
+        return this._cachedUser?.roleID === 'Recursos Humanos';
     }
 }

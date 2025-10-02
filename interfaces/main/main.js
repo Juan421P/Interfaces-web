@@ -1,5 +1,5 @@
 import { Interface } from './../base/interface.js';
-import { AuthService } from './../../js/services/auth.service.js';
+import { AuthGuard } from './../../js/guards/auth.guard.js';
 import { buildInitials } from './../../js/lib/common.js';
 
 export default class MainInterface extends Interface {
@@ -43,43 +43,47 @@ export default class MainInterface extends Interface {
     }
 
     async _loadUserData() {
-        try {
-            const user = (await AuthService.me()).user;
-            const firstName = user.firstName || '';
-            const lastName = user.lastName || '';
-            const role = user.roleID || 'Usuario';
+        const user = AuthGuard.user;
 
-            const welcome = document.getElementById('main-welcome');
-            if (welcome) {
-                welcome.textContent = `Bienvenido, ${firstName} ${lastName}`;
-            }
+        if (!user) {
+            console.warn('[MainInterface] No user data available');
+            this._setFallbackUserData();
+            return;
+        }
 
-            const roleEl = document.getElementById('main-role');
-            if (roleEl) {
-                roleEl.textContent = role;
-            }
+        const firstName = user.firstName || '';
+        const lastName = user.lastName || '';
+        const role = user.roleID || 'Usuario';
 
-            const avatarHost = document.getElementById('main-avatar');
-            if (avatarHost) {
-                avatarHost.innerHTML = '';
-                const initials = `${firstName[0] || ''}${lastName[0] || ''}`.toUpperCase() || '?';
-                avatarHost.appendChild(buildInitials(initials));
-            }
+        const welcome = document.getElementById('main-welcome');
+        if (welcome) {
+            welcome.textContent = `Bienvenido, ${firstName} ${lastName}`;
+        }
 
-        } catch (error) {
-            console.error('[MainInterface] Failed to load user data:', error);
+        const roleEl = document.getElementById('main-role');
+        if (roleEl) {
+            roleEl.textContent = role;
+        }
 
-            const welcome = document.getElementById('main-welcome');
-            if (welcome) welcome.textContent = 'Bienvenido';
+        const avatarHost = document.getElementById('main-avatar');
+        if (avatarHost) {
+            avatarHost.innerHTML = '';
+            const initials = `${firstName[0] || ''}${lastName[0] || ''}`.toUpperCase() || '?';
+            avatarHost.appendChild(buildInitials(initials));
+        }
+    }
 
-            const roleEl = document.getElementById('main-role');
-            if (roleEl) roleEl.textContent = 'Usuario';
+    _setFallbackUserData() {
+        const welcome = document.getElementById('main-welcome');
+        if (welcome) welcome.textContent = 'Bienvenido';
 
-            const avatarHost = document.getElementById('main-avatar');
-            if (avatarHost) {
-                avatarHost.innerHTML = '';
-                avatarHost.appendChild(buildInitials('?'));
-            }
+        const roleEl = document.getElementById('main-role');
+        if (roleEl) roleEl.textContent = 'Usuario';
+
+        const avatarHost = document.getElementById('main-avatar');
+        if (avatarHost) {
+            avatarHost.innerHTML = '';
+            avatarHost.appendChild(buildInitials('?'));
         }
     }
 
@@ -94,5 +98,4 @@ export default class MainInterface extends Interface {
             });
         }
     }
-
 }

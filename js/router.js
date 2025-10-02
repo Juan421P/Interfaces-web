@@ -13,6 +13,7 @@ export class Router {
     constructor() {
         this.currentView = null;
         this.ALL_VIEWS = this.flattenRoutes(ROUTES.views);
+        this.isAuthenticated = false;
         this.init();
     }
 
@@ -25,45 +26,45 @@ export class Router {
             THEMES.loadTheme();
             this.render();
         });
-
-        if (!window.location.hash) {
-            window.location.hash = '#login';
-        }
     }
 
     async initializeApp() {
         console.log('🚀 [Router] initializeApp started');
-        console.log('🚀 [Router] Creating Body...');
-        await new Body().render();
-        console.log('🚀 [Router] Body completed');
-        console.log('🚀 [Router] Checking DOM after Body...');
-        console.log('🚀 [Router] #navbar exists:', !!document.querySelector('#navbar'));
-        console.log('🚀 [Router] #main-view exists:', !!document.querySelector('#main-view'));
-        console.log('🚀 [Router] #footer exists:', !!document.querySelector('#footer'));
-        console.log('🚀 [Router] Body children:', Array.from(document.body.children).map(el => el.tagName + (el.id ? `#${el.id}` : '')));
-        console.log('🚀 [Router] Creating Footer...');
-        await new Footer().render();
-        console.log('🚀 [Router] Footer completed');
 
+        this.isAuthenticated = await AuthGuard.isAuthenticated();
+        console.log('🚀 [Router] Initial auth check:', this.isAuthenticated);
+
+        await new Body().render();
         this.toast = new Toast();
         await this.toast.init();
-
         THEMES.loadTheme();
-    }
 
-    flattenRoutes(obj) {
-        const result = [];
-        for (const val of Object.values(obj)) {
-            if (val?.hash) {
-                result.push(val);
-            } else if (typeof val === 'object') {
-                result.push(...this.flattenRoutes(val));
-            }
+        const currentHash = window.location.hash;
+
+        if (!this.isAuthenticated && currentHash !== '#login') {
+            console.log('🚀 [Router] Not authenticated, redirecting to login');
+            window.location.hash = '#login';
+            return;
         }
-        return result;
+
+        if (this.isAuthenticated && currentHash === '#login') {
+            console.log('🚀 [Router] Already authenticated, redirecting to main');
+            window.location.hash = '#main';
+            return;
+        }
+
+        if (!currentHash || currentHash === '#') {
+            window.location.hash = this.isAuthenticated ? '#main' : '#login';
+            return;
+        }
+
+        await this.render();
     }
 
     async render(hash = window.location.hash) {
+        if (hash === '#login' && this.isAuthenticated) return;
+        if (hash !== '#login' && hash !== '#not-found' && !this.isAuthenticated) return;
+
         const view = this.ALL_VIEWS.find(v => v.hash === hash);
 
         if (!view) {
@@ -72,11 +73,6 @@ export class Router {
         }
 
         if (view.hash !== '#login' && view.hash !== '#not-found') {
-            if (!this.isAuthenticated) {
-                window.location.hash = '#login';
-                return;
-            }
-
             if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
                 window.location.hash = '#main';
                 return;
