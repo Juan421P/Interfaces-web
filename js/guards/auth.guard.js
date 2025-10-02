@@ -1,24 +1,22 @@
+// auth.guard.js
 import { AuthService } from "../services/auth.service.js";
 
 export class AuthGuard {
-    static async isAuthenticated() {
-        if (window.location.hash !== '#login' && window.location.hash !== '#not-found') {
-            try {
-                const res = await AuthService.me();
-                return res !== null;
-            } catch (err) {
-                console.error('AuthGuard.isAuthenticated error:', err);
-                return false;
-            }
-        }
-    }
+    static _user = null;
 
-    static async authLogin() {
+    static async isAuthenticated() {
+        if (window.location.hash === '#login' || window.location.hash === '#not-found') {
+            return false; // 👈 devolvemos explícitamente
+        }
         try {
             const res = await AuthService.me();
-            return res !== null;
+            if (res) {
+                AuthGuard._user = res;
+                return true;
+            }
+            return false;
         } catch (err) {
-            console.error('AuthGuard.authLogin error:', err);
+            console.error('AuthGuard.isAuthenticated error:', err);
             return false;
         }
     }
@@ -32,23 +30,12 @@ export class AuthGuard {
         return true;
     }
 
+    static clearUser() {
+        AuthGuard._user = null;
+    }
+
     static isAdmin() {
         return AuthGuard._user?.roleName === 'Administrador';
     }
-
-    static isStudent() {
-        return AuthGuard._user?.roleName === 'Estudiante';
-    }
-
-    static isTeacher() {
-        return AuthGuard._user?.roleName === 'Docente';
-    }
-
-    static isRA() {
-        return AuthGuard._user?.roleName === 'Registro Académico';
-    }
-
-    static isRH() {
-        return AuthGuard._user?.roleName === 'Recursos Humanos';
-    }
+    // ... demás roles
 }
