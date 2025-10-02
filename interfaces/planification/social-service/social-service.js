@@ -87,9 +87,9 @@ export default class SocialServiceInterface extends Interface {
             services.forEach(service => {
                 const card = document.createElement('div');
                 card.className =
-                    'w-72 p-6 bg-gradient-to-tr from-[rgb(var(--body-from))] to-[rgb(var(--body-to))] rounded-xl shadow hover:shadow-lg hover:scale-[1.015] transition-transform duration-300 cursor-pointer';
+                    'w-72 p-6 bg-gradient-to-tr from-[rgb(var(--card-from))] to-[rgb(var(--card-to))] rounded-xl shadow hover:shadow-lg hover:scale-[1.015] transition-transform duration-300 cursor-pointer';
                 card.innerHTML = `
-                    <h2 class="font-bold bg-gradient-to-tr from-[rgb(var(--body-from))]0 to-[rgb(var(--body-to))]0 bg-clip-text text-transparent text-lg drop-shadow mb-2">${service.socialServiceProjectName}</h2>
+                    <h2 class="font-bold bg-gradient-to-tr from-[rgb(var(--text-from))]0 to-[rgb(var(--text-to))]0 bg-clip-text text-transparent text-lg drop-shadow mb-2">${service.socialServiceProjectName}</h2>
                     <p class="text-sm bg-gradient-to-tr from-[rgb(var(--text-from))] to-[rgb(var(--text-to))] bg-clip-text text-transparent drop-shadow">${service.description || 'Sin descripción'}</p>
                 `;
                 section.appendChild(card);
