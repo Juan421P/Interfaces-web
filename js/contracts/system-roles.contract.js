@@ -1,6 +1,6 @@
 import { Contract } from './../lib/contract.js';
 
-export class systemRolesContract extends Contract{
+export class SystemRolesContract extends Contract{
     constructor(){
         super({
             schema :{
