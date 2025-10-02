@@ -3,24 +3,22 @@ import { CareersContract } from './../contracts/careers.contract.js';
 
 export class CareersService extends Service {
     
-    constructor() {
-        super('/Careers', new CareersContract());
-    }
+    static baseEndpoint = '/Careers';
+    static contract = new CareersContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getCareersPaginated', null, 'table');
     }
 
-    async create(Data) {
-        return await this.post('insertCareer', Data, 'create');
+    static async create(data) {
+        return await this.post('insertCareer', data, 'create');
     }
 
-   async update(Data) {
-        return await this.put('updateCareer', Data, 'update');
-  }
+    static async update(data) {
+        return await this.put('updateCareer', data, 'update');
+    }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('deleteCareer', id);
     }
-
 }

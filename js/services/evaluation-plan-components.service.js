@@ -8,7 +8,7 @@ export class EvaluationPlanComponentsService extends Service {
   // ===== estáticos =====
 
   // GET /EvaluationPlanComponents/getEvaluationPlanComponents
-  static async getAll() {
+  static async list() {
     return super.get('getEvaluationPlanComponents', null, null, 'table');
   }
 

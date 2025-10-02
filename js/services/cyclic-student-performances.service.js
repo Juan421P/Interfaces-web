@@ -9,7 +9,7 @@ export class CyclicStudentPerformanceService extends Service {
   // ===== estáticos =====
 
   // GET /CyclicStudentPerformance/getPerformances
-  static async getAll() {
+  static async list() {
     return super.get('getPerformances', null, null, 'table');
   }
 

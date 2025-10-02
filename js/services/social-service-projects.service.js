@@ -3,23 +3,22 @@ import { SocialServiceContract } from "../contracts/social-service-projects.cont
 
 export class SocialServiceService extends Service{
 
-    constructor(){
-        super('/SocialService', new SocialServiceContract());
+    static baseEndpoint = '/SocialService';
+    static contract = new SocialServiceContract();
+
+    static async list() {
+        return await this.get('getDataSocialService', null, 'table');
     }
 
-    async getAll(){
-        return await this.getAll('getDataSocialService', null, 'table');
+    static async create(data) {
+        return await this.post('newSocialService', data, 'create');
     }
 
-    async create(socialServiceData){
-        return await this.post('newSocialService', socialServiceData, 'create');
+    static async update(data) {
+        return await this.put('updateSocialService', data, 'update');
     }
 
-    async update(socialServiceData){
-        return await this.put('updateSocialService', socialServiceData, 'update');
-    }
-
-    async delete(id){
+    static async delete(id) {
         return await this.delete('deleteSocialService', id);
     }
 }

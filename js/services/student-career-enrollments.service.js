@@ -6,7 +6,7 @@ export class StudentCareerEnrollmentsService extends Service {
   static contract = new StudentCareerEnrollmentsContract();
 
   // Estáticos (útiles para llamadas directas)
-  static async getAll() {
+  static async list() {
     // GET /StudentCareerEnrollments/getAllEnrollments
     return super.get('getAllEnrollments', null, null, 'table');
   }

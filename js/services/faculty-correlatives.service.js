@@ -3,24 +3,22 @@ import { FacultyCorrelativeContract } from '../contracts/faculty-correlatives.co
 
 export class FacultyCorrelativesService extends Service {
     
-    constructor() {
-        super('/FacultyCorrelative', new FacultyCorrelativeContract());
-    }
+    static baseEndpoint = '/FacultyCorrelative';
+    static contract = new FacultyCorrelativeContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getFacultiesCorrelativesPagination', null, 'table');
     }
 
-    async create(FacultyCorrelativeData) {
-        return await this.post('newFacultyCorrelatives', systemRolData, 'create');
+    static async create(facultyCorrelativeData) {
+        return await this.post('newFacultyCorrelatives', facultyCorrelativeData, 'create');
     }
 
-    async update(FacultyCorrelativeData) {
-        return await this.put('updateFacultyCorrelatives', systemRolData, 'update');
+    static async update(facultyCorrelativeData) {
+        return await this.put('updateFacultyCorrelatives', facultyCorrelativeData, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('deleteFacultyCorrelatives', id);
     }
-
 }

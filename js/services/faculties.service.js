@@ -3,24 +3,22 @@ import { FacultiesContract } from './../contracts/faculties.contract.js';
 
 export class FacultiesService extends Service {
     
-    constructor() {
-        super('/Faculties', new FacultiesContract());
-    }
+    static baseEndpoint = '/Faculties';
+    static contract = new FacultiesContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getFacultiesPagination', null, 'table');
     }
 
-    async create(FacultiesData) {
-        return await this.post('newFaculties', FacultiesData, 'create');
+    static async create(facultyData) {
+        return await this.post('newFaculties', facultyData, 'create');
     }
 
-    async update(FacultiesData) {
-        return await this.put('updateFaculty', FacultiesData, 'update');
+    static async update(facultyData) {
+        return await this.put('updateFaculty', facultyData, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('deleteFaculty', id);
     }
-
 }

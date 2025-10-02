@@ -9,7 +9,7 @@ export class EvaluationPlansService extends Service {
   // ===== métodos estáticos =====
 
   // GET /EvaluationPlans/getEvaluationPlan
-  static async getAll() {
+  static async list() {
     return super.get('getEvaluationPlan', null, null, 'table');
   }
 
