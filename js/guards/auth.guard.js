@@ -1,26 +1,47 @@
 import { AuthService } from "../services/auth.service.js";
 
 export class AuthGuard {
-    static async isAuthenticated() {
-        if (window.location.hash !== '#login' && window.location.hash !== '#not-found') {
-            try {
-                const res = await AuthService.me();
-                return res !== null;
-            } catch (err) {
-                console.error('AuthGuard.isAuthenticated error:', err);
-                return false;
-            }
+    static _cachedUser = null;
+    static _lastCheck = 0;
+    static CACHE_DURATION = 30000;
+
+    static async isAuthenticated(forceRefresh = false) {
+        if (!forceRefresh && this._cachedUser && Date.now() - this._lastCheck < this.CACHE_DURATION) {
+            return true;
+        }
+
+        try {
+            const res = await AuthService.me();
+            this._cachedUser = res;
+            this._lastCheck = Date.now();
+            return res !== null;
+        } catch (err) {
+            console.error('AuthGuard.isAuthenticated error:', err);
+            this._cachedUser = null;
+            return false;
         }
     }
 
     static async authLogin() {
         try {
             const res = await AuthService.me();
+            this._cachedUser = res;
+            this._lastCheck = Date.now();
             return res !== null;
         } catch (err) {
             console.error('AuthGuard.authLogin error:', err);
+            this._cachedUser = null;
             return false;
         }
+    }
+
+    static clearCache() {
+        this._cachedUser = null;
+        this._lastCheck = 0;
+    }
+
+    static get user() {
+        return this._cachedUser;
     }
 
     static async ensureAuth(redirectTo = '#login') {
