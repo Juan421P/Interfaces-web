@@ -64,13 +64,19 @@ export class Router {
     }
 
     async render(hash = window.location.hash) {
-        const ok = await AuthGuard.isAuthenticated();
-        if (!ok) {
-            console.log('🚀 [Router] User not authenticated, redirecting to login');
-            window.location.hash = '#login';
-        } else {
-            console.log('🚀 [Router] User authenticated, rendering current view');
-            await this.render();
+        if (hash !== '#login' && hash !== '#not-found') {
+            const ok = await AuthGuard.isAuthenticated();
+            if (!ok) {
+                console.log('🚀 [Router] User not authenticated, redirecting to login');
+                window.location.hash = '#login';
+                return;
+            }
+
+            const view = this.ALL_VIEWS.find(v => v.hash === hash);
+            if (view?.guard === 'admin' && !AuthGuard.isAdmin()) {
+                window.location.hash = '#main';
+                return;
+            }
         }
 
         const view = this.ALL_VIEWS.find(v => v.hash === hash);
@@ -80,21 +86,7 @@ export class Router {
             return;
         }
 
-        if (view.hash !== '#login' && view.hash !== '#not-found') {
-            const ok = await AuthGuard.isAuthenticated();
-            if (!ok) {
-                window.location.hash = '#login';
-                return;
-            }
-
-            if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
-                window.location.hash = '#main';
-                return;
-            }
-        }
-
         await this.handleNavbar(view);
-
         await this.loadInterface(view);
     }
 
