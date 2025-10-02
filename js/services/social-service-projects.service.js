@@ -1,7 +1,7 @@
 import { Service } from "../lib/service.js";
 import { SocialServiceContract } from "../contracts/social-service-projects.contract";
 
-export class SocialServiceService extends Service{
+export class SocialServiceService extends Service {
 
     static baseEndpoint = '/SocialService';
     static contract = new SocialServiceContract();
@@ -11,7 +11,10 @@ export class SocialServiceService extends Service{
     }
 
     static async create(data) {
-        return await this.post('newSocialService', data, 'create');
+        return await this.postRaw('newSocialService', {
+            "socialServiceProjectName": data.socialServiceProjectName,
+            "description": data.description
+        }, null);
     }
 
     static async update(data) {
