@@ -37,6 +37,7 @@ export class DocumentsContract extends Contract{
                     'documentID'
                 ],
                 update: [
+                    'documentID',
                     'documentCategoryID',
                     'documentName',
                     'documentCategory'

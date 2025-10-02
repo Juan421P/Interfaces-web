@@ -43,6 +43,7 @@ export class SocialServiceContract extends Contract{
                     'socialServiceProjectID'
                 ],
                 update: [
+                    'socialServiceProjectID',
                     'universityID',
                     'socialServiceProjectName',
                     'description',

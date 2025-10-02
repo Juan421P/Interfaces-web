@@ -1,4 +1,4 @@
-/*import { Contract } from './../lib/contract.js';
+import { Contract } from './../lib/contract.js';
 
 export class DegreeTypeContract extends Contract{
 	constructor(){
@@ -38,6 +38,7 @@ export class DegreeTypeContract extends Contract{
 					'id'
 				],
 				update: [
+					'id',
 					'universityID',
 					'degreeTypeName',
 					'universityName'
@@ -45,4 +46,4 @@ export class DegreeTypeContract extends Contract{
 			}
 		})
 	}
-}*/
+}
