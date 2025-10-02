@@ -10,7 +10,7 @@ import {
     Form,
     FormInput,
     SubmitInput
-} from './../../../components/components.js';
+} from './../../components/components.js';
 
 export default class NotificationsInterface extends Interface {
 
