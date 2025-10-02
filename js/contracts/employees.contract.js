@@ -1,47 +1,68 @@
-import { makeContract } from './../lib/contract.js';
+import { Contract, makeContract } from './../lib/contract.js';
 
-const { types: t } = makeContract({ schema: {} });
-
-export const EmployeesContract = makeContract({
-    schema: {
-        employeeID: t.string({
-            required: false
-        }),
-        personID: t.string({
-            required: true
-        }),
-        departmentID: t.string({
-            required: true
-        }),
-        employeeCode: t.string({
-            required: true,
-            trim: true
-        }),
-        employeeDetail: t.string({
-            required: true,
-            trim: true
-        }),
-    },
-    scopes: {
-        create: [
-            'personID',
-            'departmentID',
-            'employeeCode',
-            'employeeDetail'
-        ],
-        update: [
-            'employeeID',
-            'personID',
-            'departmentID',
-            'employeeCode',
-            'employeeDetail'
-        ],
-        table: [
-            'employeeID',
-            'personID',
-            'departmentID',
-            'employeeCode',
-            'employeeDetail'
-        ],
-    },
-});
+export class EmployeesContract extends Contract{
+    constructor(){
+        super({
+            schema: {
+                id: Contract.types.string({
+                    required: true,
+                    default: ''
+                }),
+                personID: Contract.types.string({
+                    required: true,
+                    default: ''
+                }),
+                departmentID: Contract.types.string({
+                    required: true,
+                    default: ''
+                }),
+                employeeCode: Contract.types.string({
+                    required: true,
+                    default: ''
+                }),
+                EmployeeDetail: Contract.types.string({
+                    required: true,
+                    detail: ''
+                }),
+                personName: Contract.types.string({
+                    required: true,
+                    detail: ''
+                }),
+                personLastName: Contract.types.string({
+                    required: true,
+                    detail: ''
+                }),
+            },
+            scopes:{
+                create: [
+                    'personID',
+                    'departmentID',
+                    'employeeCode',
+                    'EmployeeDetail',
+                    'personName',
+                    'personLastName'
+                ],
+                table: [
+                    'id',
+                    'personID',
+                    'departmentID',
+                    'employeeCode',
+                    'EmployeeDetail',
+                    'personName',
+                    'personLastName'
+                ],
+                update: [
+                    'personID',
+                    'departmentID',
+                    'employeeCode',
+                    'EmployeeDetail',
+                    'personName',
+                    'personLastName'
+                ],
+                delete: [
+                    'id'
+                ]
+            }
+        })
+    }
+}
