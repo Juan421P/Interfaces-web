@@ -116,18 +116,19 @@ export default class LoginInterface extends Interface {
                         (values['email-input'] || '').trim(),
                         (values['password-input'] || '').trim()
                     );
+
                     console.info('[Login] Login API call completed');
-                    if (await AuthGuard.authLogin(true)) {
-                        if(window.router){
-                            window.router.isAuthenticated = true;
-                        }
-                        window.location.hash = "main";
+
+                    const loginSuccessful = await AuthGuard.authLogin();
+
+                    if (loginSuccessful) {
+                        window.location.hash = '#main';
                     } else {
-                        this.toast.show('Credenciales incorrectas 😔');
+                        this.toast.show("Credenciales incorrectas");
                     }
                 } catch (error) {
                     console.error(error);
-                    this.toast.show('Error al iniciar sesión');
+                    this.toast.show("Error al iniciar sesión");
                 }
             }
         });

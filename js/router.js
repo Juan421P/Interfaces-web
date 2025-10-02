@@ -13,7 +13,6 @@ export class Router {
     constructor() {
         this.currentView = null;
         this.ALL_VIEWS = this.flattenRoutes(ROUTES.views);
-        this.isAuthenticated = false;
         this.init();
     }
 
@@ -43,15 +42,15 @@ export class Router {
     async initializeApp() {
         console.log('🚀 [Router] initializeApp started');
 
-        this.isAuthenticated = await AuthGuard.isAuthenticated();
-        console.log('🚀 [Router] Initial auth check:', this.isAuthenticated);
+        const isAuthenticated = await AuthGuard.isAuthenticated();
+        console.log('🚀 [Router] Initial auth check:', isAuthenticated);
 
         console.log('🚀 [Router] Creating Body...');
         await new Body().render();
         console.log('🚀 [Router] Body completed');
 
         console.log('🚀 [Router] Creating Footer...');
-        await new Footer().render(); // ADDED BACK THE FOOTER
+        await new Footer().render();
         console.log('🚀 [Router] Footer completed');
 
         this.toast = new Toast();
@@ -60,20 +59,20 @@ export class Router {
 
         const currentHash = window.location.hash;
 
-        if (!this.isAuthenticated && currentHash !== '#login') {
+        if (!isAuthenticated && currentHash !== '#login') {
             console.log('🚀 [Router] Not authenticated, redirecting to login');
             window.location.hash = '#login';
             return;
         }
 
-        if (this.isAuthenticated && currentHash === '#login') {
+        if (isAuthenticated && currentHash === '#login') {
             console.log('🚀 [Router] Already authenticated, redirecting to main');
             window.location.hash = '#main';
             return;
         }
 
         if (!currentHash || currentHash === '#') {
-            window.location.hash = this.isAuthenticated ? '#main' : '#login';
+            window.location.hash = isAuthenticated ? '#main' : '#login';
             return;
         }
 
@@ -81,9 +80,6 @@ export class Router {
     }
 
     async render(hash = window.location.hash) {
-        if (hash === '#login' && this.isAuthenticated) return;
-        if (hash !== '#login' && hash !== '#not-found' && !this.isAuthenticated) return;
-
         const view = this.ALL_VIEWS.find(v => v.hash === hash);
 
         if (!view) {
@@ -92,9 +88,14 @@ export class Router {
         }
 
         if (view.hash !== '#login' && view.hash !== '#not-found') {
-            if (view.guard === 'admin' && !AuthGuard.isAdmin()) {
-                window.location.hash = '#main';
+            const isAuthenticated = await AuthGuard.isAuthenticated();
+            if (!isAuthenticated) {
+                window.location.hash = '#login';
                 return;
+            }
+
+            if (view.guard === 'admin') {
+                console.warn('Admin guard not implemented without caching');
             }
         }
 
@@ -122,11 +123,8 @@ export class Router {
     async loadInterface(view) {
         try {
             console.log(`🚀 [Router] Loading interface for: ${view.hash}`);
-            console.log(`🚀 [Router] View object:`, view);
             const interfaceModule = await this.getInterfaceModule(view);
-            console.log(`🚀 [Router] Interface module loaded:`, interfaceModule);
             const interfaceInstance = new interfaceModule.default();
-            console.log(`🚀 [Router] Interface instance created:`, interfaceInstance);
             await interfaceInstance.render('#main-view');
             console.log(`🚀 [Router] Interface rendered successfully`);
 
@@ -140,21 +138,14 @@ export class Router {
 
     async getInterfaceModule(view) {
         const interfaceMap = {
-            // Interfaces generales
             '#main': () => import('./../interfaces/main/main.js'),
             '#login': () => import('./../interfaces/login/login.js'),
             '#testing': () => import('./../interfaces/testing/testing.js'),
             '#news': () => import('./../interfaces/news/news.js'),
             '#not-found': () => import('./../interfaces/not-found/not-found.js'),
             '#profile': () => import('./../interfaces/profile/profile.js'),
-
-            // Interfaces del módulo de Sistema; Ivanya
             '#system-users': () => import('./../interfaces/system/users/users.js'),
             '#system-roles': () => import('./../interfaces/system/roles/roles.js'),
-            //'#system-codes': () => import('./../interfaces/system/codes/codes.js'),
-            //'#system-audit': () => import('./../interfaces/system/audit/audit.js'),
-
-            // Interfaces del módulo de Planificación
             '#planification-university': () => import('./../interfaces/planification/university/university.js'),
             '#planification-localities': () => import('./../interfaces/planification/localities/localities.js'),
             '#planification-faculties': () => import('./../interfaces/planification/faculties/faculties.js'),
@@ -169,18 +160,12 @@ export class Router {
             '#planification-service': () => import('./../interfaces/planification/social-service/social-service.js'),
             '#planification-documents': () => import('./../interfaces/planification/documents/documents.js'),
             '#planification-evaluation-instruments': () => import('./../interfaces/planification/evaluation-instruments/evaluation-instruments.js'),
-
-            // Interfaces del módulo de Recursos Humanos; Benjamín
             '#hr-employees': () => import('./../interfaces/human-resources/employees/employees.js'),
-
-            // Interfaces del módulo de Registro Académico
             '#ar-students': () => import('./../interfaces/academic-records/students/students.js'),
             '#ar-career-enrollments': () => import('./../interfaces/academic-records/career-enrollments/career-enrollments.js'),
             '#ar-cycle-enrollments': () => import('./../interfaces/academic-records/cycle-enrollments/cycle-enrollments.js'),
             '#ar-course-enrollments': () => import('./../interfaces/academic-records/course-enrollments/course-enrollments.js'),
             '#ar-student-performance': () => import('./../interfaces/academic-records/student-performance/student-performance.js'),
-
-            // Interfaces del módulo de Portal de Docente; El novio de Gabriela Córdova
             '#tp-courses': () => import('./../interfaces/teacher-portal/courses/courses.js'),
             '#tp-evaluation-plans': () => import('./../interfaces/teacher-portal/evaluation-plans/evaluation-plans.js'),
             '#tp-evaluations': () => import('./../interfaces/teacher-portal/evaluations/evaluations.js'),
@@ -202,25 +187,16 @@ export class Router {
         return this.ALL_VIEWS.find(v => v.hash === window.location.hash);
     }
 
-    // ADD METHOD TO HANDLE LOGOUT
     async handleLogout() {
         try {
-            // Clear AuthGuard cache
-            AuthGuard.clearCache();
-            
-            // Update router state
-            this.isAuthenticated = false;
-            
-            // Clear any session data
             sessionStorage.clear();
             localStorage.clear();
-            
-            // Redirect to login
+
             window.location.hash = '#login';
-            
+
         } catch (error) {
             console.error('Logout error:', error);
-            window.location.hash = '#login'; // Force redirect anyway
+            window.location.hash = '#login';
         }
     }
 }
