@@ -38,10 +38,13 @@ export default class LoginInterface extends Interface {
     async _setupForm() {
         this.form = await new Form({
             host: '#login-form-host',
-            formClass: 'gap-16 px-6 mx-auto md:mx-0 md:px-0 z-50 md:w-full',
+            formClass: 'gap-16 px-6 mx-auto md:mx-0 md:px-0 z-50 w-full max-w-md',
             sections: [
                 {
-                    opts: { gap: 2 },
+                    opts: {
+                        gap: 2,
+                        classes: 'md:px-0 px-10'
+                    },
                     titles: [
                         {
                             text: 'Inicio de sesión',
@@ -64,7 +67,10 @@ export default class LoginInterface extends Interface {
                     ]
                 },
                 {
-                    opts: { gap: 6 },
+                    opts: {
+                        gap: 6,
+                        classes: 'px-10 md:px-0'
+                    },
                     components: [
                         {
                             type: FormInput,
@@ -87,13 +93,18 @@ export default class LoginInterface extends Interface {
                     ]
                 },
                 {
-                    opts: { gap: 4, px: 10 },
+                    opts: {
+                        gap: 4,
+                        px: 0,
+                        classes: 'px-0 md:px-10'
+                    },
                     components: [
                         {
                             type: SubmitInput,
                             opts: {
                                 id: 'submit-button',
-                                text: 'Iniciar sesión'
+                                text: 'Iniciar sesión',
+                                additionalClasses: 'w-full px-6'
                             }
                         }
                     ]

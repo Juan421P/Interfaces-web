@@ -23,7 +23,7 @@ export class Form {
         email: str => /^[A-Za-z0-9.]+@[A-Za-z0-9.]+\.(?:[A-Za-z]{2,}|edu\.sv)$/.test(str?.trim() || '')
     };
 
-    async _initialize(){
+    async _initialize() {
         await this._render();
     }
 
@@ -35,47 +35,7 @@ export class Form {
         this.formClass.split(/\s+/).filter(Boolean).forEach(c => this.formEl.classList.add(c));
 
         for (const section of this.sections) {
-            const wrapper = document.createElement('section');
-            wrapper.classList.add('flex', 'flex-col');
-
-            if (section.opts?.gap) {
-                wrapper.classList.add(`gap-${section.opts.gap}`);
-            } else {
-                wrapper.classList.add('gap-6');
-            }
-
-            if (section.opts?.px) {
-                wrapper.classList.add(`px-${section.opts.px}`);
-            } else {
-                wrapper.classList.add('px-0');
-            }
-
-            if (section.opts?.py) {
-                wrapper.classList.add(`py-${section.opts.py}`);
-            }
-
-            if (Array.isArray(section.titles)) {
-                for (const t of section.titles) {
-                    const tag = `h${Math.min(Math.max(t.relevance || 1, 1), 6)}`;
-                    const el = document.createElement(tag);
-                    el.textContent = t.text;
-
-                    const classes = Array.isArray(t.classes)
-                        ? t.classes
-                        : (t.classes || '').split(/\s+/);
-
-                    (classes.length ? classes : ['text-[rgb(var(--card-from))]'])
-                        .filter(Boolean)
-                        .forEach(c => el.classList.add(c));
-
-                    wrapper.appendChild(el);
-                }
-            }
-
-            for (const compDef of section.components || []) {
-                await this._mountComponent(compDef, wrapper);
-            }
-
+            const wrapper = await this._createSection(section);
             this.formEl.appendChild(wrapper);
         }
 
@@ -121,6 +81,82 @@ export class Form {
 
         this.host.innerHTML = '';
         this.host.appendChild(this.formEl);
+    }
+
+    async _createSection(sectionDef, parentClasses = []) {
+        const wrapper = document.createElement('section');
+
+        const isHorizontal = sectionDef.opts?.layout === 'horizontal';
+        const directionClass = isHorizontal ? 'flex-row' : 'flex-col';
+        wrapper.classList.add('flex', directionClass);
+
+        if (sectionDef.opts?.gap) {
+            wrapper.classList.add(`gap-${sectionDef.opts.gap}`);
+        } else {
+            wrapper.classList.add('gap-6');
+        }
+
+        if (sectionDef.opts?.px) {
+            wrapper.classList.add(`px-${sectionDef.opts.px}`);
+        } else {
+            wrapper.classList.add('px-0');
+        }
+
+        if (sectionDef.opts?.py) {
+            wrapper.classList.add(`py-${sectionDef.opts.py}`);
+        }
+
+        if (sectionDef.opts?.classes) {
+            const classes = typeof sectionDef.opts.classes === 'string'
+                ? sectionDef.opts.classes.split(/\s+/).filter(Boolean)
+                : Array.isArray(sectionDef.opts.classes)
+                    ? sectionDef.opts.classes
+                    : [];
+
+            classes.forEach(className => wrapper.classList.add(className));
+        }
+
+        parentClasses.forEach(className => wrapper.classList.add(className));
+
+        if (isHorizontal && sectionDef.opts?.equalWidth !== false) {
+            wrapper.classList.add('items-stretch');
+        }
+
+        if (Array.isArray(sectionDef.titles)) {
+            for (const t of sectionDef.titles) {
+                const tag = `h${Math.min(Math.max(t.relevance || 1, 1), 6)}`;
+                const el = document.createElement(tag);
+                el.textContent = t.text;
+
+                const classes = Array.isArray(t.classes)
+                    ? t.classes
+                    : (t.classes || '').split(/\s+/);
+
+                (classes.length ? classes : ['text-[rgb(var(--card-from))]'])
+                    .filter(Boolean)
+                    .forEach(c => el.classList.add(c));
+
+                wrapper.appendChild(el);
+            }
+        }
+
+        for (const item of sectionDef.components || []) {
+            if (item.type === 'section') {
+                // This is a nested section
+                const nestedSection = await this._createSection(item, isHorizontal ? ['flex-1'] : []);
+                wrapper.appendChild(nestedSection);
+            } else {
+                // This is a regular component
+                const componentHost = document.createElement('div');
+                if (isHorizontal && sectionDef.opts?.equalWidth !== false) {
+                    componentHost.classList.add('flex-1');
+                }
+                wrapper.appendChild(componentHost);
+                await this._mountComponent(item, componentHost);
+            }
+        }
+
+        return wrapper;
     }
 
     _mountComponent(compDef, container) {

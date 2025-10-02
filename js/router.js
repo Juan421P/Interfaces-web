@@ -49,15 +49,6 @@ export class Router {
         await this.toast.init();
 
         THEMES.loadTheme();
-
-        const ok = await AuthGuard.isAuthenticated();
-        if (!ok) {
-            console.log('🚀 [Router] User not authenticated, redirecting to login');
-            window.location.hash = '#login';
-        } else {
-            console.log('🚀 [Router] User authenticated, rendering current view');
-            await this.render();
-        }
     }
 
     flattenRoutes(obj) {
@@ -73,6 +64,15 @@ export class Router {
     }
 
     async render(hash = window.location.hash) {
+        const ok = await AuthGuard.isAuthenticated();
+        if (!ok) {
+            console.log('🚀 [Router] User not authenticated, redirecting to login');
+            window.location.hash = '#login';
+        } else {
+            console.log('🚀 [Router] User authenticated, rendering current view');
+            await this.render();
+        }
+
         const view = this.ALL_VIEWS.find(v => v.hash === hash);
 
         if (!view) {
