@@ -116,15 +116,8 @@ export default class LoginInterface extends Interface {
                         (values['email-input'] || '').trim(),
                         (values['password-input'] || '').trim()
                     );
-
                     console.info('[Login] Login API call completed');
-                    const ok = await AuthGuard.authLogin();
-
-                    if (ok) {
-                        window.location.hash = '#main';
-                    } else {
-                        this.toast.show("Sesión no válida");
-                    }
+                    window.location.hash = '#main';
                 } catch (error) {
                     console.error(error);
                     this.toast.show("Error al iniciar sesión");
