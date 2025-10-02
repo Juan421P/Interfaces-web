@@ -2,25 +2,23 @@ import { Service } from './../lib/service.js';
 import { UniversityContract } from '../contracts/universities.contract.js'
 
 export class UniversitiesService extends Service {
-    
-    constructor() {
-        super('/University', new UniversityContract());
-    }
 
-    async getAll() {
+    static baseEndpoint = '/University';
+    static contract = new UniversityContract();
+
+    static async list() {
         return await this.get('getDataUniversity', null, 'table');
     }
 
-    async create(UniversityData) {
-        return await this.post('newUniversity', UniversityData, 'create');
+    static async create(data) {
+        return await this.post('newUniversity', data, 'create');
     }
 
-    async update(UniversityData) {
-        return await this.put('updateUniversity', UniversityData, 'update');
+    static async update(data) {
+        return await this.put('updateUniversity', data, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('deleteUniversity', id);
     }
-
 }

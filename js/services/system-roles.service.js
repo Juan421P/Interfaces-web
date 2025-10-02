@@ -3,24 +3,22 @@ import { systemRolesContract } from '../contracts/system-roles.contract.js'
 
 export class systemRolesService extends Service {
     
-    constructor() {
-        super('/SystemRol', new systemRolesContract());
-    }
+    static baseEndpoint = '/SystemRol';
+    static contract = new SystemRolesContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getSystemRol', null, 'table');
     }
 
-    async create(systemRolData) {
-        return await this.post('newSystemaRol', systemRolData, 'create');
+    static async create(data) {
+        return await this.post('newSystemaRol', data, 'create');
     }
 
-    async update(systemRolData) {
-        return await this.put('updateSystemRol', systemRolData, 'update');
+    static async update(data) {
+        return await this.put('updateSystemRol', data, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('eliminarSystemRol', id);
     }
-
 }

@@ -7,7 +7,7 @@ export class EmployeesService extends Service {
   static contract = new EmployeesContract();
 
   // GET /Employees/getEmployees
-  static async getAll() {
+  static async list() {
     return super.get('getEmployees', null, null, 'table');
   }
 

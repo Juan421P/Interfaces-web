@@ -3,23 +3,22 @@ import { DocumentsContract } from "../contracts/documents.contract.js";
 
 export class DocumentsService extends Service{
 
-    constructor(){
-        super('/Documents', new DocumentsContract());
-    }
+    static baseEndpoint = '/Documents';
+    static contract = new DocumentsContract();
 
-    async getAll(){
+    static async list() {
         return await this.get('getDocuments', null, 'table');
     }
 
-    async create(documentData){
+    static async create(documentData) {
         return await this.post('insertDocument', documentData, 'create');
     }
 
-    async update(documentData){
+    static async update(documentData) {
         return await this.put('updateDocument', documentData, 'update');
     }
 
-    async delete(id){
-        return await this.delete('deleteDocument',id);
+    static async delete(id) {
+        return await this.delete('deleteDocument', id);
     }
 }

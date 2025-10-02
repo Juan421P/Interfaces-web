@@ -9,7 +9,7 @@ export class StudentCycleEnrollmentsService extends Service {
   // ===== MÉTODOS ESTÁTICOS =====
 
   // GET /StudentCycleEnrollments/getStudentCycleEnrollments
-  static async getAll() {
+  static async list() {
     return super.get('getStudentCycleEnrollments', null, null, 'table');
   }
 

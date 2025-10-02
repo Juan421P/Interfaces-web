@@ -9,7 +9,7 @@ export class CourseEnrollmentService extends Service {
   // ===== métodos estáticos =====
 
   // GET /CourseEnrollments/getCourseEnrollments
-  static async getAll() {
+  static async list() {
     return super.get('getCourseEnrollments', null, null, 'table');
   }
 

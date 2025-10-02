@@ -3,24 +3,23 @@ import { NotificationsContract } from './../contracts/notifications.contract.js'
 
 export class NotificationsService extends Service {
     
-    constructor() {
-        super('/Notifications', new NotificationsContract());
-    }
+    static baseEndpoint = '/Notifications';
+    static contract = new NotificationsContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getNotifications', null, 'table');
     }
 
-    async create(notificationData) {
+    static async create(notificationData) {
         return await this.post('newNotification', notificationData, 'create');
     }
 
-    //async update(notificationData) {
-    //    return await this.put('updateNotification', notificationData, 'update');
-    //}
+    // Si más adelante necesitas update, lo puedes habilitar aquí
+    // static async update(notificationData) {
+    //     return await this.put('updateNotification', notificationData, 'update');
+    // }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('deleteNotification', id);
     }
-
 }

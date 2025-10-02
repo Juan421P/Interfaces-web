@@ -3,24 +3,22 @@ import { UserContract } from './../contracts/users.contract.js';
 
 export class UsersService extends Service {
     
-    constructor() {
-        super('/Users', new UserContract());
-    }
+    static baseEndpoint = '/Users';
+    static contract = new UserContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getUsersPagination', null, 'table');
     }
 
-    async create(userData) {
+    static async create(userData) {
         return await this.post('AddUser', userData, 'create');
     }
 
-    async update(userData) {
+    static async update(userData) {
         return await this.put('UpdateUser', userData, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('DeleteUser', id);
     }
-
 }

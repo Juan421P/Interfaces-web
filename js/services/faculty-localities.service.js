@@ -3,24 +3,22 @@ import { FacultyLocalitiesContract } from '../contracts/faculty-correlatives.con
 
 export class FacultyCorrelativesService extends Service {
     
-    constructor() {
-        super('/FacultyLocalities', new FacultyLocalitiesContract());
-    }
+    static baseEndpoint = '/FacultyLocalities';
+    static contract = new FacultyLocalitiesContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getFacultiesLocalitiesPagination', null, 'table');
     }
 
-    async create(FacultyLocalitiesData) {
-        return await this.post('AddFacultyLocality', FacultyLocalitiesData, 'create');
+    static async create(facultyLocalitiesData) {
+        return await this.post('AddFacultyLocality', facultyLocalitiesData, 'create');
     }
 
-    async update(FacultyLocalitiesData) {
-        return await this.put('UpdateFacultyLocality', FacultyLocalitiesData, 'update');
+    static async update(facultyLocalitiesData) {
+        return await this.put('UpdateFacultyLocality', facultyLocalitiesData, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('DeleteFacultyLocality', id);
     }
-
 }

@@ -3,24 +3,22 @@ import { PensaContract } from "../contracts/pensa.contract";
 
 export class PensaService extends Service {
     
-    constructor() {
-        super('/Pensum', new PensaContract());
-    }
+    static baseEndpoint = '/Pensum';
+    static contract = new PensaContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getPensumPagination', null, 'table');
     }
 
-    async create(Data) {
-        return await this.post('newPensum', Data, 'create');
+    static async create(data) {
+        return await this.post('newPensum', data, 'create');
     }
 
-    async update(Data) {
-        return await this.put('updatePensum', Data, 'update');
+    static async update(data) {
+        return await this.put('updatePensum', data, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('deletePensum', id);
     }
-
 }

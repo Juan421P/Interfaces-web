@@ -3,23 +3,22 @@ import { StudentContract } from "../contracts/students.contract.js";
 
 export class StudentService extends Service{
      
-    constructor(){
-        super('/Students', new StudentContract());
-    }
+    static baseEndpoint = '/Students';
+    static contract = new StudentContract();
 
-    async getAll(){
+    static async list() {
         return await this.get('getStudents', null, 'table');
     }
 
-    async create(studentData){
-        return await this.post('newStudent', studentData, 'create');
+    static async create(data) {
+        return await this.post('newStudent', data, 'create');
     }
 
-    async update(studentData){
-        return await this.put('updateStudents', studentData, 'update');
+    static async update(data) {
+        return await this.put('updateStudents', data, 'update');
     }
 
-    async delete(id){
-        return await this.delete('deleteStudents', id)
+    static async delete(id) {
+        return await this.delete('deleteStudents', id);
     }
 }

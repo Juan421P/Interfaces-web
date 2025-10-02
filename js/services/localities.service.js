@@ -3,23 +3,22 @@ import { LocalitiesContract } from '../contracts/localities.contract.js'
 
 export class LocalitiesService extends Service {
     
-    constructor() {
-        super('/Locality', new LocalitiesContract());
-    }
+    static baseEndpoint = '/Locality';
+    static contract = new LocalitiesContract();
 
-    async getAll() {
+    static async list() {
         return await this.get('getLocalitiesPagination', null, 'table');
     }
 
-    async create(LocalityData) {
-        return await this.post('newLocality', LocalityData, 'create');
+    static async create(localityData) {
+        return await this.post('newLocality', localityData, 'create');
     }
 
-    async update(LocalityData) {
-        return await this.put('updateLocality', LocalityData, 'update');
+    static async update(localityData) {
+        return await this.put('updateLocality', localityData, 'update');
     }
 
-    async delete(id) {
+    static async delete(id) {
         return await this.delete('deleteLocation', id);
     }
 
