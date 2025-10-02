@@ -1,6 +1,5 @@
 import { Interface } from './../../base/interface.js';
 import { UsersService } from './../../../js/services/users.service.js';
-import { UserContract } from './../../../js/contracts/user.contract.js';
 
 import {
     Modal,
