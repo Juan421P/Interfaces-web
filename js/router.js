@@ -162,7 +162,7 @@ export class Router {
             '#planification-pensums': () => import('./../interfaces/planification/pensums/pensums.js'),
             '#planification-subjects': () => import('./../interfaces/planification/subjects/subjects.js'),
             '#planification-cycles': () => import('./../interfaces/planification/cycles/cycles.js'),
-            '#planification-dates': () => import('./../interfaces/planification/academic-dates/academic-dates.js'),
+            //'#planification-dates': () => import('./../interfaces/planification/academic-dates/academic-dates.js'), ya no sirve mi w
             '#planification-modalities': () => import('./../interfaces/planification/modalities/modalities.js'),
             '#planification-degrees': () => import('./../interfaces/planification/degrees/degrees.js'),
             '#planification-titles': () => import('./../interfaces/planification/titles/titles.js'),
