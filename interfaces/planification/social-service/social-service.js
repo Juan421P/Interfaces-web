@@ -1,6 +1,6 @@
 import { Interface } from './../../base/interface.js';
 import { SocialServiceService } from './../../../js/services/social-service-projects.service.js';
-import { Toast } from './../../../components/components.js';
+import { Modal, Toast } from './../../../components/components.js';
 
 export default class SocialServiceInterface extends Interface {
 
@@ -28,6 +28,7 @@ export default class SocialServiceInterface extends Interface {
                 </div>
                 <section id="service-list" class="flex flex-wrap gap-6"></section>
             </main>
+
             <template id="tmpl-add-service">
                 <form id="service-form" novalidate class="flex flex-col max-w-md px-6 mx-auto gap-14 py-14">
                     <div class="flex flex-col items-center">
@@ -68,9 +69,7 @@ export default class SocialServiceInterface extends Interface {
     }
 
     async _setupServiceManagement() {
-        const section = document.querySelector('#service-list');
         const addBtn = document.querySelector('#add-service-btn');
-
         await this._renderServices();
 
         addBtn.addEventListener('click', () => {
@@ -102,38 +101,47 @@ export default class SocialServiceInterface extends Interface {
     }
 
     _openForm() {
-        const modal = document.querySelector('#tmpl-add-service').content.cloneNode(true);
-        const main = document.querySelector('main');
-        main.appendChild(modal);
-
-        const form = main.querySelector('#service-form');
-        form.addEventListener('submit', async e => {
-            e.preventDefault();
-
-            const formData = new FormData(form);
-            const data = {
-                socialServiceProjectName: formData.get('socialServiceProjectName').trim(),
-                description: formData.get('description').trim()
-            };
-
-            if (!data.socialServiceProjectName) {
-                this.toast.show('Por favor ingresa el nombre del proyecto');
-                return;
-            }
-
-            try {
-                await SocialServiceService.create(data);
-                this.toast.show('Proyecto de servicio social guardado');
-                main.querySelector('#service-form').remove();
-                await this._renderServices();
-            } catch (error) {
-                console.error('[SocialServiceInterface] Failed to create service project:', error);
-                this.toast.show('Error al guardar el proyecto');
-            }
+        const modal = new Modal({
+            templateId: 'tmpl-add-service',
+            size: 'md'
         });
 
-        main.querySelector('#cancel-btn').addEventListener('click', () => {
-            main.querySelector('#service-form').remove();
-        });
+        setTimeout(() => {
+            const form = document.getElementById('service-form');
+            const cancelBtn = document.getElementById('cancel-btn');
+
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+                    const data = {
+                        socialServiceProjectName: formData.get('socialServiceProjectName').trim(),
+                        description: formData.get('description').trim()
+                    };
+
+                    if (!data.socialServiceProjectName) {
+                        this.toast.show('Por favor ingresa el nombre del proyecto');
+                        return;
+                    }
+
+                    try {
+                        await SocialServiceService.create(data);
+                        this.toast.show('Proyecto de servicio social guardado');
+                        modal.close();
+                        await this._renderServices();
+                    } catch (error) {
+                        console.error('[SocialServiceInterface] Failed to create service project:', error);
+                        this.toast.show('Error al guardar el proyecto');
+                    }
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                    modal.close();
+                });
+            }
+        }, 100);
     }
 }
