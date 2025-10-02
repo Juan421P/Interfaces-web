@@ -1,54 +1,32 @@
-import { AuthService } from "../services/auth.service.js";
+// auth.service.js
+import { Service } from './../lib/service.js';
+import { AuthContract } from './../contracts/auth.contract.js';
+import { AuthGuard } from './../guards/auth.guard.js';
 
-export class AuthGuard {
-    static async isAuthenticated() {
-        if (window.location.hash !== '#login' && window.location.hash !== '#not-found') {
-            try {
-                const res = await AuthService.me();
-                return res !== null;
-            } catch (err) {
-                console.error('AuthGuard.isAuthenticated error:', err);
-                return false;
-            }
-        }
-    }
+export class AuthService extends Service {
+    static baseEndpoint = '/Auth';
+    static contract = new AuthContract();
 
-    static async authLogin() {
-        try {
-            const res = await AuthService.me();
-            return res !== null;
-        } catch (err) {
-            console.error('AuthGuard.authLogin error:', err);
-            return false;
-        }
-    }
-
-    static async ensureAuth(redirectTo = '#login') {
-        const ok = await AuthGuard.isAuthenticated();
-        if (!ok) {
-            window.location.hash = redirectTo;
-            return false;
-        }
+    static async login(email, password) {
+        await this.postRaw('login', { email, contrasena: password }, 'login');
+        // después del login pedimos el user
+        const user = await this.me();
+        AuthGuard._user = user;
+        localStorage.setItem("user", JSON.stringify(user)); // 👈 opcional persistencia
         return true;
     }
 
-    static isAdmin() {
-        return AuthGuard._user?.roleName === 'Administrador';
+    static async me() {
+        const res = await this.get('me', null, null, 'me');
+        return res;
     }
 
-    static isStudent() {
-        return AuthGuard._user?.roleName === 'Estudiante';
-    }
-
-    static isTeacher() {
-        return AuthGuard._user?.roleName === 'Docente';
-    }
-
-    static isRA() {
-        return AuthGuard._user?.roleName === 'Registro Académico';
-    }
-
-    static isRH() {
-        return AuthGuard._user?.roleName === 'Recursos Humanos';
+    static async logout() {
+        await this.postRaw('logout');
+        AuthGuard.clearUser();
+        localStorage.removeItem("user");
+        sessionStorage.clear();
+        return true;
     }
 }
+
