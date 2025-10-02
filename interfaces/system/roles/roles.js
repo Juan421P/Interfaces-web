@@ -1,6 +1,6 @@
 import { Interface } from './../../base/interface.js';
 
-import { systemRolesService } from './../../../js/services/system-roles.service.js';
+import { SystemRolesService } from './../../../js/services/system-roles.service.js';
 import {
     Modal,
     Button,
@@ -67,7 +67,7 @@ export default class RolesInterface extends Interface {
         this.toast = new Toast();
         await this.toast.init();
 
-        this.rolesService = new systemRolesService();
+        this.rolesService = new SystemRolesService();
 
         // botón "Agregar rol"
         new Button({
