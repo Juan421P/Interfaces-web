@@ -1,5 +1,5 @@
 import { Interface } from './../../base/interface.js';
-import { SocialServiceProjectsService } from './../../../js/services/social-service-projects.service.js';
+import { SocialServiceService } from './../../../js/services/social-service-projects.service.js';
 import { Toast } from './../../../components/components.js';
 
 export default class SocialServiceInterface extends Interface {
@@ -80,7 +80,7 @@ export default class SocialServiceInterface extends Interface {
 
     async _renderServices() {
         try {
-            const services = await SocialServiceProjectsService.list();
+            const services = await SocialServiceService.list();
             const section = document.querySelector('#service-list');
             section.innerHTML = '';
 
@@ -122,7 +122,7 @@ export default class SocialServiceInterface extends Interface {
             }
 
             try {
-                await SocialServiceProjectsService.create(data);
+                await SocialServiceService.create(data);
                 this.toast.show('Proyecto de servicio social guardado');
                 main.querySelector('#service-form').remove();
                 await this._renderServices();
