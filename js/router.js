@@ -21,9 +21,9 @@ export class Router {
             await this.initializeApp();
         });
 
-        window.addEventListener('hashchange', () => {
+        window.addEventListener('hashchange', async () => {
             THEMES.loadTheme();
-            this.render();
+            await this.render();
         });
     }
 
@@ -124,15 +124,21 @@ export class Router {
         try {
             console.log(`🚀 [Router] Loading interface for: ${view.hash}`);
             const interfaceModule = await this.getInterfaceModule(view);
+            
+            if (this.currentInterface) {
+                await this.currentInterface.destroy?.();
+            }
+
             const interfaceInstance = new interfaceModule.default();
             await interfaceInstance.render('#main-view');
+            this.currentInterface = interfaceInstance;
             console.log(`🚀 [Router] Interface rendered successfully`);
-
             document.title = view.title;
 
         } catch (err) {
             console.error('Interface load error', err);
-            window.location.hash = '#not-found';
+            this.toast?.show?.('Error cargando interfaz 😭');
+            window.location.hash = (await AuthGuard.isAuthenticated()) ? '#main' : '#login';
         }
     }
 
@@ -189,13 +195,15 @@ export class Router {
 
     async handleLogout() {
         try {
+            console.log('🗺️ [Router] Handling logout...');
+            await AuthGuard.logout();
             sessionStorage.clear();
-            localStorage.clear();
-
+            console.log('🗺️ [Router] Logout completed. Redirecting to #login');
             window.location.hash = '#login';
-
         } catch (error) {
-            console.error('Logout error:', error);
+            console.error('🗺️ [Router] Logout error:', error);
+            AuthGuard.clearStoredData();
+            sessionStorage.clear();
             window.location.hash = '#login';
         }
     }

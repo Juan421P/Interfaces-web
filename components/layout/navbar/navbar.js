@@ -3,6 +3,7 @@ import { Component, Modal, Button } from './../../components.js';
 import { AuthService } from './../../../js/services/auth.service.js';
 import { buildInitials } from './../../../js/lib/common.js';
 import { ComponentRenderError } from './../../../js/errors/components/base/component-render-error.js';
+import { AuthGuard } from '../../../js/guards/auth.guard.js';
 
 const getLabelSpan = (element) => element.querySelector('span:not(.profile-initials)');
 
@@ -555,12 +556,16 @@ export class Navbar extends Component {
                             host: '#logout-confirm',
                             text: 'Confirmar',
                             buttonType: 2,
-                            onClick: (e) => {
+                            onClick: async (e) => {
                                 e.preventDefault();
                                 logoutModal.close();
-                                if (window.router) {
-                                    window.router.handleLogout();
-                                } else {
+                                try {
+                                    await AuthGuard.logout();
+                                    window.location.hash = '#login';
+                                } catch (error) {
+                                    console.error('[Navbar] Logout failed:', error);
+                                    AuthGuard.clearStoredData();
+                                    sessionStorage.clear();
                                     window.location.hash = '#login';
                                 }
                             },

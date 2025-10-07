@@ -61,9 +61,6 @@ export default class NotificationsInterface extends Interface {
         this.toast = new Toast();
         await this.toast.init();
 
-        // service
-        this.notificationsService = new NotificationsService();
-
         // usuario actual
         const auth = await AuthService.me();
         this.currentUser = auth?.user;
@@ -85,7 +82,6 @@ export default class NotificationsInterface extends Interface {
             });
         }
 
-        // render inicial de la tabla
         await this._renderTable();
     }
 
@@ -160,17 +156,10 @@ export default class NotificationsInterface extends Interface {
 
     async _renderTable() {
         try {
-            const svcWrapper = {
-                list: async () => {
-                    const data = await this.notificationsService.getAll();
-                    return Array.isArray(data) ? data : (data?.data ?? []);
-                }
-            };
-
             if (!this.table) {
                 this.table = new Table({
                     host: '#notifications-table',
-                    service: svcWrapper,
+                    service: NotificationsService,
                     servicePrefix: 'Notifications',
                     headers: [
                         { label: "Título", key: "title" },
@@ -230,7 +219,7 @@ export default class NotificationsInterface extends Interface {
         title.textContent = row.title ?? '—';
 
         const meta = document.createElement('p');
-        meta.className = 'text-sm text-indigo-500 mb-4';
+        meta.className = 'mb-4 text-sm text-indigo-500';
         meta.textContent = `${row.userName ?? '—'} • ${row.sentAt ?? '—'}`;
 
         const body = document.createElement('div');

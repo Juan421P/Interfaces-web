@@ -7,7 +7,6 @@ import {
     Toast
 } from './../../components/components.js';
 
-import { AuthService } from './../../js/services/auth.service.js';
 import { AuthGuard } from './../../js/guards/auth.guard.js';
 
 export default class LoginInterface extends Interface {
@@ -112,16 +111,13 @@ export default class LoginInterface extends Interface {
             ],
             onSubmit: async (values) => {
                 try {
-                    await AuthService.login(
+                    const result = await AuthGuard.login(
                         (values['email-input'] || '').trim(),
                         (values['password-input'] || '').trim()
                     );
 
-                    console.info('[Login] Login API call completed');
-
-                    const loginSuccessful = await AuthGuard.authLogin();
-
-                    if (loginSuccessful) {
+                    if (result.success) {
+                        console.info('👤 [Login] Login successful, redirecting to #main');
                         window.location.hash = '#main';
                     } else {
                         this.toast.show("Credenciales incorrectas");

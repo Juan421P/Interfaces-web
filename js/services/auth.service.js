@@ -7,11 +7,10 @@ export class AuthService extends Service {
     static contract = new AuthContract();
 
     static async login(email, password) {
-        await this.postRaw('login', { email, contrasena: password }, 'login');
-        const me = await this.me();
-        const user = me?.user ?? me ?? null;
-        AuthGuard.user = user;
-        return true;
+        return await this.postRaw('login', {
+            email: email,
+            contrasena: password
+        }, 'login');
     }
 
     static async me() {
@@ -19,9 +18,6 @@ export class AuthService extends Service {
     }
 
     static async logout() {
-        await this.postRaw('logout');
-        AuthGuard.clearUser();
-        sessionStorage.clear();
-        return true;
+        return await this.postRaw('logout');
     }
 }
